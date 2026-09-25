@@ -17,6 +17,12 @@ npm run lint && npm run typecheck
 Set `NEXT_PUBLIC_SITE_URL` in production so Open Graph URLs are absolute. On Vercel the
 production domain is picked up automatically.
 
+### Claude Artifact / any static host
+
+`npm run build:artifact` bundles the same React tree with esbuild (no Next.js runtime) into
+`artifact-dist/`: an `index.html` fragment, JS chunks and the public assets it needs, all
+with relative URLs. This is the build published as a Claude Artifact.
+
 ### GitHub Pages (view it on your phone)
 
 `.github/workflows/pages.yml` builds a static export (`npm run build:pages`, served under
