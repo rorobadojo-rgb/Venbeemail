@@ -13,6 +13,12 @@ npm run build     # → dist/  (relative paths, deploy the folder to any static 
 npm run preview   # serve dist/
 ```
 
+## Live site (GitHub Pages)
+
+`.github/workflows/deploy-pages.yml` builds and publishes `dist/` on every push to `main`.
+One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions**. The site is then
+served at `https://rorobadojo-rgb.github.io/Venbeemail/` (open it on any phone).
+
 ## What's on the page
 
 | Brief | Where |
