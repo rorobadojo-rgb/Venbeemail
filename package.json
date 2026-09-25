@@ -1,0 +1,23 @@
+{
+  "name": "venbeemail",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/export-sprites.mjs && vite build",
+    "preview": "vite preview",
+    "sprites": "node scripts/export-sprites.mjs"
+  },
+  "dependencies": {
+    "@fontsource/bangers": "^5.3.0",
+    "@fontsource/space-mono": "^5.3.0",
+    "gsap": "^3.15.0",
+    "howler": "^2.2.4",
+    "qrcode-generator": "^2.0.4",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "vite": "^8.3.1"
+  }
+}

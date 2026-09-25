@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="id" data-theme="golden">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>VenbeeMail — Email sementara, bikin sebentar, buang cepat</title>
+    <meta name="description" content="VenbeeMail: email sementara / disposable email gratis. Pilih nama, pilih domain receh, pakai, lalu biarkan meleleh otomatis dalam 10 menit." />
+    <meta name="theme-color" content="#0A0A0A" />
+    <meta property="og:title" content="VenbeeMail — Email sementara" />
+    <meta property="og:description" content="Bikin sebentar, buang cepat. Inbox sementara dengan slime, pinguin punk, dan skatepark." />
+    <meta property="og:image" content="/logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
+  </head>
+  <body>
+    <a class="skip" href="#tool">Langsung ke alat email</a>
+
+    <!-- Background: illustrated park (mobile / poster) + lazy WebGL skatepark (desktop) -->
+    <div class="bg" aria-hidden="true">
+      <div id="static-park" class="static-park"></div>
+      <canvas id="scene" class="scene"></canvas>
+      <div class="bg-shade"></div>
+      <div class="grain"></div>
+      <div class="vignette"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="VenbeeMail beranda"><img src="/logo.svg" width="40" height="37" alt="" /><span>VenbeeMail</span></a>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="open-settings" type="button" aria-label="Buka pengaturan">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
+        </button>
+        <button class="amp-knob" id="amp-knob" type="button" aria-pressed="true" aria-label="VOL: suara">
+          <span class="amp-label">VOL</span>
+          <svg class="knob" viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">
+            <g class="knob-ticks" stroke="#F5E6C8" stroke-width="2"><path d="M24 2v5M5 13l4 3M43 13l-4 3M2 30h5M46 30h-5"/></g>
+            <g class="knob-dial"><circle cx="24" cy="26" r="15" fill="#1b1b1b" stroke="#0A0A0A" stroke-width="3"/><circle cx="24" cy="26" r="11" fill="#2a2a2a"/><rect x="22.5" y="12" width="3" height="10" rx="1.5" fill="#FF3A1F"/></g>
+          </svg>
+          <span class="amp-led" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="logo3d" id="logo3d" role="img" aria-label="Logo VenbeeMail: wajah bulat marah bergigi besar"></div>
+        <h1 id="hero-title" class="wordmark" aria-label="VenbeeMail"><span id="wordmark" class="wordmark-art"></span></h1>
+        <p class="tagline">Email sementara. <span>Bikin sebentar, buang cepat.</span></p>
+
+        <section class="tool glass" id="tool" aria-labelledby="tool-title" data-urgency="low">
+          <div class="tool-goo" aria-hidden="true"></div>
+          <header class="tool-head">
+            <h2 id="tool-title" class="sfx">Bikin alamatmu</h2>
+            <div class="timer">
+              <span class="timer-label">Meleleh dalam</span>
+              <span class="timer-val mono" id="timer-val" role="timer">10:00</span>
+            </div>
+          </header>
+          <div class="slimebar" aria-hidden="true"><div class="slimebar-fill" id="slimebar"></div><div class="slimebar-drips"></div></div>
+
+          <div class="field">
+            <label for="username" class="sfx">Username</label>
+            <div class="user-row">
+              <div class="input-wrap" id="input-wrap" data-state="empty">
+                <input id="username" type="text" inputmode="email" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="24" placeholder="namamu" aria-describedby="user-hint" />
+                <span class="at mono" id="at-domain" aria-hidden="true">@peler.com</span>
+              </div>
+              <button class="btn btn-small btn-random" id="btn-random" type="button"><span class="dice" aria-hidden="true">⚄</span> Random</button>
+            </div>
+            <p class="hint" id="user-hint" aria-live="polite">Huruf kecil, angka, titik, strip, underscore.</p>
+          </div>
+
+          <fieldset class="domains">
+            <legend class="sfx">Pilih domain</legend>
+            <div class="chips" id="chips"></div>
+          </fieldset>
+
+          <div class="addr-box">
+            <span class="addr-label sfx">Alamat aktif</span>
+            <output class="addr mono" id="addr" aria-live="polite"></output>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-gen" id="btn-generate" type="button" style="--rot:-1.5deg">GENERATE</button>
+            <button class="btn btn-copy" id="btn-copy" type="button" style="--rot:1deg">
+              <svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><g class="ico-copy"><rect x="8" y="8" width="12" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M5 16V5a2 2 0 0 1 2-2h9" fill="none" stroke="currentColor" stroke-width="2.6"/></g><g class="ico-check"><path d="M4 12.5l5 5L20 6" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="30" stroke-dashoffset="30"/></g></svg>
+              <span class="lbl">COPY</span>
+            </button>
+            <button class="btn btn-refresh" id="btn-refresh" type="button" style="--rot:-1deg">
+              <svg class="ico ico-refresh" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M20 3v5h-5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              REFRESH INBOX
+            </button>
+            <button class="btn btn-delete" id="btn-delete" type="button" style="--rot:1.5deg">DELETE</button>
+            <button class="btn btn-qr" id="btn-qr" type="button" style="--rot:-0.5deg">QR CODE</button>
+          </div>
+
+          <div class="services" role="group" aria-label="Layanan">
+            <button class="svc" id="svc-extend" type="button">⏱ Extend +10 min</button>
+            <button class="svc" id="svc-change" type="button">🔀 Change address</button>
+            <button class="svc" id="svc-link" type="button">🔗 Copy inbox link</button>
+            <button class="svc" id="svc-settings" type="button">⚙ Settings</button>
+          </div>
+
+          <div class="inbox">
+            <div class="inbox-head">
+              <h3 class="sfx">Inbox</h3>
+              <span class="badge" id="inbox-count">0</span>
+              <span class="live"><i></i>LIVE</span>
+            </div>
+            <ul class="mail-list" id="mail-list" aria-live="polite"></ul>
+            <p class="inbox-empty" id="inbox-empty">Inbox masih kosong. Email baru nongol tiap beberapa detik…</p>
+          </div>
+
+          <div class="qr-stage" id="qr-stage" hidden>
+            <div class="qr-card" role="dialog" aria-modal="true" aria-label="QR code inbox">
+              <p class="sfx">Scan buat buka inbox ini</p>
+              <div id="qr-code" class="qr-code"></div>
+              <p class="mono qr-addr" id="qr-addr"></p>
+              <button class="btn btn-small" id="qr-close" type="button">Tutup</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="section" id="kenapa" aria-labelledby="kenapa-title">
+        <h2 class="section-title" id="kenapa-title">Kenapa <em>VenbeeMail</em>?</h2>
+        <div class="decks">
+          <article class="deck" style="--deck:#B4FF1A">
+            <div class="deck-inner">
+              <div class="deck-face deck-front">
+                <span class="deck-sticker" aria-hidden="true">⚡</span>
+                <h3>Tanpa daftar</h3>
+                <p>Langsung dapat alamat. Nggak perlu akun, password, apalagi nomor HP.</p>
+                <span class="deck-tag">0 detik setup</span>
+              </div>
+              <div class="deck-face deck-back" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </article>
+          <article class="deck" style="--deck:#FF3DAE">
+            <div class="deck-inner">
+              <div class="deck-face deck-front">
+                <span class="deck-sticker" aria-hidden="true">🫠</span>
+                <h3>Meleleh otomatis</h3>
+                <p>Alamat &amp; inbox hancur sendiri dalam 10 menit. Butuh lebih lama? Tinggal Extend.</p>
+                <span class="deck-tag">auto-delete</span>
+              </div>
+              <div class="deck-face deck-back" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </article>
+          <article class="deck" style="--deck:#22E6FF">
+            <div class="deck-inner">
+              <div class="deck-face deck-front">
+                <span class="deck-sticker" aria-hidden="true">🛡</span>
+                <h3>Inbox asli tetap bersih</h3>
+                <p>Pakai buat promo, trial, forum, atau wifi kafe. Spam nyangkut di sini, bukan di email utamamu.</p>
+                <span class="deck-tag">anti spam</span>
+              </div>
+              <div class="deck-face deck-back" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="cara" aria-labelledby="cara-title">
+        <h2 class="section-title" id="cara-title">Cara <em>kerja</em></h2>
+        <div class="track" aria-hidden="true">
+          <div class="track-line"></div>
+          <span class="cone" style="left:0%">1</span><span class="cone" style="left:50%">2</span><span class="cone" style="left:100%">3</span>
+          <div class="rider"></div>
+        </div>
+        <ol class="steps">
+          <li class="step"><span class="step-n">01</span><h3>Pilih nama &amp; domain</h3><p>Ketik username sendiri atau tekan Random. Pilih satu dari 10 domain receh — splat!</p></li>
+          <li class="step"><span class="step-n">02</span><h3>Pakai alamatnya</h3><p>Copy, tempel di form pendaftaran. Email masuk langsung nongol di inbox, lengkap dengan kode verifikasi.</p></li>
+          <li class="step"><span class="step-n">03</span><h3>Buang atau biarkan meleleh</h3><p>Tekan DELETE kapan saja, atau tunggu timer habis. Alamatnya hilang, jejaknya ikut lenyap.</p></li>
+        </ol>
+      </section>
+
+      <section class="section" id="faq" aria-labelledby="faq-title">
+        <div class="setlist">
+          <span class="tape tape-l" aria-hidden="true"></span><span class="tape tape-r" aria-hidden="true"></span>
+          <h2 class="setlist-title" id="faq-title">SETLIST <small>— FAQ</small></h2>
+          <ol class="set">
+            <li><button class="set-q" type="button" aria-expanded="false" aria-controls="a1"><span class="set-n">01</span>Apa itu VenbeeMail?</button><div class="set-a" id="a1" hidden><p>Layanan email sementara (disposable email). Kamu dapat alamat instan untuk menerima email, tanpa daftar dan tanpa data pribadi.</p></div></li>
+            <li><button class="set-q" type="button" aria-expanded="false" aria-controls="a2"><span class="set-n">02</span>Berapa lama alamatnya aktif?</button><div class="set-a" id="a2" hidden><p>10 menit sejak dibuat. Tekan “Extend +10 min” kalau masih butuh. Setelah habis, alamat &amp; isi inbox dihapus.</p></div></li>
+            <li><button class="set-q" type="button" aria-expanded="false" aria-controls="a3"><span class="set-n">03</span>Bisa kirim email dari sini?</button><div class="set-a" id="a3" hidden><p>Tidak. VenbeeMail hanya untuk menerima — biar nggak dipakai buat spam balik.</p></div></li>
+            <li><button class="set-q" type="button" aria-expanded="false" aria-controls="a4"><span class="set-n">04</span>Aman buat akun penting?</button><div class="set-a" id="a4" hidden><p>Jangan. Siapa pun yang tahu alamatnya bisa membuka inbox yang sama. Pakai untuk pendaftaran sekali pakai, bukan untuk bank atau akun utama.</p></div></li>
+            <li><button class="set-q" type="button" aria-expanded="false" aria-controls="a5"><span class="set-n">05</span>Kenapa domainnya aneh-aneh?</button><div class="set-a" id="a5" hidden><p>Biar receh dan gampang diingat. Ada 10 pilihan — tiap domain punya warna slime sendiri.</p></div></li>
+            <li><button class="set-q" type="button" aria-expanded="false" aria-controls="a6"><span class="set-n">06</span>Datanya disimpan?</button><div class="set-a" id="a6" hidden><p>Tidak lebih lama dari umur alamatnya. Setelah meleleh, semuanya dihapus. Tanpa cookie pelacak.</p></div></li>
+          </ol>
+          <p class="setlist-foot">ENCORE: pakai lagi kapan saja ✦</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer">
+      <div class="lamps" aria-hidden="true">
+        <span class="lamp"></span><span class="lamp"></span><span class="lamp"></span><span class="lamp"></span><span class="lamp"></span><span class="lamp"></span>
+      </div>
+      <div class="footer-wordmark" id="footer-wordmark" role="img" aria-label="VenbeeMail"></div>
+      <p class="footer-line">Lampu mati satu per satu. Slime-nya tetap menyala.</p>
+      <p class="footer-small">© 2026 VenbeeMail · Email sementara · Dibuat dengan slime &amp; distorsi.</p>
+    </footer>
+
+    <aside class="drawer" id="drawer" hidden aria-hidden="true">
+      <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <header class="drawer-head">
+          <h2 id="drawer-title" class="sfx">Settings</h2>
+          <button class="icon-btn" id="drawer-close" type="button" aria-label="Tutup pengaturan">✕</button>
+        </header>
+        <div class="set-group">
+          <h3>Tema panggung</h3>
+          <div class="seg" role="radiogroup" aria-label="Tema">
+            <button type="button" role="radio" data-theme-set="golden" aria-checked="true">🌇 Golden hour</button>
+            <button type="button" role="radio" data-theme-set="night" aria-checked="false">🌃 Night skatepark</button>
+          </div>
+        </div>
+        <div class="set-group">
+          <h3>Suara</h3>
+          <label class="switch"><input type="checkbox" id="set-sound" /><span class="switch-ui" aria-hidden="true"></span>Nyalakan suara</label>
+        </div>
+        <div class="set-group">
+          <h3>Animasi</h3>
+          <label class="switch"><input type="checkbox" id="set-motion" /><span class="switch-ui" aria-hidden="true"></span>Kurangi gerakan (reload)</label>
+        </div>
+        <p class="drawer-note">Demo front-end: inbox disimulasikan. Hubungkan ke backend mail untuk email sungguhan.</p>
+      </div>
+    </aside>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="flash" id="flash" aria-hidden="true"></div>
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+    </svg>
+
+    <noscript><p class="noscript">VenbeeMail butuh JavaScript untuk membuat alamat email sementara.</p></noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
