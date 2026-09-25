@@ -218,7 +218,8 @@ svg {
   display: block;
   aspect-ratio: 1;
   pointer-events: none;
-  background: url("/doodles/atlas.svg") no-repeat;
+  /* --atlas is set on <html> in app/layout.tsx so it follows the base path */
+  background: var(--atlas) no-repeat;
   background-size: 400% 400%;
   background-position: calc(var(--dx) * 100% / 3) calc(var(--dy) * 100% / 3);
   rotate: var(--r, 0deg);

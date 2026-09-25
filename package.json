@@ -2,7 +2,7 @@
   "name": "venbeemail",
   "version": "1.0.0",
   "private": true,
-  "description": "VenbeeMail — comic-book landing page for a disposable email service",
+  "description": "VenbeeMail \u2014 comic-book landing page for a disposable email service",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "assets:doodles": "node scripts/doodles/build-doodles.mjs",
     "assets:audio": "node scripts/audio/build-audio.mjs",
-    "assets:mascot": "python3 scripts/mascot/trace_mascot.py"
+    "assets:mascot": "python3 scripts/mascot/trace_mascot.py",
+    "build:pages": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/Venbeemail next build"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

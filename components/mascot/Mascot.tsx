@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef } from "react";
+import { asset } from "@/lib/asset";
 import { prefersReducedMotion } from "@/lib/motion";
 import { playThrottled } from "@/lib/sound";
 import { BIRD_GEOMETRY as G } from "./birdGeometry.generated";
@@ -125,7 +126,7 @@ export function Mascot({ className = "", flip, interactive = true, raised = fals
       <div className="mascot__inner">
         <img
           className="mascot__body"
-          src="/mascot/venbee-bird-body.svg"
+          src={asset("/mascot/venbee-bird-body.svg")}
           alt=""
           width={G.width}
           height={G.height}

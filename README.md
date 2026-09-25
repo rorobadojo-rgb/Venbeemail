@@ -17,6 +17,15 @@ npm run lint && npm run typecheck
 Set `NEXT_PUBLIC_SITE_URL` in production so Open Graph URLs are absolute. On Vercel the
 production domain is picked up automatically.
 
+### GitHub Pages (view it on your phone)
+
+`.github/workflows/pages.yml` builds a static export (`npm run build:pages`, served under
+`/Venbeemail`) and publishes it on every push to `main`:
+**https://rorobadojo-rgb.github.io/Venbeemail/**
+
+One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions**,
+then re-run the workflow from the **Actions** tab (or push to `main`).
+
 ## What's on the page
 
 | Panel | What happens |

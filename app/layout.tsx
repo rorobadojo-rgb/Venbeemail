@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bangers, Bowlby_One, Space_Mono } from "next/font/google";
+import { asset } from "@/lib/asset";
 import { SITE } from "@/lib/site";
 import "../styles/base.css";
 import "../styles/comic.css";
@@ -37,7 +38,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id" className={`${display.variable} ${comic.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="id" className={`${display.variable} ${comic.variable} ${mono.variable}`}
+      style={{ "--atlas": `url("${asset("/doodles/atlas.svg")}")` } as React.CSSProperties} suppressHydrationWarning>
       <head>
         {/* flag JS before first paint so the cinematic layout never flashes */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.setAttribute('data-js','')" }} />

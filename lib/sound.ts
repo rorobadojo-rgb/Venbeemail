@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type { Howl } from "howler";
+import { asset } from "./asset";
 import { MUSIC_LOOP, SFX_SPRITE, type SfxName } from "./audioSprite.generated";
 
 /**
@@ -74,7 +75,7 @@ export function initSound() {
       () =>
         whenIdle(() => {
           void import("howler");
-          void fetch("/audio/sfx.mp3").catch(() => undefined);
+          void fetch(asset("/audio/sfx.mp3")).catch(() => undefined);
         }),
       { once: true },
     );
@@ -93,7 +94,7 @@ async function start() {
   howler = await import("howler");
   howler.Howler.mute(state.muted);
   sfx = new howler.Howl({
-    src: ["/audio/sfx.mp3"],
+    src: [asset("/audio/sfx.mp3")],
     sprite: SFX_SPRITE as unknown as Record<string, [number, number]>,
     volume: 0.8,
   });
@@ -108,7 +109,7 @@ function startMusic() {
   if (!howler) return;
   if (!music) {
     music = new howler.Howl({
-      src: ["/audio/chiptune.mp3"],
+      src: [asset("/audio/chiptune.mp3")],
       sprite: { loop: MUSIC_LOOP },
       volume: MUSIC_VOLUME,
     });

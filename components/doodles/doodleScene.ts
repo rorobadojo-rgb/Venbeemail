@@ -12,6 +12,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
+import { asset } from "@/lib/asset";
 import { cameraBus } from "@/lib/cameraBus";
 import { ATLAS_COLS, DOODLES } from "@/lib/doodleAtlas.generated";
 
@@ -230,7 +231,7 @@ export function createDoodleScene(canvas: HTMLCanvasElement, { count: instances,
 
   const image = new Image();
   image.decoding = "async";
-  image.src = "/doodles/atlas.webp";
+  image.src = asset("/doodles/atlas.webp");
   let disposed = false;
   image
     .decode()
