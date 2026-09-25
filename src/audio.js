@@ -76,7 +76,11 @@ function wav(b) {
   dv.setUint32(24, SR, true); dv.setUint32(28, SR * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true);
   w(36, 'data'); dv.setUint32(40, n * 2, true);
   for (let i = 0; i < n; i++) dv.setInt16(44 + i * 2, Math.max(-1, Math.min(1, b[i])) * 32767, true);
-  return URL.createObjectURL(new Blob([dv], { type: 'audio/wav' }));
+  // base64 data URI: Howler decodes it in-memory (no XHR/blob fetch), so it also works in sandboxed frames
+  const bytes = new Uint8Array(dv.buffer);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return 'data:audio/wav;base64,' + btoa(bin);
 }
 
 /* ---------- sound design ---------- */

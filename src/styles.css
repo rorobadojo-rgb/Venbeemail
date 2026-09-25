@@ -218,7 +218,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px clamp(16px, 3vw, 32px);
+  padding: calc(12px + env(safe-area-inset-top, 0px)) clamp(16px, 3vw, 32px) 12px;
   pointer-events: none;
 }
 .topbar > * {
@@ -1396,7 +1396,7 @@ main {
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 22px;
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
   z-index: 60;
   max-width: min(520px, calc(100vw - 32px));
   padding: 12px 18px;
