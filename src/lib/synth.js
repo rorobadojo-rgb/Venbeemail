@@ -1,5 +1,7 @@
 // Every sound on the page is synthesised at runtime in an OfflineAudioContext and
-// handed to Howler as a WAV blob — the site ships zero audio files.
+// handed to Howler as a base64 WAV data URI — the site ships zero audio files.
+// (Howler decodes data URIs itself, so no fetch/XHR is needed: works under strict CSPs
+// that block blob: requests.)
 // Loaded lazily after the visitor's first interaction.
 
 const SR = 44100;
@@ -350,7 +352,10 @@ function wavUrl(samples) {
     const s = Math.max(-1, Math.min(1, samples[i] * gain));
     v.setInt16(44 + i * 2, s * 0x7fff, true);
   }
-  return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return `data:audio/wav;base64,${btoa(bin)}`;
 }
 
 export async function renderAll() {
