@@ -1,0 +1,521 @@
+/* ------------------------------------------------------------------ tokens */
+:root {
+  --red: #ff3a1f;
+  --red-deep: #d92a12;
+  --blue: #1b7cff;
+  --blue-deep: #0a4acc;
+  --blue-light: #63bdff;
+  --ink: #0a0a0a;
+  --cream: #f5e6c8;
+  --cream-hi: #fff6e3;
+  --mascot: #8c7b6b;
+
+  --bw: 6px; /* panel border */
+  --g: clamp(12px, 1.8vw, 28px); /* gutter */
+  --radius: 10px;
+
+  --font-display: var(--font-bowlby), "Arial Black", Impact, sans-serif;
+  --font-comic: var(--font-bangers), "Comic Sans MS", Impact, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, "Courier New", monospace;
+
+  --dots-ink: radial-gradient(circle, rgb(10 10 10 / 0.9) 30%, transparent 32%);
+  --dots-cream: radial-gradient(circle, rgb(245 230 200 / 0.55) 30%, transparent 32%);
+  --dots-blue: radial-gradient(circle, rgb(27 124 255 / 0.35) 30%, transparent 32%);
+  --dots-red: radial-gradient(circle, rgb(255 58 31 / 0.45) 30%, transparent 32%);
+
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------ reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--red);
+  color: var(--ink);
+  font-family: var(--font-comic);
+  font-size: 1.125rem;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+h1,
+h2,
+h3,
+p,
+ol,
+ul,
+dl,
+dd {
+  margin: 0;
+}
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+a {
+  color: inherit;
+}
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+:focus-visible {
+  outline: 4px solid var(--blue);
+  outline-offset: 3px;
+}
+::selection {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -80px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--cream);
+  border: 4px solid var(--ink);
+  font-family: var(--font-comic);
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip:focus {
+  top: 12px;
+}
+
+/* --------------------------------------------------------------- backdrop */
+/* CSS stand-in for the WebGL doodle wall (and what shows before it loads). */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, #ff5a36 0%, var(--red) 55%, var(--red-deep) 100%);
+}
+.doodle-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+.doodle-field.is-ready {
+  opacity: 1;
+}
+/* halftone everywhere: a fine dot screen over the whole wall, heavier at the edges */
+.backdrop-dots {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--dots-ink) 0 0 / 11px 11px;
+  opacity: 0.16;
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 30%, #000 100%);
+  mask-image: radial-gradient(ellipse at center, transparent 30%, #000 100%);
+}
+
+/* ------------------------------------------------------------ type pieces */
+.sfx {
+  font-family: var(--font-comic);
+  font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+  line-height: 1;
+  color: var(--cream);
+  -webkit-text-stroke: 0.09em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0.07em 0.07em 0 var(--ink);
+  letter-spacing: 0.04em;
+  transform: rotate(-8deg);
+  display: inline-block;
+}
+.sfx--small {
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+}
+
+.caption {
+  display: inline-block;
+  padding: 0.35em 0.8em 0.3em;
+  background: var(--cream);
+  border: 4px solid var(--ink);
+  font-family: var(--font-comic);
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.caption b {
+  font-weight: 400;
+  color: var(--red);
+}
+.caption--red,
+.caption--blue {
+  color: var(--cream);
+  -webkit-text-stroke: 0.14em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0.08em 0.08em 0 var(--ink);
+}
+.caption--red {
+  background: var(--red);
+}
+.caption--red b {
+  color: var(--ink);
+}
+.caption--blue {
+  background: var(--blue);
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 3.6vw, 3.6rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  color: var(--cream);
+  -webkit-text-stroke: 0.07em var(--ink);
+  paint-order: stroke fill;
+  text-shadow:
+    0.03em 0.03em 0 var(--ink),
+    0.06em 0.06em 0 var(--ink),
+    0.09em 0.09em 0 var(--ink);
+}
+
+/* ---------------------------------------------------------------- doodles */
+.doodle {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  pointer-events: none;
+  background: url("/doodles/atlas.svg") no-repeat;
+  background-size: 400% 400%;
+  background-position: calc(var(--dx) * 100% / 3) calc(var(--dy) * 100% / 3);
+  rotate: var(--r, 0deg);
+  animation: boil 0.6s steps(1) infinite;
+}
+@keyframes boil {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  33% {
+    transform: rotate(1.4deg) scale(1.01);
+  }
+  66% {
+    transform: rotate(-1deg) scale(0.995);
+  }
+}
+
+/* phones get ~60% fewer doodle extras */
+@media (max-width: 959.98px) {
+  .doodle--extra {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- bubbles */
+.bubble {
+  --bub-bg: var(--cream-hi);
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.6em 0.9em 0.55em;
+  background: var(--bub-bg);
+  border: 4px solid var(--ink);
+  border-radius: 1.4em;
+  font-family: var(--font-comic);
+  font-size: clamp(1.05rem, 1.35vw, 1.4rem);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+/* tail: an ink triangle with a cream one on top */
+.bubble::before,
+.bubble::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+.bubble--bottom-left::before {
+  left: 18%;
+  bottom: -26px;
+  border-width: 26px 18px 0 0;
+  border-color: var(--ink) transparent transparent transparent;
+}
+.bubble--bottom-left::after {
+  left: calc(18% + 5px);
+  bottom: -17px;
+  border-width: 18px 11px 0 0;
+  border-color: var(--bub-bg) transparent transparent transparent;
+}
+.bubble--bottom-right::before {
+  right: 18%;
+  bottom: -26px;
+  border-width: 26px 0 0 18px;
+  border-color: var(--ink) transparent transparent transparent;
+}
+.bubble--bottom-right::after {
+  right: calc(18% + 5px);
+  bottom: -17px;
+  border-width: 18px 0 0 11px;
+  border-color: var(--bub-bg) transparent transparent transparent;
+}
+.bubble--left::before {
+  left: -26px;
+  top: 50%;
+  margin-top: -10px;
+  border-width: 0 26px 20px 0;
+  border-color: transparent var(--ink) transparent transparent;
+}
+.bubble--left::after {
+  left: -15px;
+  top: 50%;
+  margin-top: -5px;
+  border-width: 0 16px 11px 0;
+  border-color: transparent var(--bub-bg) transparent transparent;
+}
+.bubble--right::before {
+  right: -26px;
+  top: 50%;
+  margin-top: -10px;
+  border-width: 0 0 20px 26px;
+  border-color: transparent transparent transparent var(--ink);
+}
+.bubble--right::after {
+  right: -15px;
+  top: 50%;
+  margin-top: -5px;
+  border-width: 0 0 11px 16px;
+  border-color: transparent transparent transparent var(--bub-bg);
+}
+
+/* typewriter */
+[data-js] .tw-c {
+  visibility: hidden;
+}
+[data-js] .tw-c.on {
+  visibility: visible;
+}
+.tw-caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.12em;
+  margin-left: 0.1em;
+  background: var(--ink);
+  animation: caret 0.7s steps(1) infinite;
+}
+.tw.done .tw-caret {
+  display: none;
+}
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.pop-in {
+  display: inline-block;
+  animation: pop-in 0.4s cubic-bezier(0.2, 1.8, 0.4, 1) both;
+}
+@keyframes pop-in {
+  from {
+    transform: scale(0.6) rotate(-4deg);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------- comic button */
+.cbtn {
+  --sh: 6;
+  --btn-bg: var(--red);
+  --btn-fg: var(--cream);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.1em;
+  padding: 0.5em 1.3em 0.45em;
+  border: 4px solid var(--ink);
+  border-radius: 12px;
+  background:
+    var(--dots-cream) 0 0 / 8px 8px,
+    var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: calc(var(--sh) * 1px) calc(var(--sh) * 1px) 0 var(--ink);
+}
+.cbtn__label {
+  -webkit-text-stroke: 0.08em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--ink);
+}
+.cbtn--blue {
+  --btn-bg: var(--blue);
+}
+.cbtn--cream {
+  --btn-bg: var(--cream);
+  --btn-fg: var(--ink);
+}
+.cbtn--cream .cbtn__label {
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.cbtn--ink {
+  --btn-bg: var(--ink);
+  background:
+    radial-gradient(circle, rgb(245 230 200 / 0.18) 30%, transparent 32%) 0 0 / 8px 8px,
+    var(--ink);
+}
+.cbtn--ink .cbtn__label {
+  -webkit-text-stroke: 0;
+  text-shadow: 0.06em 0.06em 0 var(--red);
+}
+.cbtn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.7);
+}
+
+/* small secondary chip */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.35em 0.9em;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--font-comic);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.chip:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.chip:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ burst */
+.burst {
+  position: absolute;
+  z-index: 40;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.burst__dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, currentColor 42%, transparent 46%) 0 0 / 6px 6px;
+  border: 2px solid var(--ink);
+}
+.burst__star {
+  position: absolute;
+  left: -70px;
+  top: -52px;
+  width: 140px;
+  height: 104px;
+  background: var(--cream);
+  clip-path: polygon(50% 0, 60% 26%, 88% 6%, 76% 36%, 100% 44%, 76% 58%, 94% 88%, 62% 72%, 52% 100%, 42% 74%, 10% 94%, 26% 62%, 0 50%, 24% 38%, 8% 10%, 38% 26%);
+  filter: drop-shadow(4px 4px 0 var(--ink));
+}
+.burst__text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-comic);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--cream);
+  -webkit-text-stroke: 0.1em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0.08em 0.08em 0 var(--ink);
+}
+.burst--red {
+  color: var(--red);
+}
+.burst--red .burst__text {
+  color: var(--red);
+}
+.burst--blue {
+  color: var(--blue);
+}
+.burst--blue .burst__text {
+  color: var(--blue-light);
+}
+.burst--cream {
+  color: var(--cream);
+}
+.burst--ink {
+  color: var(--ink);
+}
+.burst--ink .burst__text {
+  color: var(--cream);
+}
+
+/* --------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .doodle {
+    animation: none;
+  }
+}

@@ -1,0 +1,500 @@
+/* =====================================================================
+   Comic page structure.
+   Base rules = flow layout (phones, reduced motion, no JS).
+   The cinematic "guided view" (pinned stage + camera) only applies when JS
+   is on and the viewport matches lib/motion.ts → CINEMATIC.
+   ===================================================================== */
+
+.comic {
+  position: relative;
+  z-index: 2;
+}
+
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--g);
+  padding: calc(var(--g) + 56px) var(--g) var(--g);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.slot {
+  position: relative;
+}
+.slot--features {
+  display: grid;
+  gap: var(--g);
+}
+.feat-slot {
+  position: relative;
+}
+.echo,
+.page-stamp,
+.stage__dim {
+  display: none;
+}
+
+/* ----------------------------------------------------------------- panel */
+.panel {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--cream);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+/* printed dot screen inside every panel */
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--panel-dots, var(--dots-red)) 0 0 / 12px 12px;
+  -webkit-mask-image: linear-gradient(160deg, transparent 35%, #000 100%);
+  mask-image: linear-gradient(160deg, transparent 35%, #000 100%);
+}
+
+/* ---------------------------------------------------------- inset panel */
+.inset {
+  position: relative;
+  border: 5px solid var(--ink);
+  border-radius: 8px;
+  background:
+    var(--dots-blue) 0 0 / 10px 10px,
+    var(--cream);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.inset__label {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  z-index: 2;
+  padding: 0.2em 0.6em;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-comic);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 6px 0 8px 0;
+}
+
+/* ------------------------------------------------------------- mascot */
+.mascot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 798 / 756;
+}
+.mascot__inner {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 90%;
+}
+.mascot--flip .mascot__inner {
+  scale: -1 1;
+}
+.mascot__body,
+.mascot__face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.mascot.is-raised .mascot__inner {
+  animation: boing 0.42s cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+@keyframes boing {
+  0% {
+    transform: scale(1, 1);
+  }
+  35% {
+    transform: scale(0.94, 1.07) translateY(-3%);
+  }
+  70% {
+    transform: scale(1.03, 0.97);
+  }
+}
+
+/* ----------------------------------------------------- sound controls */
+.sound-ctl {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.shhh {
+  --bub-bg: var(--cream-hi);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas: "word icon" "hint icon";
+  align-items: center;
+  column-gap: 8px;
+  padding: 6px 12px 6px 14px;
+  background: var(--bub-bg);
+  border: 4px solid var(--ink);
+  border-radius: 999px 999px 999px 999px;
+  box-shadow: 4px 4px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.3, 1.8, 0.5, 1), box-shadow 0.15s;
+}
+.shhh::before,
+.shhh::after {
+  content: "";
+  position: absolute;
+  border-style: solid;
+}
+.shhh::before {
+  left: 18px;
+  bottom: -18px;
+  border-width: 18px 14px 0 0;
+  border-color: var(--ink) transparent transparent;
+}
+.shhh::after {
+  left: 23px;
+  bottom: -9px;
+  border-width: 10px 7px 0 0;
+  border-color: var(--bub-bg) transparent transparent;
+}
+.shhh:hover {
+  transform: translate(-2px, -2px) rotate(-3deg);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.shhh:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--ink);
+}
+.shhh__word {
+  grid-area: word;
+  font-family: var(--font-comic);
+  font-size: 1.55rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--red);
+  -webkit-text-stroke: 0.08em var(--ink);
+  paint-order: stroke fill;
+}
+.shhh__hint {
+  grid-area: hint;
+  font-family: var(--font-comic);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.shhh__icon {
+  grid-area: icon;
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.shhh__icon path:first-child {
+  fill: var(--ink);
+}
+.shhh.is-muted {
+  --bub-bg: var(--ink);
+  color: var(--cream);
+}
+.shhh.is-muted .shhh__word {
+  color: var(--cream);
+  -webkit-text-stroke: 0;
+}
+.shhh.is-muted .shhh__icon {
+  stroke: var(--cream);
+}
+.shhh.is-muted .shhh__icon path:first-child {
+  fill: var(--cream);
+}
+.shhh.is-muted::before {
+  border-top-color: var(--ink);
+}
+.music-tog {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 4px solid var(--ink);
+  border-radius: 50%;
+  background: var(--blue-deep);
+  color: var(--cream);
+  font-family: var(--font-comic);
+  font-size: 1.3rem;
+  line-height: 0.8;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  rotate: 8deg;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.music-tog__state {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.music-tog:not(.is-on) {
+  background: var(--cream);
+  color: var(--ink);
+}
+.music-tog.is-on span:first-child {
+  animation: note 0.9s ease-in-out infinite;
+}
+.music-tog:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.music-tog:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+@keyframes note {
+  50% {
+    transform: translateY(-3px) rotate(-10deg);
+  }
+}
+
+/* ------------------------------------------------------- chapter nav */
+.chapters {
+  display: none;
+}
+
+/* =====================================================================
+   Desktop, no motion preference: wider flow layout
+   ===================================================================== */
+@media (min-width: 960px) {
+  .slot--features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =====================================================================
+   CINEMATIC — keep in sync with lib/motion.ts
+   ===================================================================== */
+@media (min-width: 960px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  [data-js] .stage {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    overflow: clip;
+    perspective: 1800px;
+  }
+  [data-js] .tilt {
+    position: absolute;
+    inset: 0;
+    container-type: size;
+    transform-origin: 50% 50%;
+  }
+  [data-js] .cam {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: 0 0;
+  }
+  /* the comic spread: 2 × 2 panels, each one screen big */
+  [data-js] .page {
+    display: grid;
+    grid-template-columns: repeat(2, calc(100cqw - 2 * var(--g)));
+    grid-auto-rows: minmax(calc(100cqh - 2 * var(--g)), auto);
+    gap: var(--g);
+    padding: var(--g);
+    width: max-content;
+    max-width: none;
+    margin: 0;
+  }
+  [data-js] .slot--features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* empty frame waiting for its panel */
+  [data-js] .slot--gen::before,
+  [data-js] .slot--inbox::before,
+  [data-js] .feat-slot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 5px dashed rgb(10 10 10 / 0.45);
+    border-radius: var(--radius);
+    background: var(--dots-ink) 0 0 / 14px 14px;
+    opacity: 0.7;
+  }
+  [data-js] .echo {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border: var(--bw) solid var(--ink);
+    border-radius: var(--radius);
+    pointer-events: none;
+    visibility: hidden;
+    filter: blur(3px);
+    background: var(--cream);
+  }
+  [data-js] .echo--blue {
+    background: var(--dots-cream) 0 0 / 12px 12px, var(--blue);
+  }
+  [data-js] .echo--cream {
+    background: var(--dots-blue) 0 0 / 12px 12px, var(--cream);
+  }
+  [data-js] .echo--red {
+    background: var(--dots-cream) 0 0 / 12px 12px, var(--red);
+  }
+  [data-js] .echo--ink {
+    background: var(--ink);
+  }
+  [data-js] .panel {
+    will-change: transform;
+  }
+  /* motion smear on a flying panel (injected by ComicPage) */
+  [data-js] .speed {
+    --sa: 0deg;
+    --sm: to right;
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    visibility: hidden;
+    background: repeating-linear-gradient(
+      var(--sa),
+      transparent 0 22px,
+      rgb(245 230 200 / 0.9) 22px 25px,
+      transparent 25px 52px,
+      rgb(10 10 10 / 0.55) 52px 55px
+    );
+    -webkit-mask-image: linear-gradient(var(--sm), transparent 15%, #000 85%);
+    mask-image: linear-gradient(var(--sm), transparent 15%, #000 85%);
+  }
+  [data-js] .speed--left { --sm: to left; }
+  [data-js] .speed--top { --sa: 90deg; --sm: to top; }
+  [data-js] .speed--bottom { --sa: 90deg; --sm: to bottom; }
+  [data-js] .speed--top-right { --sa: 135deg; --sm: to top right; }
+
+  /* the hero sits a little tilted in 3D; the mouse adds up to ±6° on top */
+  [data-js] .panel--hero {
+    transform: perspective(1800px) rotateX(2deg) rotateY(-2.5deg) scale(0.985);
+  }
+
+  /* comic cover stamp in the middle of the finished spread */
+  [data-js] .page-stamp {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    width: 30cqh;
+    aspect-ratio: 1;
+    margin: -15cqh 0 0 -15cqh;
+    border: 8px solid var(--ink);
+    border-radius: 50%;
+    background:
+      var(--dots-cream) 0 0 / 14px 14px,
+      var(--red);
+    box-shadow: 12px 12px 0 var(--ink);
+    color: var(--cream);
+    text-align: center;
+    visibility: hidden;
+  }
+  [data-js] .page-stamp__top,
+  [data-js] .page-stamp__bottom {
+    font-family: var(--font-comic);
+    font-size: 2.6cqh;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    -webkit-text-stroke: 0.1em var(--ink);
+    paint-order: stroke fill;
+  }
+  [data-js] .page-stamp__num {
+    font-family: var(--font-display);
+    font-size: 11cqh;
+    line-height: 1;
+    -webkit-text-stroke: 0.06em var(--ink);
+    paint-order: stroke fill;
+    text-shadow: 0.05em 0.05em 0 var(--ink);
+  }
+
+  [data-js] .stage__dim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background: rgb(10 10 10 / 0.5);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* the end card lands over the finished page */
+  [data-js] .endcard {
+    position: absolute;
+    inset: 6vh 7vw;
+    z-index: 6;
+    visibility: hidden;
+  }
+
+  [data-js] .chapters {
+    display: block;
+    position: fixed;
+    right: 14px;
+    top: 50%;
+    z-index: 55;
+    translate: 0 -50%;
+  }
+  [data-js] .chapters ol {
+    display: grid;
+    gap: 8px;
+  }
+  [data-js] .chapters button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: var(--cream);
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.3, 1.8, 0.5, 1), background 0.2s;
+  }
+  [data-js] .chapters__num {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+  }
+  [data-js] .chapters__label {
+    position: absolute;
+    right: calc(100% + 10px);
+    padding: 2px 8px;
+    border: 3px solid var(--ink);
+    background: var(--cream);
+    font-family: var(--font-comic);
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    opacity: 0;
+    translate: 6px 0;
+    pointer-events: none;
+    transition: opacity 0.15s, translate 0.15s;
+  }
+  [data-js] .chapters button:hover .chapters__label,
+  [data-js] .chapters button:focus-visible .chapters__label {
+    opacity: 1;
+    translate: 0 0;
+  }
+  [data-js] .chapters button.is-on {
+    background: var(--red);
+    color: var(--cream);
+    transform: scale(1.18) rotate(-8deg);
+  }
+}
