@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>VenbeeMail — Email sementara. Tempel. Pakai. Buang.</title>
+    <meta
+      name="description"
+      content="VenbeeMail: alamat email sementara gratis. Tanpa daftar, hilang otomatis, bebas spam. Tempel. Pakai. Buang."
+    />
+    <meta name="theme-color" content="#0A0A0A" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="VenbeeMail — Tempel. Pakai. Buang." />
+    <meta property="og:description" content="Email sementara tanpa daftar. Hilang otomatis. Bebas spam." />
+    <meta property="og:image" content="/og-bird.png" />
+    <link rel="icon" type="image/svg+xml" href="/src/assets/brand/venbee-bird.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="preload" href="/src/assets/fonts/bowlby-one.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/assets/fonts/space-mono-700.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      // Progressive enhancement: hide slap-in elements until JS boots, but never forever.
+      document.documentElement.classList.add('js');
+      setTimeout(function () {
+        if (!window.__venbee) document.documentElement.classList.remove('js');
+      }, 4000);
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#label">Langsung ke alamat email</a>
+
+    <main>
+      <!-- 1 · HERO ─────────────────────────────────────────────── -->
+      <section class="hero" id="top" aria-labelledby="title">
+        <div class="hero__shake">
+          <div class="stage" aria-hidden="true"></div>
+
+          <button class="shh" type="button">
+            <span class="shh__card">
+              <span class="shh__face shh__face--front">SHH</span>
+              <span class="shh__face shh__face--back" aria-hidden="true">zzz</span>
+            </span>
+            <span class="sr-only" data-shh-action> — matikan suara</span>
+          </button>
+
+          <div class="hero__content">
+            <button class="bird" type="button" aria-label="Kelupas stiker burung VenbeeMail">
+              <span class="bird__hop">
+                <span class="bird__peel">
+                  <span class="bird__front">
+                    <img
+                      class="bird__img"
+                      src="/src/assets/brand/venbee-bird.svg"
+                      alt=""
+                      width="829"
+                      height="787"
+                      fetchpriority="high"
+                      draggable="false"
+                    />
+                    <svg class="bird__lid" viewBox="0 0 829 787" aria-hidden="true" focusable="false">
+                      <path d="M281 156 A113 113 0 0 0 505 177 Z" />
+                    </svg>
+                  </span>
+                  <span class="peel-flapwrap" aria-hidden="true"><span class="peel-flap bird__flap"></span></span>
+                </span>
+              </span>
+            </button>
+
+            <h1 class="title" id="title" aria-label="VenbeeMail"><span class="title__fallback">VenbeeMail</span></h1>
+            <p class="tagline"><span>Tempel. Pakai. Buang.</span></p>
+
+            <div class="widget">
+              <div class="label" id="label" tabindex="-1">
+                <div class="label__head">
+                  <span class="label__kicker">Alamat sementara kamu</span>
+                </div>
+                <div class="label__tape">
+                  <output class="dymo" id="address" for="btn-generate" aria-live="polite">
+                    <span class="sr-only" data-address-text></span>
+                    <span class="dymo__chars" aria-hidden="true"></span>
+                  </output>
+                  <span class="label__empty">— kosong · tekan GENERATE —</span>
+                </div>
+                <div class="label__foot">
+                  <span class="label__timer"><i aria-hidden="true"></i>hangus dalam <b data-timer>10:00</b></span>
+                  <span class="label__hint">klik strip = salin</span>
+                </div>
+                <div class="label__slot" aria-hidden="true"></div>
+                <div class="label__flash" aria-hidden="true"></div>
+              </div>
+
+              <div class="domains__stack" aria-hidden="true"></div>
+              <div class="domains" role="radiogroup" aria-label="Pilih domain">
+                <button class="dom" type="button" role="radio" data-domain="peler.com">
+                  @peler<small>.com</small>
+                </button>
+                <button class="dom" type="button" role="radio" data-domain="ewe.com">@ewe<small>.com</small></button>
+                <button class="dom" type="button" role="radio" data-domain="bawok.com">
+                  @bawok<small>.com</small>
+                </button>
+                <button class="dom" type="button" role="radio" data-domain="vevek.com">
+                  @vevek<small>.com</small>
+                </button>
+                <button class="dom" type="button" role="radio" data-domain="pentil.com">
+                  @pentil<small>.com</small>
+                </button>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn--gen" id="btn-generate" type="button">
+                  <span class="btn__face">GENERATE</span>
+                </button>
+                <button class="btn btn--copy" id="btn-copy" type="button"><span class="btn__face">COPY</span></button>
+                <button class="btn btn--toss" id="btn-toss" type="button"><span class="btn__face">TOSS</span></button>
+              </div>
+            </div>
+          </div>
+
+          <a class="scroll-cue" href="#kenapa"><span>scroll</span></a>
+          <p class="hero__tip" aria-hidden="true">seret stikernya · klik burungnya</p>
+        </div>
+      </section>
+
+      <!-- 2 · KENAPA ───────────────────────────────────────────── -->
+      <section class="why" id="kenapa" aria-labelledby="why-title">
+        <h2 class="section-title" id="why-title"><span>Kenapa</span> <span>VenbeeMail</span></h2>
+        <p class="section-sub">Scroll pelan-pelan — stikernya ngelupas sendiri.</p>
+
+        <div class="why__grid">
+          <article class="peel-card" data-corner="br" style="--r: -2.5deg">
+            <div class="peel-card__under">
+              <span class="sprite peel-card__icon" data-sprite="at-blob"></span>
+              <h3>Tanpa daftar</h3>
+              <p>Nggak ada form, nggak ada password. Buka halaman, alamatmu langsung jadi.</p>
+            </div>
+            <div class="peel-card__cover peel-card__cover--blue" aria-hidden="true">
+              <span class="peel-card__num">01</span>
+              <span class="sprite peel-card__doodle" data-sprite="ghost-grin"></span>
+              <span class="peel-card__hint">kelupas ↘</span>
+            </div>
+            <span class="peel-flapwrap" aria-hidden="true"><span class="peel-flap"></span></span>
+          </article>
+
+          <article class="peel-card" data-corner="bl" style="--r: 1.8deg">
+            <div class="peel-card__under">
+              <span class="sprite peel-card__icon" data-sprite="hourglass"></span>
+              <h3>Hilang otomatis</h3>
+              <p>Alamat &amp; isinya hangus sendiri. Nggak ada jejak, nggak ada drama.</p>
+            </div>
+            <div class="peel-card__cover peel-card__cover--red" aria-hidden="true">
+              <span class="peel-card__num">02</span>
+              <span class="sprite peel-card__doodle" data-sprite="clock"></span>
+              <span class="peel-card__hint">↙ kelupas</span>
+            </div>
+            <span class="peel-flapwrap" aria-hidden="true"><span class="peel-flap"></span></span>
+          </article>
+
+          <article class="peel-card" data-corner="tr" style="--r: -1.2deg">
+            <div class="peel-card__under">
+              <span class="sprite peel-card__icon" data-sprite="trash"></span>
+              <h3>Bebas spam</h3>
+              <p>Pakai buat daftar-daftar yang nggak jelas. Spam-nya biar burung kami yang telan.</p>
+            </div>
+            <div class="peel-card__cover peel-card__cover--black" aria-hidden="true">
+              <span class="peel-card__num">03</span>
+              <span class="sprite peel-card__doodle" data-sprite="bomb"></span>
+              <span class="peel-card__hint">kelupas ↗</span>
+            </div>
+            <span class="peel-flapwrap" aria-hidden="true"><span class="peel-flap"></span></span>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3 · INBOX DEMO ───────────────────────────────────────── -->
+      <section class="inbox" id="inbox" aria-labelledby="inbox-title">
+        <h2 class="section-title" id="inbox-title"><span>Inbox</span> <span>demo</span></h2>
+        <p class="section-sub">Email palsu nempel tiap 8 detik. Tenang, ini cuma simulasi.</p>
+
+        <div class="board">
+          <div class="board__bar">
+            <span class="board__tag">INBOX</span>
+            <span class="board__addr" data-inbox-address>—</span>
+            <span class="board__count" data-inbox-count>0 pesan</span>
+          </div>
+          <ol class="board__grid" aria-live="polite" aria-relevant="additions" aria-label="Pesan masuk (simulasi)">
+            <li class="slot"></li>
+            <li class="slot"></li>
+            <li class="slot"></li>
+            <li class="slot"></li>
+            <li class="slot"></li>
+            <li class="slot"></li>
+          </ol>
+          <p class="board__empty" data-inbox-empty>Menunggu email masuk…</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- 4 · FOOTER ─────────────────────────────────────────────── -->
+    <footer class="foot">
+      <p class="foot__note"><span>Made with too many stickers</span></p>
+      <ul class="socials" aria-label="Media sosial">
+        <li>
+          <a class="social" href="#" aria-label="Instagram" style="--r: -8deg; --face: var(--red)">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5.5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <circle cx="17.4" cy="6.6" r="1.1" class="fill" />
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a class="social" href="#" aria-label="X" style="--r: 6deg; --face: var(--black)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 4 L19.5 20 M19.5 4 L4.5 20" /></svg>
+          </a>
+        </li>
+        <li>
+          <a class="social" href="#" aria-label="TikTok" style="--r: -4deg; --face: var(--blue)">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 4 V15.5 A3.6 3.6 0 1 1 9.4 12" />
+              <path d="M13 4 C13.6 6.6 15.6 8.4 18.4 8.6" />
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a class="social" href="#" aria-label="GitHub" style="--r: 9deg; --face: var(--grey)">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8.5 9 L5 12.5 L8.5 16 M15.5 9 L19 12.5 L15.5 16 M13.2 7.5 L10.8 17.5" />
+            </svg>
+          </a>
+        </li>
+      </ul>
+      <p class="foot__legal">
+        © 2026 VenbeeMail · Inbox di atas hanya simulasi — belum ada email sungguhan yang dikirim.
+      </p>
+    </footer>
+
+    <div class="confetti" aria-hidden="true"></div>
+    <div class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

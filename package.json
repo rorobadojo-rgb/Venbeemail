@@ -1,0 +1,25 @@
+{
+  "name": "venbeemail",
+  "private": true,
+  "version": "1.0.0",
+  "description": "VenbeeMail — sticker-bomb landing page for a disposable email service",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "atlas": "node scripts/build-atlas.mjs",
+    "trace:bird": "python3 scripts/trace-bird.py && node scripts/render-bird-png.mjs"
+  },
+  "dependencies": {
+    "cannon-es": "^0.20.0",
+    "gsap": "^3.15.0",
+    "howler": "^2.2.4",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "sharp": "^0.35.4",
+    "vite": "^8.3.1"
+  }
+}
