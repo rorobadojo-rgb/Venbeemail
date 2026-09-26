@@ -2,7 +2,6 @@
 
 import { gsap } from "gsap";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { BASE_PATH } from "@/lib/asset";
 import { domainInfo, type Domain } from "@/lib/domains";
 import { copyText, downloadEml } from "@/lib/eml";
 import {
@@ -31,6 +30,14 @@ import { Nota, type NotaHandle } from "./Nota";
 import { Services } from "./Services";
 import { StallPlates } from "./StallPlates";
 import { WoodSign } from "./WoodSign";
+
+/** This page's URL with `?inbox=` set: opens that address (see loadMarket). */
+function inboxLink(address: string) {
+  const u = new URL(window.location.href);
+  u.search = `?inbox=${encodeURIComponent(address)}`;
+  u.hash = "";
+  return u.href;
+}
 
 /** ids of letters that arrived this session (they slide in instead of just appearing) */
 const arrivedIds = new Set<string>();
@@ -112,7 +119,7 @@ export function MailTool() {
   const address = inbox ? addressOf(inbox) : null;
   const left = inbox ? timeLeft(inbox, now) : 0;
   const expired = inbox ? isExpired(inbox, now) : false;
-  const link = address && typeof window !== "undefined" ? `${window.location.origin}${BASE_PATH}/?inbox=${encodeURIComponent(address)}` : "";
+  const link = address && typeof window !== "undefined" ? inboxLink(address) : "";
   const wanted = isValidLocal(m.username) ? m.username : null;
   const preview = `${wanted ?? "nama-acak"}@${m.domain}`;
   const orderChanged = !inbox || inbox.domain !== m.domain || (wanted !== null && wanted !== inbox.local);

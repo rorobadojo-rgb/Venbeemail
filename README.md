@@ -25,6 +25,14 @@ production domain is picked up automatically.
 
 One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
+### Claude Artifact
+
+`npm run build:artifact` builds the static export with relative asset URLs and turns it
+into `artifact-out/` (`scripts/artifact/build-artifact.mjs`). That folder has a small
+loader (`index.html`) that opens the page (`app.html`), with Next's files under
+`assets/_next/`, because Artifact paths may not start with `_`. It works from any
+sub-path, so you can publish it as a multi-file Artifact.
+
 ## What's on the page
 
 | Part | What happens |

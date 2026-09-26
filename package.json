@@ -14,7 +14,8 @@
     "build:pages": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/Venbeemail next build",
     "assets:logo": "python3 scripts/logo/trace_logo.py",
     "assets:hand": "node scripts/hand/build-hand.mjs",
-    "assets:poster": "node scripts/poster/render-poster.mjs"
+    "assets:poster": "node scripts/poster/render-poster.mjs",
+    "build:artifact": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=. next build && node scripts/artifact/build-artifact.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
