@@ -15,7 +15,7 @@ export function ShopSign() {
       type="button"
       className={`shopsign${muted ? " is-closed" : ""}`}
       aria-pressed={muted}
-      aria-label={muted ? "Suara mati (TUTUP). Klik untuk menyalakan" : "Suara nyala (BUKA). Klik untuk membisukan"}
+      title={muted ? "Klik untuk menyalakan suara" : "Klik untuk membisukan suara"}
       onClick={() => {
         const next = !muted;
         setMuted(next);
@@ -23,14 +23,12 @@ export function ShopSign() {
       }}
     >
       <span className="shopsign__string" aria-hidden="true" />
-      <span className="shopsign__card" aria-hidden="true">
+      <span className="shopsign__card">
         <span className="shopsign__face shopsign__face--open">
-          <b>BUKA</b>
-          <small>{unlocked ? "suara nyala" : "klik = suara"}</small>
+          <b>BUKA</b> <small>{unlocked ? "suara nyala" : "klik = suara"}</small>
         </span>
         <span className="shopsign__face shopsign__face--closed">
-          <b>TUTUP</b>
-          <small>suara mati</small>
+          <b>TUTUP</b> <small>suara mati</small>
         </span>
       </span>
     </button>

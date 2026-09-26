@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "assets:logo": "python3 scripts/logo/trace_logo.py && node scripts/logo/build-icons.mjs",
+    "assets:logo": "python3 scripts/logo/trace_logo.py && node --experimental-strip-types --no-warnings scripts/logo/build-icons.mjs",
     "assets:posters": "node scripts/posters/build-posters.mjs",
     "assets:audio": "node scripts/audio/build-audio.mjs",
     "build:pages": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/Venbeemail next build"

@@ -78,7 +78,7 @@ const effects: Record<Exclude<StickerEffect, "none">, (p: Parts) => gsap.core.Ti
           delete cut.dataset.bite;
         },
       })
-      .to(v, { r: 30, duration: 0.14, ease: "back.out(3)", onUpdate: apply })
+      .to(v, { r: 36, duration: 0.14, ease: "back.out(3)", onUpdate: apply })
       .add(crumbs(p, 8), 0.05)
       .to(p.art, { rotation: 5, duration: 0.08, yoyo: true, repeat: 1 }, 0)
       .to(v, { r: 0, duration: 0.6, ease: "elastic.out(1, 0.5)", onUpdate: apply }, 0.9);

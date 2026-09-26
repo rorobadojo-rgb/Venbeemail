@@ -64,7 +64,6 @@
   font: 700 12px/1 var(--font-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  opacity: 0.8;
 }
 .pbox__name {
   margin: 4px 0 8px;
@@ -118,8 +117,7 @@
 }
 .nutri__foot {
   margin: 6px 0 0;
-  font-size: 11px;
-  opacity: 0.85;
+  font-size: 11.5px;
 }
 .shelf__plank--wide {
   margin-top: 0;

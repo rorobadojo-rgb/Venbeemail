@@ -337,7 +337,6 @@ export function Register() {
           disabled={!address}
           onClick={onCopy}
           note="sobek & salin"
-          aria-label={address ? `Copy ${address}` : "Copy"}
         >
           <KeyDoodle icon="copy" />
         </StickerButton>

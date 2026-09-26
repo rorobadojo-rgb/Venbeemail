@@ -2,6 +2,7 @@
 
 import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
+import { markIntroDone } from "@/lib/intro";
 import { prefersReducedMotion } from "@/lib/motion";
 import { playThrottled } from "@/lib/sound";
 import { TITLE } from "./glyphs";
@@ -25,12 +26,19 @@ export function Title() {
     const flap = el.querySelector<SVGRectElement>(".vm__flap");
     if (prefersReducedMotion() || !chute) {
       el.classList.add("is-in");
+      markIntroDone();
       return;
     }
     const c = chute.getBoundingClientRect();
     const cx = c.left + c.width * 0.6;
     const cy = c.top + c.height * 0.5;
-    const tl = gsap.timeline({ delay: 0.35, onComplete: () => el.classList.add("is-in") });
+    const tl = gsap.timeline({
+      delay: 0.35,
+      onComplete: () => {
+        el.classList.add("is-in");
+        markIntroDone();
+      },
+    });
     letters.forEach((svg, i) => {
       const r = svg.getBoundingClientRect();
       const dx = cx - (r.left + r.width / 2);
@@ -47,6 +55,8 @@ export function Title() {
     return () => {
       tl.kill();
       gsap.set(letters, { clearProps: "all" });
+      el.classList.add("is-in");
+      markIntroDone();
     };
   }, []);
 

@@ -648,7 +648,7 @@ function CameraRig() {
     const k = 1 - Math.exp(-dt * 3);
     c.scroll += (s - c.scroll) * k;
     c.yaw += (-pointer.x * 5 * DEG - c.yaw) * (1 - Math.exp(-dt * 2.5));
-    c.pitch += (-pointer.y * 3.5 * DEG - c.pitch) * (1 - Math.exp(-dt * 2.5));
+    c.pitch += (-pointer.y * 5 * DEG - c.pitch) * (1 - Math.exp(-dt * 2.5));
     // slow push-in over the first ~30 s, then a gentle breath; scrolling walks down the aisle
     const intro = 1 - Math.pow(1 - Math.min(1, t / 30), 3);
     const z = 9.6 - intro * 2.2 - c.scroll * 4.2 + Math.sin(t * 0.25) * 0.08;

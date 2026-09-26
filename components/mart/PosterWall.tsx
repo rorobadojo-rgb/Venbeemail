@@ -30,12 +30,12 @@ export function PosterWall() {
             className={`wall__poster${kind}`}
             style={{ "--x": `${l.x}%`, "--y": `${l.y}%`, "--r": `${l.r}deg`, "--s": l.s, "--k": i } as React.CSSProperties}
           >
-            <img src={asset(`/posters/${p.name}.webp`)} alt="" width={256} height={320} loading="lazy" decoding="async" fetchPriority="low" />
+            <img src={asset(`/posters/${p.name}.webp`)} alt="" width={256} height={320} decoding="async" />
             {kind.includes("blink") ? (
-              <img className="wall__frame" src={asset(`/posters/${p.name}-blink.webp`)} alt="" width={256} height={320} loading="lazy" decoding="async" />
+              <img className="wall__frame" src={asset(`/posters/${p.name}-blink.webp`)} alt="" width={256} height={320} decoding="async" />
             ) : null}
             {kind.includes("pulse") ? (
-              <img className="wall__rays" src={asset(`/posters/${p.name}-rays.webp`)} alt="" width={256} height={320} loading="lazy" decoding="async" />
+              <img className="wall__rays" src={asset(`/posters/${p.name}-rays.webp`)} alt="" width={256} height={320} decoding="async" />
             ) : null}
           </div>
         );

@@ -299,6 +299,15 @@ section {
 .shopsign.is-closed .shopsign__card {
   transform: rotateY(180deg);
 }
+/* the face turned away is hidden (half-way through the flip) so only the
+   visible word names the button */
+.shopsign__face {
+  transition: visibility 0s 0.25s;
+}
+.shopsign:not(.is-closed) .shopsign__face--closed,
+.shopsign.is-closed .shopsign__face--open {
+  visibility: hidden;
+}
 .shopsign__face {
   position: absolute;
   inset: 0;

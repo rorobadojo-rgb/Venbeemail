@@ -1,7 +1,7 @@
 "use client";
 
 import { gsap } from "gsap";
-import { useEffect, useImperativeHandle, useRef, type Ref } from "react";
+import { useEffect, useId, useImperativeHandle, useRef, type Ref } from "react";
 import { asset } from "@/lib/asset";
 import { prefersReducedMotion } from "@/lib/motion";
 import { pointer, trackPointer } from "@/lib/pointer";
@@ -37,6 +37,7 @@ const SQUASH = 0.07;
  */
 export function ZombieLogo({ className = "", sleeping = false, blink = true, follow = true, ref }: Props) {
   const svg = useRef<SVGSVGElement>(null);
+  const uid = useId().replace(/:/g, "");
   const q = (s: string) => svg.current?.querySelector<SVGGElement>(s) ?? null;
   const eyes = () => SIDES.map((s) => q(`.zl__eye--${s}`)).filter(Boolean) as SVGGElement[];
   const brows = () => SIDES.map((s) => q(`.zl__brow--${s}`)).filter(Boolean) as SVGGElement[];
@@ -172,7 +173,7 @@ export function ZombieLogo({ className = "", sleeping = false, blink = true, fol
       <svg ref={svg} className="zl__face" viewBox={G.viewBox.join(" ")} aria-hidden="true">
         <defs>
           {SIDES.map((s) => (
-            <clipPath key={s} id={`zl-clip-${s}`}>
+            <clipPath key={s} id={`zl-${uid}-${s}`}>
               <path d={G.eyes[s].white} />
             </clipPath>
           ))}
@@ -181,7 +182,7 @@ export function ZombieLogo({ className = "", sleeping = false, blink = true, fol
           <g key={s} className={`zl__eye zl__eye--${s}`}>
             <path d={G.eyes[s].ring} fill={G.colors.ink} />
             <path d={G.eyes[s].white} fill={G.colors.cream} />
-            <g clipPath={`url(#zl-clip-${s})`}>{pupil(s)}</g>
+            <g clipPath={`url(#zl-${uid}-${s})`}>{pupil(s)}</g>
           </g>
         ))}
         {SIDES.map((s) => (

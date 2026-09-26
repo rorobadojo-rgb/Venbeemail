@@ -85,31 +85,33 @@ export function Services() {
 
   return (
     <div className="services">
-      <div className="baskets" role="tablist" aria-label="Keranjang (inbox)">
-        {mail.inboxes.map((b, i) => {
-          const on = b.id === inbox.id;
-          const unread = b.messages.filter((m) => !m.read).length;
-          return (
-            <StickerButton
-              key={b.id}
-              role="tab"
-              aria-selected={on}
-              aria-controls="meja-paket"
-              selected={on}
-              label={`KERANJANG ${i + 1}`}
-              color={(["orange", "teal", "yellow"] as const)[i % 3]}
-              body="cream"
-              size="sm"
-              effect="jelly"
-              sound="rustle"
-              note={addressOf(b) ?? "kosong"}
-              onClick={() => mailActions.setActive(b.id)}
-              title={addressOf(b) ?? undefined}
-            >
-              <Basket count={on ? 0 : unread} />
-            </StickerButton>
-          );
-        })}
+      <div className="baskets">
+        <div className="baskets__tabs" role="tablist" aria-label="Keranjang (inbox)">
+          {mail.inboxes.map((b, i) => {
+            const on = b.id === inbox.id;
+            const unread = b.messages.filter((m) => !m.read).length;
+            return (
+              <StickerButton
+                key={b.id}
+                role="tab"
+                aria-selected={on}
+                aria-controls="meja-paket"
+                selected={on}
+                label={`KERANJANG ${i + 1}`}
+                color={(["orange", "teal", "yellow"] as const)[i % 3]}
+                body="cream"
+                size="sm"
+                effect="jelly"
+                sound="rustle"
+                note={addressOf(b) ?? "kosong"}
+                onClick={() => mailActions.setActive(b.id)}
+                title={addressOf(b) ?? undefined}
+              >
+                <Basket count={on ? 0 : unread} />
+              </StickerButton>
+            );
+          })}
+        </div>
         <StickerButton
           label="+ KERANJANG"
           color="lime"
