@@ -1,0 +1,404 @@
+/* ================================================================ WARUNG */
+.warung {
+  position: relative;
+  padding-bottom: clamp(40px, 7vw, 90px);
+}
+
+/* the blue tarp roof with a scalloped edge */
+.warung__roof {
+  position: relative;
+  z-index: 2;
+  height: clamp(58px, 8vw, 92px);
+  background:
+    linear-gradient(rgb(0 0 0 / 0.45), transparent 45%, rgb(255 255 255 / 0.08) 70%, transparent),
+    repeating-linear-gradient(90deg, var(--tarp) 0 60px, #4a86ff 60px 120px);
+  border-bottom: 4px solid var(--ink);
+  box-shadow: 0 10px 22px rgb(0 0 0 / 0.5);
+}
+.warung__roof::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -22px;
+  height: 20px;
+  background:
+    radial-gradient(circle at 30px 0, var(--tarp) 0 26px, var(--ink) 26px 29px, transparent 30px) 0 0 / 120px 20px repeat-x,
+    radial-gradient(circle at 90px 0, #4a86ff 0 26px, var(--ink) 26px 29px, transparent 30px) 0 0 / 120px 20px repeat-x;
+}
+
+.warung__frame {
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(18px, 4vw, 64px);
+}
+/* bamboo posts */
+.warung__frame::before,
+.warung__frame::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  bottom: -40px;
+  width: clamp(10px, 1.6vw, 20px);
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(transparent 0 118px, #6b4a18 118px 124px, transparent 124px 130px),
+    linear-gradient(90deg, #a77a2c, #e0b865 40%, #b98d3a);
+}
+.warung__frame::before {
+  left: clamp(2px, 1vw, 16px);
+}
+.warung__frame::after {
+  right: clamp(2px, 1vw, 16px);
+}
+
+/* ================================================================ BANNER */
+.banner {
+  position: relative;
+  z-index: 3;
+  margin: 6px auto 0;
+  perspective: 1400px;
+}
+.banner__bulbs {
+  position: absolute;
+  top: -6px;
+  left: 1%;
+  right: 1%;
+  z-index: 4;
+}
+.banner__ropes::before,
+.banner__ropes::after {
+  content: "";
+  position: absolute;
+  top: -30px;
+  width: 4px;
+  height: 46px;
+  background: repeating-linear-gradient(170deg, #c9a06a 0 4px, #8a6a3b 4px 7px);
+  border-radius: 2px;
+}
+.banner__ropes::before {
+  left: 3.2%;
+}
+.banner__ropes::after {
+  right: 3.2%;
+}
+.banner__cloth {
+  position: relative;
+  margin-top: 10px;
+  border: 7px solid var(--cream);
+  border-radius: 8px;
+  outline: 4px solid var(--ink);
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 22px 0 -4px rgb(0 0 0 / 0.4);
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+.banner__cloth.is-flapping {
+  filter: url(#flap);
+}
+.banner__print {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+}
+.banner__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(75% 95% at 62% 52%, rgb(10 10 10 / 0.86), rgb(10 10 10 / 0.55) 65%, rgb(10 10 10 / 0.25)),
+    linear-gradient(90deg, rgb(10 10 10 / 0.15), transparent 30%);
+}
+.banner__content {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(170px, 290px) 1fr;
+  align-items: center;
+  gap: clamp(12px, 3vw, 44px);
+  padding: clamp(26px, 3.4vw, 44px) clamp(18px, 4vw, 52px) clamp(28px, 3.6vw, 48px);
+}
+.banner__eyelet {
+  position: absolute;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border: 4px solid #cfcfcf;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.banner__eyelet--l {
+  left: 2.6%;
+}
+.banner__eyelet--r {
+  right: 2.6%;
+}
+.banner__title {
+  margin: 0;
+  line-height: 0;
+}
+.banner__tag {
+  margin-top: clamp(14px, 1.6vw, 22px);
+  max-width: 34em;
+  font-family: var(--font-sign);
+  font-size: clamp(0.82rem, 1.45vw, 1.12rem);
+  line-height: 1.35;
+  color: var(--cream);
+  text-shadow: 0 3px 0 var(--ink);
+}
+.banner__tag b {
+  font-weight: 400;
+  color: var(--green);
+}
+
+/* slime dripping off the banner's bottom edge */
+.banner__drips {
+  position: relative;
+  height: 0;
+  z-index: 2;
+}
+.slime {
+  position: absolute;
+  top: -8px;
+  width: 16px;
+  margin-left: -8px;
+}
+.slime__goo {
+  display: block;
+  width: 16px;
+  height: calc(20px * var(--s));
+  border: 3px solid var(--ink);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(90deg, #4fd90f, var(--green) 45%, #b8ff85 60%, var(--green));
+  transform-origin: 50% 0;
+}
+.slime__drop {
+  position: absolute;
+  top: calc(20px * var(--s) - 8px);
+  left: 1px;
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--ink);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: var(--green);
+  opacity: 0;
+}
+
+@media (max-width: 760px) {
+  .banner__content {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .banner .banner__logo {
+    width: min(52vw, 220px);
+  }
+  .banner__tag {
+    margin-inline: auto;
+  }
+}
+
+/* ================================================================== LOGO */
+.zlogo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 793 / 774;
+}
+.zlogo__body {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 72%;
+}
+.zlogo__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.zlogo__btn {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 46%;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.zlogo__btn:hover {
+  transform: scale(1.03) rotate(-1.5deg);
+}
+.zlogo__btn:active {
+  transform: scale(0.97);
+}
+.banner__logo {
+  filter: drop-shadow(0 10px 0 rgb(0 0 0 / 0.45));
+}
+
+/* ========================================================== SYRUP TITLE */
+.syrup {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 7px 0 rgb(0 0 0 / 0.55));
+}
+.syrup__mold {
+  fill: rgb(245 230 200 / 0.08);
+  stroke: var(--cream);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.syrup__pour {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 300 300;
+  stroke-dashoffset: 300;
+  animation: syrup-pour 1.5s ease-in-out calc(0.35s + var(--i) * 0.26s) both;
+}
+.syrup__fill {
+  transform: translateY(var(--h));
+  animation: syrup-fill 1.25s cubic-bezier(0.3, 0.1, 0.3, 1) calc(0.6s + var(--i) * 0.26s) both;
+}
+.syrup__wave {
+  animation: syrup-wave 1.4s linear 4;
+}
+.syrup__jelly {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: syrup-wobble 1s ease-out calc(1.8s + var(--i) * 0.26s) both;
+}
+.syrup__gloss {
+  opacity: 0;
+  animation: syrup-gloss 0.6s ease calc(1.8s + var(--i) * 0.26s) both;
+}
+.syrup__bit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: syrup-bob 3.4s ease-in-out var(--d) infinite alternate;
+}
+.syrup__drip {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+  animation: syrup-drip var(--t) ease-in-out var(--d) infinite;
+}
+.syrup__drop {
+  opacity: 0;
+  animation: syrup-drop var(--t) ease-in var(--d) infinite;
+}
+.syrup__stamp {
+  transform-box: fill-box;
+  transform-origin: 50% 60%;
+  animation: syrup-stamp 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) calc(1.2s + var(--j) * 0.12s) both;
+}
+@keyframes syrup-pour {
+  0% {
+    stroke-dashoffset: 300;
+  }
+  24% {
+    stroke-dashoffset: 0;
+  }
+  70% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -300;
+  }
+}
+@keyframes syrup-fill {
+  from {
+    transform: translateY(var(--h));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes syrup-wave {
+  to {
+    transform: translateX(-40px);
+  }
+}
+@keyframes syrup-wobble {
+  0% {
+    transform: scale(1, 1);
+  }
+  18% {
+    transform: scale(1.09, 0.9);
+  }
+  38% {
+    transform: scale(0.95, 1.07);
+  }
+  58% {
+    transform: scale(1.03, 0.97);
+  }
+  78% {
+    transform: scale(0.99, 1.01);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+@keyframes syrup-gloss {
+  to {
+    opacity: 0.55;
+  }
+}
+@keyframes syrup-bob {
+  from {
+    transform: translateY(-3px) rotate(-8deg);
+  }
+  to {
+    transform: translateY(3px) rotate(10deg);
+  }
+}
+@keyframes syrup-drip {
+  0% {
+    transform: scaleY(0);
+  }
+  62% {
+    transform: scaleY(1);
+  }
+  67% {
+    transform: scaleY(0.5);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+@keyframes syrup-drop {
+  0%,
+  64% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  67% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+}
+@keyframes syrup-stamp {
+  from {
+    opacity: 0;
+    transform: translateY(-46px) scale(1.5) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

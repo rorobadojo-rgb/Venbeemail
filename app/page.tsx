@@ -1,7 +1,12 @@
-import { ChapterNav } from "@/components/ChapterNav";
-import { ComicPage } from "@/components/ComicPage";
-import { DoodleField } from "@/components/doodles/DoodleField";
-import { SoundControls } from "@/components/SoundControls";
+import { SyrupTitle } from "@/components/hero/SyrupTitle";
+import { WarungBanner } from "@/components/hero/WarungBanner";
+import { Kentongan } from "@/components/Kentongan";
+import { MarketBackdrop } from "@/components/market/MarketBackdrop";
+import { ClosingFooter } from "@/components/sections/ClosingFooter";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { HowSection } from "@/components/sections/HowSection";
+import { WhySection } from "@/components/sections/WhySection";
+import { MailTool } from "@/components/tool/MailTool";
 import { SITE } from "@/lib/site";
 
 const jsonLd = {
@@ -20,15 +25,36 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <div className="backdrop" aria-hidden="true" />
-      <DoodleField />
-      <div className="backdrop-dots" aria-hidden="true" />
-      <a className="skip" href="#generator">
-        Langsung ke generator email
+      <MarketBackdrop />
+      <a className="skip" href="#alat">
+        Langsung ke alat email
       </a>
-      <SoundControls />
-      <ChapterNav />
-      <ComicPage />
+      <Kentongan />
+      <main>
+        <section className="warung" aria-labelledby="judul">
+          <div className="warung__roof" aria-hidden="true" />
+          <div className="warung__frame">
+            <WarungBanner
+              title={
+                <h1 id="judul" className="banner__title">
+                  <span className="sr-only">VenbeeMail, email sementara</span>
+                  <SyrupTitle />
+                </h1>
+              }
+              tagline={
+                <p className="banner__tag">
+                  Email sementara dari <b>pasar malam zombie</b>. Ambil kantong, tulis nota, pakai, buang.
+                </p>
+              }
+            />
+            <MailTool />
+          </div>
+        </section>
+        <WhySection />
+        <HowSection />
+        <FaqSection />
+      </main>
+      <ClosingFooter />
     </>
   );
 }

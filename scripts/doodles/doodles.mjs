@@ -1,219 +1,279 @@
-// Original VenbeeMail doodle extras, drawn in-house for this project.
-// Each doodle lives in a 512x512 cell. Style rules (taken from the brief):
-// blue bodies with a top-lit gradient, thick black outlines, red-orange and
-// cream accents. Shapes built from several parts use `outlined()` so their
-// outline wraps the union instead of every overlapping part.
+// Original VenbeeMail night-market doodles, drawn in code for this project.
+//
+// Style rules (from the brief's background reference, not copied from it):
+// black ground, jagged lightning rays bursting from one point, grey / white
+// cartoon characters with heavy black outlines, and syrup-coloured accents.
+// Every character here is our own: a cracked skull, a drooling ghost, bones,
+// a slime puddle with stalk eyes, a tin robot, an es-campur glass with a
+// grin, a smoke puff, a grinning star, an eyeball and a zombie hand.
+//
+// Stamps are drawn in a 200 x 200 box. Parts that overlap use `outlined()`
+// so a single outline wraps their union.
 
 export const INK = "#0A0A0A";
-export const RED = "#FF3A1F";
-export const BLUE = "#1B7CFF";
-export const CREAM = "#F5E6C8";
-const LW = 18; // outline weight inside a 512 cell
+export const WHITE = "#F4F1EA";
+export const GREY = "#9A9A9A";
+export const GREY_D = "#5E5E5E";
+export const GREY_L = "#CFCFCF";
 
-export const defs = `
-  <linearGradient id="vb" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#63BDFF"/>
-    <stop offset=".55" stop-color="${BLUE}"/>
-    <stop offset="1" stop-color="#0A4ACC"/>
-  </linearGradient>
-  <radialGradient id="vbi" cx=".4" cy=".35" r=".7">
-    <stop offset="0" stop-color="#7CCBFF"/>
-    <stop offset="1" stop-color="#0A4ACC"/>
-  </radialGradient>`;
+export const SYRUP = {
+  pink: "#FF3DAE",
+  green: "#7CFF2B",
+  red: "#FF3A1F",
+  purple: "#8A2BE2",
+  yellow: "#FFD23F",
+  teal: "#19D3C5",
+  orange: "#FF8A1F",
+  blue: "#2D6BFF",
+};
 
-const ink = (w = LW) =>
-  `stroke="${INK}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
-const shine = (d, w = 14) =>
-  `<path d="${d}" fill="none" stroke="#CFEBFF" stroke-width="${w}" stroke-linecap="round" opacity=".9"/>`;
-/** Draw shapes with one outline around their union. */
-const outlined = (shapes, fill = "url(#vb)") =>
-  `<g fill="${INK}" ${ink(LW * 2)}>${shapes}</g><g fill="${fill}">${shapes}</g>`;
+const LW = 8;
+const ink = (w = LW) => `stroke="${INK}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const line = (d, w = LW, color = INK) =>
+  `<path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+/** Several shapes with one outline around their union. */
+const outlined = (shapes, fill) => `<g fill="${INK}" ${ink(LW * 2)}>${shapes}</g><g fill="${fill}">${shapes}</g>`;
 
-export const doodles = [
-  {
-    name: "skull-flame",
-    svg: `
-      <path d="M256 58C138 58 78 140 82 238c2 54 26 84 48 100l8 52c4 30 30 50 62 50h112c32 0 58-20 62-50l8-52c22-16 46-46 48-100 4-98-56-180-174-180Z" fill="url(#vb)" ${ink()}/>
-      ${shine("M140 170c10-40 40-70 80-80")}
-      <path d="M330 92l-18 34 26 12-22 40" fill="none" ${ink(12)}/>
-      <ellipse cx="186" cy="252" rx="58" ry="62" fill="${INK}"/>
-      <ellipse cx="326" cy="252" rx="58" ry="62" fill="${INK}"/>
-      <path d="M186 200c26 30 40 52 32 80-5 20-18 30-32 30-22 0-36-16-33-38 2-20 18-26 18-44 10 10 12 22 20 24 4-18 0-34-5-52Z" fill="${RED}" ${ink(8)}/>
-      <path d="M186 270c8 8 10 18 4 26-6 6-16 4-18-4-2-8 6-12 14-22Z" fill="${CREAM}"/>
-      <circle cx="326" cy="252" r="28" fill="none" stroke="${CREAM}" stroke-width="10"/>
-      <circle cx="326" cy="252" r="8" fill="${CREAM}"/>
-      <path d="M256 318l-22 34h44Z" fill="${INK}" ${ink(8)}/>
-      <path d="M168 380h176v46c0 10-8 18-18 18H186c-10 0-18-8-18-18Z" fill="${CREAM}" ${ink(14)}/>
-      <path d="M204 382v58M240 382v60M276 382v60M312 382v58" ${ink(10)}/>`,
+// ------------------------------------------------------------------ stamps
+// each stamp: (a = main accent, b = second accent) => svg in a 200 box
+export const stamps = {
+  skull: (a, b) => `
+    <path d="M100 16C56 16 28 46 28 88c0 26 11 42 25 51v21c0 9 7 16 16 16h62c9 0 16-7 16-16v-21c14-9 25-25 25-51 0-42-28-72-72-72Z" fill="${WHITE}" ${ink()}/>
+    ${line("M42 104c4 18 12 28 22 34", 10, GREY_L)}
+    ${line("M104 17l-10 20 13 9-11 18", 6)}
+    <path d="M56 86c0-14 11-22 24-19 11 2 15 13 13 24-3 13-13 19-24 17-9-2-13-11-13-22Z" fill="${INK}"/>
+    <path d="M144 86c0-14-11-22-24-19-11 2-15 13-13 24 3 13 13 19 24 17 9-2 13-11 13-22Z" fill="${INK}"/>
+    <circle cx="76" cy="88" r="8" fill="${a}"/><circle cx="124" cy="88" r="8" fill="${a}"/>
+    <circle cx="73" cy="85" r="3" fill="${WHITE}"/><circle cx="121" cy="85" r="3" fill="${WHITE}"/>
+    <path d="M100 112l-10 15h20Z" fill="${INK}" ${ink(4)}/>
+    ${line("M66 150h68M82 140v24M100 140v26M118 140v24", 6)}
+    <path d="M150 40l16-10M156 52l18-2" fill="none" stroke="${b}" stroke-width="7" stroke-linecap="round"/>`,
+
+  ghost: (a) => `
+    <path d="M48 176V94c0-44 24-74 52-74s52 30 52 74v82l-13-12-13 15-13-14-13 15-13-15-13 14-13-15Z" fill="${WHITE}" ${ink()}/>
+    ${line("M64 70c4-18 14-30 28-34", 9, GREY_L)}
+    <ellipse cx="80" cy="88" rx="10" ry="16" fill="${INK}"/><ellipse cx="120" cy="88" rx="10" ry="16" fill="${INK}"/>
+    <circle cx="83" cy="82" r="4" fill="${WHITE}"/><circle cx="123" cy="82" r="4" fill="${WHITE}"/>
+    <path d="M78 118c10 18 34 18 44 0Z" fill="${INK}" ${ink(6)}/>
+    <path d="M98 126c0 18 4 34 10 34s8-12 6-30Z" fill="${a}" ${ink(5)}/>
+    <path d="M40 120c-12 2-18 10-16 20M160 120c12 2 18 10 16 20" fill="none" ${ink(7)}/>`,
+
+  bone: (a) => {
+    const shapes = `
+      <rect x="44" y="88" width="112" height="26" rx="10" transform="rotate(-24 100 100)"/>
+      <circle cx="42" cy="118" r="18"/><circle cx="54" cy="142" r="18"/>
+      <circle cx="146" cy="58" r="18"/><circle cx="158" cy="82" r="18"/>`;
+    return `${outlined(shapes, WHITE)}
+      ${line("M60 118l74-34", 6, GREY_L)}
+      <path d="M92 150c-4 10-4 18 2 22 6 4 12-2 12-10 0-6-6-10-14-12Z" fill="${a}" ${ink(5)}/>`;
   },
-  {
-    name: "ghost-grin",
-    svg: `
-      <path d="M128 444V232c0-92 58-152 128-152s128 60 128 152v212l-32-30-32 30-32-30-32 30-32-30-32 30-32-30Z" fill="url(#vb)" ${ink()}/>
-      ${shine("M168 180c8-36 36-62 70-70")}
-      <ellipse cx="212" cy="214" rx="17" ry="28" fill="${INK}"/>
-      <ellipse cx="300" cy="214" rx="17" ry="28" fill="${INK}"/>
-      <circle cx="216" cy="204" r="6" fill="${CREAM}"/>
-      <circle cx="304" cy="204" r="6" fill="${CREAM}"/>
-      <path d="M190 280q66 80 132 0Z" fill="${INK}" ${ink(14)}/>
-      <path d="M226 300q30 20 60 0" fill="${RED}"/>
-      <path d="M160 300c-20 6-30 20-26 34M352 300c20 6 30 20 26 34" fill="none" ${ink(12)}/>`,
+
+  puddle: (a, b) => {
+    const blob = `
+      <path d="M24 150c0-22 22-34 46-34 10-12 50-14 64-2 26 0 44 14 44 34 0 18-22 26-40 22l-6 22c-2 8-14 8-16 0l-4-16c-14 4-30 4-44 0l-4 24c-2 10-16 10-18 0l-4-24c-10-2-18-12-18-26Z"/>
+      <rect x="66" y="52" width="10" height="72" rx="5"/><rect x="118" y="44" width="10" height="80" rx="5"/>
+      <circle cx="71" cy="48" r="20"/><circle cx="123" cy="40" r="22"/>`;
+    return `${outlined(blob, a)}
+      <circle cx="71" cy="48" r="14" fill="${WHITE}"/><circle cx="123" cy="40" r="16" fill="${WHITE}"/>
+      <circle cx="75" cy="50" r="6" fill="${INK}"/><circle cx="118" cy="42" r="7" fill="${INK}"/>
+      ${line("M44 146c10-8 22-10 34-8", 8, "#FFFFFF66")}
+      <path d="M86 150c8 8 22 8 30 0" fill="none" ${ink(6)}/>
+      <circle cx="150" cy="150" r="6" fill="${b}"/>`;
   },
-  {
-    name: "ghost-drip",
-    svg: `
-      <path d="M142 300c0-128 50-198 114-198s114 70 114 198c0 30 6 58-10 72-14 10-24-10-30-22-4 40-14 80-34 80s-16-50-26-58c-8 28-20 80-44 80s-12-62-22-80c-8 18-24 28-38 18-16-12-24-52-24-90Z" fill="url(#vb)" ${ink()}/>
-      ${shine("M178 200c6-32 26-56 54-64")}
-      <path d="M188 216q20-14 40 0M284 216q20-14 40 0" fill="none" ${ink(14)}/>
-      <ellipse cx="208" cy="246" rx="14" ry="20" fill="${INK}"/>
-      <ellipse cx="304" cy="246" rx="14" ry="20" fill="${INK}"/>
-      <path d="M224 312q32-26 64 0" fill="none" ${ink(14)}/>
-      <path d="M196 272c-6 14-12 22-12 30 0 8 6 14 12 14s12-6 12-14c0-8-6-16-12-30Z" fill="#9ED8FF" ${ink(6)}/>`,
+
+  robot: (a, b) => `
+    <path d="M100 38V18" fill="none" ${ink(7)}/><circle cx="100" cy="14" r="10" fill="${a}" ${ink(6)}/>
+    <rect x="40" y="38" width="120" height="96" rx="14" fill="${GREY}" ${ink()}/>
+    <rect x="30" y="70" width="12" height="32" rx="4" fill="${GREY_D}" ${ink(6)}/>
+    <rect x="158" y="70" width="12" height="32" rx="4" fill="${GREY_D}" ${ink(6)}/>
+    ${line("M52 52h40", 8, GREY_L)}
+    <circle cx="74" cy="80" r="20" fill="${WHITE}" ${ink(7)}/><circle cx="128" cy="78" r="14" fill="${WHITE}" ${ink(7)}/>
+    <circle cx="78" cy="82" r="8" fill="${INK}"/><circle cx="130" cy="80" r="6" fill="${INK}"/>
+    <rect x="62" y="108" width="76" height="16" rx="4" fill="${INK}"/>
+    ${line("M76 110v12M90 110v12M104 110v12M118 110v12", 4, GREY_L)}
+    <rect x="70" y="134" width="60" height="14" fill="${GREY_D}" ${ink(6)}/>
+    <rect x="48" y="148" width="104" height="44" rx="8" fill="${GREY}" ${ink()}/>
+    <circle cx="76" cy="170" r="9" fill="${b}" ${ink(5)}/><circle cx="104" cy="170" r="9" fill="${a}" ${ink(5)}/>
+    <rect x="120" y="162" width="20" height="16" rx="3" fill="${WHITE}" ${ink(5)}/>
+    <circle cx="52" cy="44" r="3" fill="${INK}"/><circle cx="148" cy="44" r="3" fill="${INK}"/>`,
+
+  glass: (a, b) => `
+    <path d="M126 10l-22 66" fill="none" stroke="${INK}" stroke-width="18" stroke-linecap="round"/>
+    <path d="M126 10l-22 66" fill="none" stroke="${b}" stroke-width="8" stroke-linecap="round"/>
+    <path d="M40 46h120l-14 138c-1 8-8 12-16 12H70c-8 0-15-4-16-12Z" fill="${WHITE}" ${ink()}/>
+    <path d="M47 104h106l-9 80c-1 6-6 8-12 8H68c-6 0-11-2-12-8Z" fill="${a}"/>
+    <rect x="60" y="72" width="30" height="30" rx="6" fill="#E6F6FF" ${ink(5)} transform="rotate(-12 75 87)"/>
+    <rect x="108" y="78" width="26" height="26" rx="6" fill="#E6F6FF" ${ink(5)} transform="rotate(14 121 91)"/>
+    <circle cx="80" cy="136" r="9" fill="${INK}"/><circle cx="122" cy="136" r="9" fill="${INK}"/>
+    <circle cx="83" cy="133" r="3" fill="${WHITE}"/><circle cx="125" cy="133" r="3" fill="${WHITE}"/>
+    <path d="M78 156c12 16 34 16 46 0Z" fill="${WHITE}" ${ink(6)}/>
+    ${line("M90 156v8M101 157v9M112 156v8", 4)}
+    <path d="M40 46h120l-14 138c-1 8-8 12-16 12H70c-8 0-15-4-16-12Z" fill="none" ${ink()}/>
+    ${line("M142 58l-8 86", 7, "#FFFFFFAA")}`,
+
+  puff: (a) => {
+    const cloud = `<circle cx="60" cy="118" r="34"/><circle cx="96" cy="90" r="42"/><circle cx="140" cy="112" r="36"/>
+      <circle cx="120" cy="146" r="28"/><circle cx="76" cy="150" r="26"/>`;
+    return `${outlined(cloud, GREY_L)}
+      ${line("M70 92c6-14 18-24 34-26", 8, WHITE)}
+      <path d="M72 118q10 8 20 0M110 116q10 8 20 0" fill="none" ${ink(6)}/>
+      <ellipse cx="102" cy="142" rx="10" ry="8" fill="${INK}"/>
+      <path d="M162 70c10-6 14-16 10-26M36 76c-8-8-8-18 0-24" fill="none" stroke="${a}" stroke-width="7" stroke-linecap="round"/>`;
   },
-  {
-    name: "bomb",
-    svg: `
-      <path d="M338 118c34-40 76-40 100-86" fill="none" ${ink(14)}/>
-      <path d="M300 146l44-34 38 50-44 34Z" fill="#2A2A2A" ${ink(14)}/>
-      <circle cx="238" cy="300" r="156" fill="${INK}"/>
-      <path d="M140 230q24-58 86-72" fill="none" stroke="${BLUE}" stroke-width="22" stroke-linecap="round"/>
-      <path d="M128 280q-4 18 0 34" fill="none" stroke="${BLUE}" stroke-width="16" stroke-linecap="round"/>
-      <ellipse cx="200" cy="300" rx="20" ry="32" fill="${CREAM}"/>
-      <ellipse cx="290" cy="300" rx="20" ry="32" fill="${CREAM}"/>
-      <circle cx="206" cy="310" r="9" fill="${INK}"/>
-      <circle cx="284" cy="310" r="9" fill="${INK}"/>
-      <path d="M168 256l52 18M322 256l-52 18" stroke="${CREAM}" stroke-width="12" stroke-linecap="round"/>
-      <path d="M210 386q36-20 72 0" fill="none" stroke="${CREAM}" stroke-width="12" stroke-linecap="round"/>
-      <path d="M440 12l10 26 26-8-16 22 22 16-28 2 2 28-18-20-18 20 2-28-28-2 22-16-16-22 26 8Z" fill="${RED}" ${ink(8)}/>
-      <circle cx="440" cy="40" r="8" fill="${CREAM}"/>`,
+
+  star: (a, b) => `
+    <path d="M100 8l20 48 50-14-30 44 44 28-52 8 6 52-38-36-38 36 6-52-52-8 44-28-30-44 50 14Z" fill="${a}" ${ink()}/>
+    <circle cx="82" cy="92" r="10" fill="${INK}"/><circle cx="118" cy="92" r="10" fill="${INK}"/>
+    <circle cx="85" cy="89" r="3" fill="${WHITE}"/><circle cx="121" cy="89" r="3" fill="${WHITE}"/>
+    <path d="M70 112c14 26 46 26 60 0Z" fill="${WHITE}" ${ink(6)}/>
+    <path d="M78 116l6 10 6-10 6 10 6-10 6 10 6-10 6 10 6-10" fill="none" ${ink(4)}/>
+    <circle cx="150" cy="40" r="6" fill="${b}"/><circle cx="40" cy="150" r="5" fill="${b}"/>`,
+
+  eyeball: (a, b) => `
+    <path d="M100 150c-4 14-8 24-8 32 0 8 4 12 8 12s8-4 8-12c0-8-4-18-8-32Z" fill="${a}" ${ink(6)}/>
+    <circle cx="100" cy="92" r="62" fill="${WHITE}" ${ink()}/>
+    ${line("M50 72c-6 10-8 20-6 30M54 124c6 8 14 14 22 16M150 66c6 8 8 16 8 26", 5, SYRUP.red)}
+    <circle cx="110" cy="84" r="30" fill="${a}" ${ink(6)}/>
+    <circle cx="112" cy="84" r="14" fill="${INK}"/>
+    <circle cx="104" cy="76" r="6" fill="${WHITE}"/>
+    ${line("M60 50c10-10 22-16 36-16", 8, GREY_L)}
+    <circle cx="160" cy="150" r="7" fill="${b}"/>`,
+
+  hand: (a, b) => {
+    const hand = `
+      <path d="M58 196l6-86c-10-18-14-34-10-40 6-8 16-2 20 10l4 12V30c0-10 14-10 16 0v58l2-68c0-10 16-10 16 0l-2 68 8-58c2-10 16-8 16 2l-8 64 12-40c4-10 16-6 14 4l-14 60c-4 20-12 34-26 44l-4 62Z"/>`;
+    return `${outlined(hand, "#9BC47A")}
+      ${line("M84 110l40 0M92 102v16M104 102v16M116 102v16", 5)}
+      ${line("M88 40v40M108 34v44", 6, "#C4E4A4")}
+      <path d="M62 196l4-40h54l-4 40Z" fill="${b}" ${ink(7)}/>
+      ${line("M70 172h40", 6, INK)}
+      <path d="M140 150c6 6 8 14 4 20" fill="none" stroke="${a}" stroke-width="8" stroke-linecap="round"/>`;
   },
-  {
-    name: "mushroom",
-    svg: `
-      <path d="M192 300l-12 118c0 28 32 40 76 40s76-12 76-40l-12-118Z" fill="${CREAM}" ${ink()}/>
-      <path d="M68 282C68 162 158 78 256 78s188 84 188 204c0 20-22 30-44 26H112c-22 4-44-6-44-26Z" fill="url(#vb)" ${ink()}/>
-      ${shine("M112 214c14-54 56-96 108-110")}
-      <circle cx="176" cy="196" r="30" fill="${INK}"/>
-      <circle cx="268" cy="142" r="24" fill="${INK}"/>
-      <circle cx="348" cy="210" r="36" fill="${INK}"/>
-      <circle cx="250" cy="250" r="18" fill="${INK}"/>
-      <circle cx="398" cy="270" r="12" fill="${INK}"/>
-      <circle cx="232" cy="362" r="10" fill="${INK}"/>
-      <circle cx="282" cy="362" r="10" fill="${INK}"/>
-      <path d="M236 396q20 16 40 0" fill="none" ${ink(10)}/>`,
-  },
-  {
-    name: "arrow",
-    svg: `
-      <g transform="translate(96 404) rotate(-42)">
-        <path d="M0-42h250v-72l150 114-150 114v-72H0Z" fill="url(#vb)" ${ink()}/>
-        <path d="M44-42v84M92-42v84M140-42v84M188-42v84" ${ink(12)}/>
-        ${shine("M268-70l72 54", 12)}
-      </g>`,
-  },
-  {
-    name: "crown",
-    svg: `
-      <path d="M100 382L78 170l100 92 78-146 78 146 100-92-22 212Z" fill="url(#vb)" ${ink()}/>
-      <path d="M100 382h312v52H100Z" fill="#0A4ACC" ${ink()}/>
-      ${shine("M122 300l-8-62")}
-      <path d="M256 280l30 36-30 36-30-36Z" fill="${CREAM}" ${ink(12)}/>
-      <circle cx="78" cy="160" r="22" fill="${RED}" ${ink(12)}/>
-      <circle cx="256" cy="106" r="24" fill="${RED}" ${ink(12)}/>
-      <circle cx="434" cy="160" r="22" fill="${RED}" ${ink(12)}/>
-      <circle cx="160" cy="408" r="10" fill="${CREAM}"/>
-      <circle cx="256" cy="408" r="10" fill="${CREAM}"/>
-      <circle cx="352" cy="408" r="10" fill="${CREAM}"/>`,
-  },
-  {
-    name: "bubble-yes",
-    svg: `
-      <path d="M256 104c126 0 208 62 208 146s-82 146-208 146c-22 0-42-2-60-6l-92 58 26-82c-50-26-82-68-82-116 0-84 82-146 208-146Z" fill="${CREAM}" ${ink()}/>
-      <g fill="none" ${ink(30)}>
-        <path d="M130 184l40 60 40-60M170 244v68"/>
-        <path d="M312 184h-62v128h62M250 248h50"/>
-        <path d="M400 196c-12-16-58-18-58 12 0 34 64 28 64 68 0 36-50 42-72 18"/>
-      </g>`,
-  },
-  {
-    name: "bubble-no",
-    svg: `
-      <path d="M256 104C130 104 48 166 48 250s82 146 208 146c22 0 42-2 60-6l92 58-26-82c50-26 82-68 82-116 0-84-82-146-208-146Z" fill="url(#vb)" ${ink()}/>
-      ${shine("M110 200c20-36 60-60 112-66")}
-      <g fill="none" ${ink(32)}>
-        <path d="M150 316V184l86 132V184"/>
-        <ellipse cx="330" cy="250" rx="46" ry="66"/>
-      </g>
-      <path d="M404 176v70" ${ink(26)}/><circle cx="404" cy="300" r="15" fill="${INK}"/>`,
-  },
-  {
-    name: "eyeball",
-    svg: `
-      <path d="M236 404c-6 30-2 56 18 70M280 404c10 22 30 34 54 36" fill="none" stroke="${RED}" stroke-width="14" stroke-linecap="round"/>
-      <circle cx="256" cy="250" r="160" fill="${CREAM}" ${ink()}/>
-      <path d="M102 210c30 10 50 4 70 18M110 300c30-6 44 8 66 2M150 380c18-18 36-22 56-18" fill="none" stroke="${RED}" stroke-width="7" stroke-linecap="round"/>
-      <circle cx="292" cy="238" r="84" fill="url(#vbi)" ${ink(14)}/>
-      <path d="M292 162v28M292 286v28M216 238h28M340 238h28M240 186l20 20M324 270l20 20M344 186l-20 20M260 270l-20 20" stroke="#0A4ACC" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="298" cy="236" r="38" fill="${INK}"/>
-      <circle cx="318" cy="214" r="13" fill="#FFFFFF"/>
-      <circle cx="274" cy="262" r="6" fill="#FFFFFF"/>`,
-  },
-  {
-    name: "bone",
-    svg: `
-      <g transform="rotate(-32 256 256)">
-        ${outlined(`
-          <rect x="120" y="222" width="272" height="68" rx="20"/>
-          <circle cx="112" cy="214" r="46"/><circle cx="112" cy="298" r="46"/>
-          <circle cx="400" cy="214" r="46"/><circle cx="400" cy="298" r="46"/>`, CREAM)}
-        <path d="M150 238h200" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" opacity=".8"/>
-      </g>`,
-  },
-  {
-    name: "mail-monster",
-    svg: `
-      <path d="M130 420l-10 48M382 420l10 48" ${ink(16)}/>
-      <rect x="70" y="140" width="372" height="282" rx="24" fill="url(#vb)" ${ink()}/>
-      <path d="M78 150l178 138 178-138" fill="none" ${ink()}/>
-      ${shine("M100 196v80")}
-      <path d="M160 328q96 90 192 0Z" fill="${INK}" ${ink(14)}/>
-      <path d="M176 334l18 26 18-20 18 24 18-22 16 22 18-22 18 24 18-22 16 16" fill="${CREAM}" stroke="${CREAM}" stroke-width="6" stroke-linejoin="round"/>
-      <g transform="translate(150 212)"><ellipse rx="38" ry="30" fill="${CREAM}" ${ink(10)}/><path d="M-44-4h88" ${ink(16)}/><circle cy="12" r="7" fill="${INK}"/></g>
-      <g transform="translate(362 212)"><ellipse rx="38" ry="30" fill="${CREAM}" ${ink(10)}/><path d="M-44-4h88" ${ink(16)}/><circle cy="12" r="7" fill="${INK}"/></g>
-      <circle cx="420" cy="120" r="30" fill="${RED}" ${ink(12)}/>
-      <path d="M420 104v18M420 134v2" ${ink(10)}/>`,
-  },
-  {
-    name: "at-blob",
-    svg: `
-      <path d="M318 214v84c0 42 72 44 82-12 18-100-56-170-144-170-92 0-156 70-156 150 0 90 70 152 160 152 44 0 74-10 98-28" fill="none" stroke="${INK}" stroke-width="84" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="256" cy="262" r="66" fill="${INK}"/>
-      <path d="M318 214v84c0 42 72 44 82-12 18-100-56-170-144-170-92 0-156 70-156 150 0 90 70 152 160 152 44 0 74-10 98-28" fill="none" stroke="url(#vb)" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="256" cy="262" r="48" fill="url(#vb)"/>
-      <circle cx="240" cy="252" r="9" fill="${INK}"/><circle cx="274" cy="252" r="9" fill="${INK}"/>
-      <path d="M238 280q18 14 36 0" fill="none" ${ink(8)}/>
-      <path d="M140 200c10-26 30-44 56-54" fill="none" stroke="#CFEBFF" stroke-width="12" stroke-linecap="round"/>`,
-  },
-  {
-    name: "lightning",
-    svg: `
-      <path d="M298 44L136 284h104l-44 184 190-264H278l58-160Z" fill="url(#vb)" ${ink()}/>
-      ${shine("M280 90l-86 130", 12)}
-      <path d="M396 120l40-20M410 170h44M90 360l-40 14M84 310l-44-6" ${ink(12)}/>`,
-  },
-  {
-    name: "paper-ball",
-    svg: `
-      <path d="M150 128l74-40 58 30 70-22 44 64 38 40-20 76 26 60-58 58-72 4-54 34-64-28-70 2-28-70-30-58 32-60-6-66Z" fill="${CREAM}" ${ink()}/>
-      <path d="M224 88l-12 70 70-40M352 96l-20 84 64 20M132 270l86-18-22 90M432 346l-78-26 8-74M226 436l30-86 64 54" fill="none" ${ink(9)} opacity=".85"/>
-      <path d="M196 214l40 40M236 214l-40 40M292 214l40 40M332 214l-40 40" ${ink(14)}/>
-      <path d="M214 316q20-18 40 0t40 0t40 0" fill="none" ${ink(12)}/>`,
-  },
-  {
-    name: "splat-star",
-    svg: `
-      <path d="M256 36l40 110 104-58-38 112 118 14-104 64 78 90-118-20-6 120-74-92-74 92-6-120-118 20 78-90-104-64 118-14-38-112 104 58Z" fill="url(#vb)" ${ink()}/>
-      <circle cx="256" cy="262" r="70" fill="${CREAM}" ${ink(14)}/>
-      <path d="M256 222v40" ${ink(24)}/><circle cx="256" cy="298" r="12" fill="${INK}"/>`,
-  },
+};
+
+export const STAMP_NAMES = Object.keys(stamps);
+
+// ------------------------------------------------------------------ banners
+function rng(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+/** Jagged lightning rays bursting from (fx, fy). */
+function rays(fx, fy, color, r, count = 13, len = 1400) {
+  let out = "";
+  const base = r() * Math.PI * 2;
+  for (let i = 0; i < count; i++) {
+    const a = base + (i / count) * Math.PI * 2 + (r() - 0.5) * 0.2;
+    const w = 0.08 + r() * 0.07; // half angle
+    const pts = [];
+    const steps = 5;
+    // one side out, the other back: zig-zag edges like a lightning bolt
+    for (let s = 0; s <= steps; s++) {
+      const d = 30 + (len * s) / steps;
+      const zig = (s % 2 ? 1 : -1) * 0.05;
+      pts.push([fx + Math.cos(a - w + zig) * d, fy + Math.sin(a - w + zig) * d]);
+    }
+    for (let s = steps; s >= 0; s--) {
+      const d = 30 + (len * s) / steps;
+      const zig = (s % 2 ? 1 : -1) * 0.05;
+      pts.push([fx + Math.cos(a + w + zig) * d, fy + Math.sin(a + w + zig) * d]);
+    }
+    out += `<path d="M${pts.map(([x, y]) => `${x.toFixed(0)} ${y.toFixed(0)}`).join("L")}Z" fill="${color}" stroke="${INK}" stroke-width="10" stroke-linejoin="round"/>`;
+  }
+  return out;
+}
+
+function sprinkles(w, h, colors, r, n = 26) {
+  let out = "";
+  for (let i = 0; i < n; i++) {
+    const x = r() * w;
+    const y = r() * h;
+    const c = colors[Math.floor(r() * colors.length)];
+    const k = r();
+    if (k < 0.35) out += `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${(4 + r() * 7).toFixed(0)}" fill="${c}" stroke="${INK}" stroke-width="4"/>`;
+    else if (k < 0.6) out += `<path d="M${x.toFixed(0)} ${y.toFixed(0)}l10 6M${(x + 4).toFixed(0)} ${(y + 14).toFixed(0)}l10 6" stroke="${WHITE}" stroke-width="5" stroke-linecap="round"/>`;
+    else if (k < 0.8) {
+      const s = 10 + r() * 10;
+      out += `<path d="M${x.toFixed(0)} ${(y - s).toFixed(0)}l${(s * 0.4).toFixed(0)} ${s.toFixed(0)}h${(-s * 0.3).toFixed(0)}l${(s * 0.3).toFixed(0)} ${s.toFixed(0)}l${(-s * 0.9).toFixed(0)} ${(-s * 1.2).toFixed(0)}h${(s * 0.35).toFixed(0)}Z" fill="${c}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
+    } else out += `<path d="M${x.toFixed(0)} ${y.toFixed(0)}c0 10 -8 16 -8 22a8 8 0 0 0 16 0c0-6-8-12-8-22Z" fill="${c}" stroke="${INK}" stroke-width="4"/>`;
+  }
+  return out;
+}
+
+/** Slime drips along the top edge. */
+function topDrips(w, color, r) {
+  let d = `M0 0H${w}V18`;
+  let x = w;
+  while (x > 0) {
+    const step = 40 + r() * 70;
+    const nx = Math.max(0, x - step);
+    const deep = r() < 0.55;
+    if (deep) {
+      const cx = (x + nx) / 2;
+      const len = 30 + r() * 60;
+      d += `L${(cx + 12).toFixed(0)} 18C${(cx + 12).toFixed(0)} ${(18 + len).toFixed(0)} ${(cx + 16).toFixed(0)} ${(30 + len).toFixed(0)} ${cx.toFixed(0)} ${(30 + len).toFixed(0)}S${(cx - 12).toFixed(0)} ${(18 + len).toFixed(0)} ${(cx - 12).toFixed(0)} 18`;
+    }
+    d += `L${nx.toFixed(0)} ${(16 + r() * 6).toFixed(0)}`;
+    x = nx;
+  }
+  d += "Z";
+  return `<path d="${d}" fill="${color}" stroke="${INK}" stroke-width="8" stroke-linejoin="round"/>`;
+}
+
+const PAIRS = [
+  ["pink", "green"],
+  ["green", "purple"],
+  ["purple", "yellow"],
+  ["yellow", "pink"],
+  ["red", "teal"],
+  ["teal", "pink"],
+  ["orange", "purple"],
+  ["pink", "yellow"],
 ];
+
+export const BANNER_W = 1024;
+export const BANNER_H = 512;
+
+/** One wide doodle banner (1024 x 512). */
+export function banner(index) {
+  const r = rng(0xbadc0de + index * 7919);
+  const [ka, kb] = PAIRS[index % PAIRS.length];
+  const a = SYRUP[ka];
+  const b = SYRUP[kb];
+  const fx = [120, 900, 512, 60, 980, 300, 760, 512][index % 8];
+  const fy = [470, 480, 560, 60, 40, 540, 520, -40][index % 8];
+  const W = BANNER_W;
+  const H = BANNER_H;
+
+  // stamps on a jittered 4 x 2 grid, one cell left empty for breathing room
+  const cells = [];
+  for (let gy = 0; gy < 2; gy++) for (let gx = 0; gx < 4; gx++) cells.push([gx, gy]);
+  const skip = Math.floor(r() * cells.length);
+  const names = [...STAMP_NAMES].sort(() => r() - 0.5);
+  let placed = "";
+  let n = 0;
+  cells.forEach(([gx, gy], i) => {
+    if (i === skip) return;
+    const name = names[n++ % names.length];
+    const s = 0.95 + r() * 0.55;
+    const x = (gx + 0.5) * (W / 4) + (r() - 0.5) * 70 - 100 * s;
+    const y = (gy + 0.5) * (H / 2) + (r() - 0.5) * 50 - 100 * s;
+    const rot = (r() - 0.5) * 40;
+    const [c1, c2] = r() < 0.5 ? [a, b] : [b, a];
+    placed += `<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) rotate(${rot.toFixed(1)} ${(100 * s).toFixed(0)} ${(100 * s).toFixed(0)}) scale(${s.toFixed(2)})">${stamps[name](c1, c2)}</g>`;
+  });
+
+  return `
+    <rect width="${W}" height="${H}" fill="${INK}"/>
+    ${rays(fx, fy, a, r)}
+    <circle cx="${fx}" cy="${fy}" r="70" fill="${b}" stroke="${INK}" stroke-width="10"/>
+    ${sprinkles(W, H, [a, b, WHITE], r)}
+    ${placed}
+    ${index % 2 ? topDrips(W, b, r) : ""}`;
+}
+
+export const BANNER_COUNT = PAIRS.length;

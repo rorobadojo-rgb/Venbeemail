@@ -1,29 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Bangers, Bowlby_One, Space_Mono } from "next/font/google";
-import { asset } from "@/lib/asset";
+import { Bungee, Chakra_Petch, Permanent_Marker, Rubik } from "next/font/google";
 import { SITE } from "@/lib/site";
 import "../styles/base.css";
-import "../styles/comic.css";
-import "../styles/panels.css";
+import "../styles/hero.css";
+import "../styles/tool.css";
+import "../styles/sections.css";
 
-const display = Bowlby_One({ weight: "400", subsets: ["latin"], variable: "--font-bowlby", display: "swap" });
-const comic = Bangers({ weight: "400", subsets: ["latin"], variable: "--font-bangers", display: "swap" });
-const mono = Space_Mono({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-space-mono",
-  display: "swap",
-  preload: false,
-});
+const sign = Bungee({ weight: "400", subsets: ["latin"], variable: "--font-bungee", display: "swap" });
+const marker = Permanent_Marker({ weight: "400", subsets: ["latin"], variable: "--font-marker", display: "swap", preload: false });
+const label = Chakra_Petch({ weight: "700", subsets: ["latin"], variable: "--font-chakra", display: "swap", preload: false });
+const body = Rubik({ weight: ["400", "600", "800"], subsets: ["latin"], variable: "--font-rubik", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: "VenbeeMail — Email sementara, gaya komik",
+  title: "VenbeeMail — Email sementara dari pasar malam zombie",
   description: SITE.description,
   applicationName: SITE.name,
   openGraph: {
     type: "website",
-    title: "VenbeeMail — Butuh email? Sebentar aja? Nih.",
+    title: "VenbeeMail — Email sementara dari pasar malam zombie",
     description: SITE.description,
     locale: "id_ID",
     siteName: SITE.name,
@@ -32,16 +27,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF3A1F",
-  colorScheme: "light",
+  themeColor: "#0A0A0A",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id" className={`${display.variable} ${comic.variable} ${mono.variable}`}
-      style={{ "--atlas": `url("${asset("/doodles/atlas.svg")}")` } as React.CSSProperties} suppressHydrationWarning>
+    <html lang="id" className={`${sign.variable} ${marker.variable} ${label.variable} ${body.variable}`} suppressHydrationWarning>
       <head>
-        {/* flag JS before first paint so the cinematic layout never flashes */}
+        {/* flag JS before first paint so JS-only states never flash */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.setAttribute('data-js','')" }} />
       </head>
       <body>{children}</body>

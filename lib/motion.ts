@@ -1,12 +1,31 @@
-/**
- * Layout/motion modes. Keep these in sync with the media queries in
- * styles/comic.css (the CSS applies the same layouts before JS runs).
- */
-export const CINEMATIC =
-  "(min-width: 960px) and (min-height: 600px) and (prefers-reduced-motion: no-preference)";
-export const FLOW =
-  "(max-width: 959.98px) and (prefers-reduced-motion: no-preference), (max-height: 599.98px) and (prefers-reduced-motion: no-preference)";
-export const REDUCED = "(prefers-reduced-motion: reduce)";
+import { useSyncExternalStore } from "react";
 
-export const prefersReducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia(REDUCED).matches;
+/**
+ * Motion / layout modes. Keep these in sync with the media queries in the
+ * stylesheets (the CSS applies the same fallbacks before JS runs).
+ */
+export const REDUCED = "(prefers-reduced-motion: reduce)";
+/** Phones, tablets and touch screens get the static lane (no live 3D). */
+export const STATIC_LANE = "(max-width: 899.98px), (pointer: coarse)";
+
+const matches = (q: string) => typeof window !== "undefined" && window.matchMedia(q).matches;
+
+export const prefersReducedMotion = () => matches(REDUCED);
+export const wantsStaticLane = () => matches(STATIC_LANE);
+
+function subscribeTo(q: string) {
+  return (cb: () => void) => {
+    const m = window.matchMedia(q);
+    m.addEventListener("change", cb);
+    return () => m.removeEventListener("change", cb);
+  };
+}
+const subscribeReduced = subscribeTo(REDUCED);
+
+/** Live `prefers-reduced-motion`, false on the server. */
+export function useReducedMotion() {
+  return useSyncExternalStore(subscribeReduced, () => matches(REDUCED), () => false);
+}
+
+/** Random delay in [min, max) ms. */
+export const between = (min: number, max: number) => min + Math.random() * (max - min);
