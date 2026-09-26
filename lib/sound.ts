@@ -85,7 +85,9 @@ export function initSound() {
 async function start() {
   if (state.unlocked) return;
   setState({ unlocked: true });
-  howler = await import("howler");
+  // bundlers differ on CommonJS interop: the API is either the namespace or its default
+  const mod = await import("howler");
+  howler = mod.Howler ? mod : (mod as unknown as { default: typeof import("howler") }).default;
   howler.Howler.mute(state.muted);
   sfx = new howler.Howl({
     src: [asset("/audio/sfx.mp3")],
