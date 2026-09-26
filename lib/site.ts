@@ -7,7 +7,7 @@ export const SITE = {
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000"),
   description:
-    "VenbeeMail: email sementara sekali pakai. Tanpa daftar, hilang otomatis, bebas spam.",
+    "VenbeeMail, minimarket zombie untuk email sementara sekali pakai. Segar, sementara, 100% tanpa daftar: hilang otomatis, bebas spam.",
   socials: [
     { id: "instagram", label: "Instagram", href: "#" },
     { id: "x", label: "X", href: "#" },

@@ -1,0 +1,508 @@
+/* =====================================================================
+   StickerButton: the one button design system (see StickerButton.tsx).
+   Die-cut product label: 8 px cream border, 3 px ink stroke, body colour,
+   colour band with hand-cut lettering, crumbs, resting tilt -4..+4 deg.
+   ===================================================================== */
+.sb {
+  --lift: 0px;
+  --push: 0px;
+  --sq: 1;
+  --rot: var(--tilt, 0deg);
+  --sh: 1;
+  --paper: var(--cream);
+  --ink-line: var(--black);
+  --fs: 15px;
+  --body-h: 70px;
+  --art-w: 84px;
+  --flash: 0;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0 0 10px;
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  vertical-align: top;
+}
+.sb--sm {
+  --fs: 12.5px;
+  --body-h: 44px;
+  --art-w: 58px;
+}
+.sb--md {
+  --fs: 14.5px;
+  --body-h: 70px;
+  --art-w: 84px;
+}
+.sb--lg {
+  --fs: 19px;
+  --body-h: 92px;
+  --art-w: 112px;
+}
+
+.sb__lift {
+  position: relative;
+  display: block;
+  transform: translateY(calc(var(--lift) + var(--push))) rotate(var(--rot)) scale(var(--sq));
+  transform-origin: 50% 85%;
+  transition: transform var(--spring-dur, 700ms) var(--spring, cubic-bezier(0.3, 1.5, 0.5, 1));
+  will-change: transform;
+}
+@media (hover: hover) {
+  .sb.is-hover {
+    --lift: -6px;
+    --rot: 0deg;
+    --sh: 1.3;
+  }
+}
+.sb.is-down {
+  --lift: 0px;
+  --push: 4px;
+  --sq: 0.92;
+  --sh: 0.45;
+}
+.sb[data-tr="hover"] .sb__lift {
+  transition: transform 240ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.sb[data-tr="press"] .sb__lift {
+  transition: transform 120ms cubic-bezier(0.3, 0.6, 0.4, 1);
+}
+
+/* ground shadow: grows while lifted, collapses on press */
+.sb__shadow {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 0;
+  height: 16px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.6);
+  filter: blur(5px);
+  transform: scale(var(--sh), calc(0.6 + var(--sh) * 0.4));
+  opacity: calc(0.35 + var(--sh) * 0.3);
+  transition:
+    transform 240ms ease-out,
+    opacity 240ms ease-out;
+  pointer-events: none;
+}
+.sb[data-tr="press"] .sb__shadow {
+  transition-duration: 120ms;
+}
+
+/* the die-cut: cream border around the label */
+.sb__cut {
+  position: relative;
+  display: block;
+  padding: 8px;
+  background: var(--cream);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1.5px rgb(0 0 0 / 0.35),
+    0 5px 0 -1px rgb(0 0 0 / 0.35);
+}
+.sb__cut[data-bite] {
+  --bite: 0px;
+  mask:
+    radial-gradient(circle at calc(100% - 10px) 8px, #0000 var(--bite), #000 calc(var(--bite) + 0.5px)),
+    radial-gradient(circle at calc(100% - 38px) -2px, #0000 calc(var(--bite) * 0.72), #000 calc(var(--bite) * 0.72 + 0.5px)),
+    radial-gradient(circle at calc(100% + 2px) 34px, #0000 calc(var(--bite) * 0.66), #000 calc(var(--bite) * 0.66 + 0.5px));
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+/* the offset second sheet peeking out bottom-left (stacked labels) */
+.sb__sheet {
+  position: absolute;
+  inset: 8px;
+  transform: translate(-5px, 5px) rotate(-1.4deg);
+  background: color-mix(in srgb, var(--body) 70%, #000);
+  border: 3px solid var(--black);
+  border-radius: 3px;
+}
+.sb__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 3px solid var(--black);
+  border-radius: 3px;
+  background: var(--body);
+  color: var(--body-ink);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 999px rgb(255 255 255 / calc(var(--flash) * 0.55));
+}
+.sb__band {
+  position: relative;
+  display: block;
+  padding: 0.42em 0.75em 0.36em;
+  background: var(--band);
+  color: var(--band-ink);
+  border-bottom: 3px solid var(--black);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: var(--fs);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-align: center;
+}
+/* chipped corner on the band, like a hand-cut label */
+.sb__band::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  width: 9px;
+  height: 9px;
+  background: var(--black);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+.sb__label {
+  display: inline-block;
+}
+.sb__ch {
+  display: inline-block;
+  white-space: pre;
+  transform: translateY(var(--y)) rotate(var(--r));
+}
+.sb__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--body-h);
+  padding: 6px 10px 7px;
+}
+.sb__art {
+  display: block;
+  width: var(--art-w);
+  aspect-ratio: 4 / 3;
+  transform-origin: 50% 80%;
+}
+.sb__art--empty {
+  display: none;
+}
+.sb__art .doodle {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.sb__note {
+  display: block;
+  max-width: 18ch;
+  font-size: calc(var(--fs) * 0.82);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sb--sm .sb__note {
+  max-width: 16ch;
+}
+.sb--sm .sb__body:has(.sb__art--empty) {
+  min-height: 0;
+  padding: 5px 8px 6px;
+}
+
+/* crumbs printed around the art (4 layouts) */
+.sb__crumbs::before,
+.sb__crumbs::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 4px;
+  border-radius: 40% 60% 30% 70%;
+  background: color-mix(in srgb, var(--band) 65%, var(--ink-line));
+  box-shadow:
+    7px 3px 0 -1px color-mix(in srgb, var(--band) 65%, var(--ink-line)),
+    3px 8px 0 -1.5px color-mix(in srgb, var(--band) 65%, var(--ink-line));
+  opacity: 0.8;
+}
+.sb__crumbs--0::before { left: 8px; top: 8px; }
+.sb__crumbs--0::after { right: 16px; bottom: 12px; transform: rotate(40deg); }
+.sb__crumbs--1::before { right: 16px; top: 9px; transform: rotate(120deg); }
+.sb__crumbs--1::after { left: 9px; bottom: 12px; }
+.sb__crumbs--2::before { left: 10px; bottom: 11px; transform: rotate(200deg); }
+.sb__crumbs--2::after { right: 14px; top: 10px; }
+.sb__crumbs--3::before { right: 15px; bottom: 12px; transform: rotate(80deg); }
+.sb__crumbs--3::after { left: 8px; top: 9px; transform: rotate(-30deg); }
+
+/* ------------------------------------------------------------ states */
+/* selected: a DIPILIH price tag slaps on */
+.sb__tag,
+.sb__ok,
+.sb__habis {
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0;
+}
+.sb__tag {
+  right: -12px;
+  top: -12px;
+  z-index: 4;
+  padding: 5px 9px 4px 16px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  background: var(--lime);
+  color: var(--black);
+  border: 2.5px solid var(--black);
+  border-radius: 3px 10px 10px 3px;
+  box-shadow: 0 3px 0 rgb(0 0 0 / 0.5);
+  transform: rotate(12deg);
+}
+.sb__tag::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--black);
+}
+.sb.is-selected .sb__tag {
+  animation: sb-slap 0.34s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+@keyframes sb-slap {
+  0% {
+    opacity: 0;
+    transform: rotate(50deg) scale(2.4);
+  }
+  55% {
+    opacity: 1;
+    transform: rotate(6deg) scale(0.88);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(12deg) scale(1);
+  }
+}
+
+/* loading: barcode stripes + a red scanline sweeping the body */
+.sb__scan {
+  position: absolute;
+  inset: 0;
+  top: calc(var(--fs) + 1.1em);
+  opacity: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgb(10 10 10 / 0.35) 0 2px, transparent 2px 5px, rgb(10 10 10 / 0.35) 5px 6px, transparent 6px 9px);
+}
+.sb__scan::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 0;
+  height: 3px;
+  background: #ff2a2a;
+  box-shadow:
+    0 0 8px 2px rgb(255 40 40 / 0.9),
+    0 0 20px 6px rgb(255 40 40 / 0.35);
+  animation: sb-scan 0.8s ease-in-out infinite alternate;
+}
+.sb[data-state="loading"] .sb__scan {
+  opacity: 1;
+}
+.sb[data-state="loading"] {
+  cursor: progress;
+}
+@keyframes sb-scan {
+  to {
+    transform: translateY(calc(var(--body-h) + 4px));
+  }
+}
+
+/* success stamp */
+.sb__ok {
+  left: 50%;
+  top: 58%;
+  z-index: 4;
+  padding: 5px 10px 3px;
+  font-size: calc(var(--fs) * 1.05);
+  color: #0b7a2a;
+  border: 3px solid #0b7a2a;
+  border-radius: 6px;
+  background: rgb(245 230 200 / 0.85);
+  transform: translate(-50%, -50%) rotate(-14deg);
+  white-space: nowrap;
+}
+.sb[data-state="success"] .sb__ok {
+  animation: sb-stamp 0.28s cubic-bezier(0.4, 0, 0.6, 1.4) both;
+}
+@keyframes sb-stamp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-40deg) scale(2.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-14deg) scale(1);
+  }
+}
+
+/* disabled: sold out */
+.sb:disabled,
+.sb[data-state="disabled"] {
+  cursor: not-allowed;
+}
+.sb[data-state="disabled"] .sb__panel,
+.sb[data-state="disabled"] .sb__sheet {
+  filter: grayscale(0.85) brightness(0.72);
+}
+.sb[data-state="disabled"] .sb__habis {
+  opacity: 0.92;
+  left: 50%;
+  top: 56%;
+  z-index: 4;
+  padding: 4px 10px 2px;
+  font-size: calc(var(--fs) * 1.2);
+  letter-spacing: 0.08em;
+  color: var(--label-red);
+  border: 3px solid var(--label-red);
+  border-radius: 4px;
+  background: rgb(10 10 10 / 0.35);
+  transform: translate(-50%, -50%) rotate(-12deg);
+}
+
+.sb:focus-visible {
+  outline: none;
+}
+.sb:focus-visible .sb__cut {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------ effect bits */
+.sb__fx,
+.sb__inner {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sb__fx {
+  z-index: 3;
+}
+.sb__inner {
+  overflow: hidden;
+}
+.sb__fx > span,
+.sb__inner > span {
+  position: absolute;
+  display: block;
+}
+.fx-crumb {
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--black);
+  clip-path: polygon(0 0, 100% 30%, 40% 100%);
+}
+.fx-bubble {
+  border-radius: 50%;
+  border: 2px solid var(--black);
+  background: rgb(255 255 255 / 0.75);
+}
+.fx-frost {
+  inset: 0;
+  background:
+    repeating-linear-gradient(60deg, rgb(255 255 255 / 0.35) 0 2px, transparent 2px 11px),
+    repeating-linear-gradient(-60deg, rgb(255 255 255 / 0.3) 0 2px, transparent 2px 13px),
+    linear-gradient(160deg, rgb(210 250 255 / 0.9), rgb(120 220 255 / 0.65));
+}
+.fx-shard {
+  inset: 0;
+  background: linear-gradient(160deg, rgb(220 252 255 / 0.95), rgb(140 225 255 / 0.8));
+  opacity: 0;
+}
+.fx-shard--0 { clip-path: polygon(0 0, 55% 0, 40% 45%, 0 60%); }
+.fx-shard--1 { clip-path: polygon(55% 0, 100% 0, 100% 50%, 40% 45%); }
+.fx-shard--2 { clip-path: polygon(0 60%, 40% 45%, 60% 100%, 0 100%); }
+.fx-shard--3 { clip-path: polygon(40% 45%, 100% 50%, 100% 100%, 60% 100%); }
+.fx-price {
+  right: 6px;
+  top: 44%;
+  padding: 3px 8px 2px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--black);
+  background: #ff8a1f;
+  border: 2.5px solid var(--black);
+  border-radius: 3px;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 0.5);
+}
+.fx-pop {
+  left: 50%;
+  top: 60%;
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--black) 0 6deg, transparent 6deg 30deg);
+  mask: radial-gradient(circle, transparent 42%, #000 44% 70%, transparent 72%);
+}
+.fx-puddle {
+  right: -18px;
+  bottom: 2px;
+  width: 70px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--lime);
+  border: 3px solid var(--black);
+  transform-origin: 20% 50%;
+}
+.fx-slime {
+  width: 10px;
+  height: 13px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: var(--lime);
+  border: 2px solid var(--black);
+}
+.fx-coin {
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: #ffd23f;
+  border: 2.5px solid var(--black);
+  font-family: var(--font-display);
+  font-size: 8px;
+  line-height: 17px;
+  text-align: center;
+  color: var(--black);
+}
+.fx-laser {
+  left: -6px;
+  right: -6px;
+  height: 3px;
+  background: #ff2a2a;
+  box-shadow:
+    0 0 10px 3px rgb(255 42 42 / 0.9),
+    0 0 26px 8px rgb(255 42 42 / 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb__lift,
+  .sb__shadow {
+    transition: none !important;
+  }
+  .sb.is-hover,
+  .sb.is-down {
+    --lift: 0px;
+    --push: 0px;
+    --sq: 1;
+  }
+}

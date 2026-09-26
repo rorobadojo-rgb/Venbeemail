@@ -1,7 +1,12 @@
-import { ChapterNav } from "@/components/ChapterNav";
-import { ComicPage } from "@/components/ComicPage";
-import { DoodleField } from "@/components/doodles/DoodleField";
-import { SoundControls } from "@/components/SoundControls";
+import { Hero } from "@/components/hero/Hero";
+import { Backdrop } from "@/components/mart/Backdrop";
+import { Faq } from "@/components/sections/Faq";
+import { Footer } from "@/components/sections/Footer";
+import { How } from "@/components/sections/How";
+import { Why } from "@/components/sections/Why";
+import { ShopSign } from "@/components/ShopSign";
+import { Toasts } from "@/components/Toasts";
+import { Toko } from "@/components/tool/Toko";
 import { SITE } from "@/lib/site";
 
 const jsonLd = {
@@ -20,15 +25,20 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <div className="backdrop" aria-hidden="true" />
-      <DoodleField />
-      <div className="backdrop-dots" aria-hidden="true" />
-      <a className="skip" href="#generator">
-        Langsung ke generator email
+      <Backdrop />
+      <a className="skip" href="#toko">
+        Langsung ke kasir email
       </a>
-      <SoundControls />
-      <ChapterNav />
-      <ComicPage />
+      <ShopSign />
+      <main id="isi">
+        <Hero />
+        <Toko />
+        <Why />
+        <How />
+        <Faq />
+      </main>
+      <Footer />
+      <Toasts />
     </>
   );
 }
