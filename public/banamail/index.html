@@ -1,0 +1,1979 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BanaMail — Email Sementara Instan, Tanpa Daftar</title>
+<meta name="description" content="BanaMail: alamat email sementara yang langsung jadi tanpa daftar. Terima email dari website mana pun, spam tetap disimpan, dan kode OTP yang nyasar ke Spam langsung diselamatkan.">
+<meta name="theme-color" content="#fbf7ea">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%8C%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&family=Space+Mono:wght@400;700&display=swap">
+<script>
+/* Arsiran krayon & stiker selotip dibuat sekali di sini (SVG data-URI), lalu dipakai CSS lewat custom property.
+   Arsiran memakai keluarga garis 2x + y = c yang periodik di ubin 96×192, jadi sambungan ubin tidak kelihatan. */
+(function () {
+  var R = document.documentElement.style;
+  var C = { yel: '#ffe500', pink: '#ff3fae', lime: '#52e03c', blue: '#2d62e6', grey: '#b4b4b4' };
+  function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function uri(s) { return 'url("data:image/svg+xml,' + encodeURIComponent(s) + '")'; }
+  function hatch(col, dense, seed) {
+    var W = 96, H = 192, d = dense ? 8 : 12, n = H / d, r = rng(seed), props = [], c, i, s;
+    for (i = 0; i < n; i++) props.push(dense ? [(1.7 + r() * 1.3).toFixed(2), (0.72 + r() * 0.28).toFixed(2)] : [(1.1 + r() * 1.2).toFixed(2), (0.45 + r() * 0.45).toFixed(2)]);
+    s = "<svg xmlns='http://www.w3.org/2000/svg' width='" + W + "' height='" + H + "'><rect width='" + W + "' height='" + H + "' fill='" + col + "' fill-opacity='" + (dense ? 0.34 : 0.1) + "'/><g stroke='" + col + "' stroke-linecap='round'>";
+    for (c = -H; c <= 2 * W + H; c += d) {
+      i = ((c / d) % n + n) % n;
+      s += "<line x1='-4' y1='" + (c + 8) + "' x2='" + (W + 4) + "' y2='" + (c - 2 * W - 8) + "' stroke-width='" + props[i][0] + "' stroke-opacity='" + props[i][1] + "'/>";
+    }
+    return s + '</g></svg>';
+  }
+  function tape(col, seed) {
+    var r = rng(seed), p = [], x, y, k = 0;
+    for (x = 12; x <= 228; x += 24) p.push([x + (r() - 0.5) * 4, 5 + (r() - 0.5) * 3]);
+    for (y = 6; y <= 54; y += 6) p.push([229 + (k++ % 2 ? 7 : -1) + (r() - 0.5) * 2, y]);
+    for (x = 228; x >= 12; x -= 24) p.push([x + (r() - 0.5) * 4, 55 + (r() - 0.5) * 3]);
+    for (y = 54; y >= 6; y -= 6) p.push([11 + (k++ % 2 ? -7 : 1) + (r() - 0.5) * 2, y]);
+    var pts = p.map(function (q) { return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' ');
+    return "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 60' preserveAspectRatio='none'><defs><pattern id='p' width='7' height='7' patternUnits='userSpaceOnUse' patternTransform='rotate(30)'><rect width='7' height='7' fill='" + col + "' fill-opacity='.32'/><path d='M2 -1V8' stroke='" + col + "' stroke-width='3.4'/></pattern></defs><polygon points='" + pts + "' fill='#fffdf6'/><polygon points='" + pts + "' fill='url(#p)' stroke='#161616' stroke-width='2.6' stroke-linejoin='round' vector-effect='non-scaling-stroke'/></svg>";
+  }
+  var seed = 11, k;
+  for (k in C) {
+    R.setProperty('--h-' + k, uri(hatch(C[k], false, seed++)));
+    R.setProperty('--h-' + k + '-d', uri(hatch(C[k], true, seed++)));
+    R.setProperty('--tape-' + k, uri(tape(C[k], seed++)));
+  }
+})();
+</script>
+<style>
+/* ============ Token ============ */
+:root {
+  --paper: #fbf7ea;
+  --paper-2: #fffdf6;
+  --grid: rgba(66, 128, 214, .2);
+  --ink: #161616;
+  --ink-soft: rgba(22, 22, 22, .68);
+  --yel: #ffe500;
+  --pink: #ff3fae;
+  --lime: #52e03c;
+  --blue: #2d62e6;
+  --grey: #9b9b9b;
+  --f-hand: "Patrick Hand", "Comic Neue", "Comic Sans MS", "Chalkboard SE", ui-rounded, system-ui, sans-serif;
+  --f-disp: "Luckiest Guy", "Bangers", Impact, "Arial Black", sans-serif;
+  --f-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --rad: 18px 22px 16px 24px / 22px 16px 24px 18px;
+  --gridpaper: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  --sticker: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(2px 4px 3px rgba(22, 22, 22, .2));
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; color-scheme: light; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--f-hand);
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: var(--gridpaper);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+body:has(dialog[open]) { overflow: hidden; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; display: block; }
+h1, h2, h3, p { margin: 0; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 3px dashed var(--blue); outline-offset: 4px; border-radius: 8px; }
+
+/* ============ Ikon ============ */
+.ic { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; overflow: visible; display: inline-block; vertical-align: middle; }
+.doodle { position: absolute; pointer-events: none; overflow: visible; filter: var(--sticker); z-index: 2; }
+.doodle.float { animation: float 5s ease-in-out infinite; }
+.doodle.float.slow { animation-duration: 7s; animation-delay: -2s; }
+
+/* ============ Bingkai spidol (garis goyang + arsiran krayon) ============ */
+.sk { position: relative; isolation: isolate; --fill: none; --bw: 3px; }
+.sk::before, .sk::after { content: ""; position: absolute; z-index: -1; border-radius: var(--rad); pointer-events: none; }
+.sk::before {
+  inset: 0;
+  border: var(--bw) solid var(--ink);
+  background-color: var(--paper-2);
+  background-image: var(--fill);
+  background-size: 96px 192px;
+  filter: url(#wob);
+}
+.sk::after { inset: 3px -2px -2px 3px; border: 1.6px solid var(--ink); opacity: .45; filter: url(#wob2); }
+
+.c-yel { --l: var(--h-yel); --d: var(--h-yel-d); }
+.c-pink { --l: var(--h-pink); --d: var(--h-pink-d); }
+.c-lime { --l: var(--h-lime); --d: var(--h-lime-d); }
+.c-blue { --l: var(--h-blue); --d: var(--h-blue-d); }
+
+/* Tombol: arsir muda → arsir pekat (hover/aktif) → putus-putus abu (nonaktif) */
+.btn {
+  --fill: var(--l);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 8px 20px;
+  background: none; border: 0;
+  font-size: 19px; line-height: 1.1; text-decoration: none; color: var(--ink);
+  transition: transform .12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) { .btn:hover { --fill: var(--d); transform: rotate(-1deg); } }
+.btn:focus-visible { --fill: var(--d); }
+.btn:active, .btn[aria-pressed="true"], .btn.is-on { --fill: var(--d); --bw: 4px; }
+.btn:active { transform: translate(1px, 2px) rotate(-.6deg); }
+.btn:disabled { --fill: var(--h-grey); color: var(--grey); cursor: not-allowed; transform: none; }
+.btn:disabled::before { border-style: dashed; border-color: var(--grey); filter: none; }
+.btn:disabled::after { display: none; }
+.btn:disabled .ic { stroke: var(--grey); }
+.btn-sm { min-height: 40px; padding: 6px 14px; font-size: 17px; }
+.btn-sm .ic { width: 20px; height: 20px; }
+
+/* Stiker selotip (tepi putih) */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 20px 8px;
+  font-family: var(--f-disp); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; line-height: 1;
+  background: var(--tape-yel) center / 100% 100% no-repeat;
+  filter: var(--sticker);
+  white-space: nowrap;
+}
+.tag.pink { background-image: var(--tape-pink); }
+.tag.lime { background-image: var(--tape-lime); }
+.tag.blue { background-image: var(--tape-blue); }
+.tag .ic { width: 16px; height: 16px; stroke-width: 2.4; }
+
+/* ============ Halaman ============ */
+.page { overflow-x: clip; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1180px; margin: 0 auto; padding: 12px 16px 6px; }
+.brand { display: inline-flex; align-items: center; gap: 8px; font-family: var(--f-disp); font-size: 28px; line-height: 1; text-decoration: none; color: var(--ink); letter-spacing: .02em; }
+.brand svg { width: 34px; height: 34px; filter: var(--sticker); }
+.brand .w1, .brand .w2 { -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 1.5px var(--ink); background-size: 96px 192px; }
+.brand .w1 { background-image: var(--h-yel-d); }
+.brand .w2 { background-image: var(--h-pink-d); }
+.lang { display: inline-flex; gap: 6px; }
+.lang .btn { min-height: 38px; min-width: 48px; padding: 4px 10px; font-family: var(--f-mono); font-weight: 700; font-size: 15px; }
+
+.layout { max-width: 1180px; margin: 0 auto; padding: 14px 16px 40px; display: grid; gap: 28px; }
+@media (min-width: 980px) {
+  .layout { grid-template-columns: minmax(320px, 430px) minmax(0, 640px); justify-content: center; align-items: start; gap: 48px; padding-top: 18px; }
+  .hero { position: sticky; top: 16px; }
+}
+
+/* ============ Hero (gambar 1 apa adanya) ============ */
+.hero { position: relative; display: grid; justify-items: center; gap: 18px; }
+.hero-fig { position: relative; margin: 0; width: 100%; max-width: 470px; padding: 9px; --fill: none; --rad: 20px 24px 18px 26px / 24px 18px 26px 20px; }
+.hero-fig img { width: 100%; height: auto; border-radius: 14px 18px 12px 20px / 18px 12px 20px 14px; }
+@media (min-width: 980px) { .hero-fig img { width: auto; max-height: calc(100vh - 150px); margin: 0 auto; } .hero-fig { width: auto; } }
+.hero-fig .tape-strip { position: absolute; width: 96px; height: 28px; background: var(--tape-yel) center / 100% 100% no-repeat; opacity: .92; z-index: 3; }
+.hero-fig .tape-strip.a { top: 2px; left: -10px; transform: rotate(-28deg); }
+.hero-fig .tape-strip.b { top: 4px; right: -10px; transform: rotate(26deg); background-image: var(--tape-pink); }
+.tagline { text-align: center; font-size: 21px; max-width: 30ch; }
+.tagline b { font-family: var(--f-disp); font-weight: 400; letter-spacing: .02em; font-size: 23px; }
+.hero-cta { display: flex; align-items: center; gap: 10px; font-size: 19px; color: var(--ink); text-decoration: none; }
+.hero-cta span { border-bottom: 3px dashed var(--pink); }
+@media (hover: hover) { .hero-cta:hover span { border-bottom-style: solid; } }
+.hero-cta svg { width: 54px; height: 54px; }
+
+/* ============ Kartu alamat ============ */
+.app { display: grid; gap: 22px; min-width: 0; }
+.card { padding: 26px 16px 20px; --fill: none; }
+@media (min-width: 520px) { .card { padding: 28px 22px 22px; } }
+.card-head { position: absolute; top: -16px; left: 18px; z-index: 3; transform: rotate(-2deg); }
+.live { position: absolute; top: 12px; right: 16px; display: inline-flex; align-items: center; gap: 6px; font-size: 15px; color: var(--ink-soft); }
+.live i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ink); background: var(--lime); animation: blink 1.6s ease-in-out infinite; }
+
+.addr-bar { --fill: var(--h-yel); display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 6px 6px 6px 16px; min-height: 64px; }
+.addr-text { flex: 1; min-width: 0; font-family: var(--f-mono); font-weight: 700; font-size: clamp(14px, 3.9vw, 21px); line-height: 1.25; overflow-wrap: anywhere; cursor: copy; padding: 8px 0; }
+.addr-text.swap { animation: swap .45s ease; }
+.icon-btn { --fill: var(--l); display: grid; place-items: center; width: 50px; height: 50px; padding: 0; background: none; border: 0; flex: none; --rad: 14px 16px 13px 17px / 16px 13px 17px 14px; }
+@media (hover: hover) { .icon-btn:hover { --fill: var(--d); } }
+.icon-btn:active { --fill: var(--d); transform: translateY(1px); }
+.icon-btn .ic { width: 26px; height: 26px; }
+.addr-note { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 17px; color: var(--ink-soft); }
+.addr-note svg { width: 22px; height: 22px; flex: none; }
+
+/* Ubin ikon (sudut tumpul) */
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 8px; margin-top: 20px; }
+@media (min-width: 540px) { .tiles { grid-template-columns: repeat(6, 1fr); } }
+.tile-btn { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 4px 0; background: none; border: 0; font-size: 17px; line-height: 1.1; text-align: center; -webkit-tap-highlight-color: transparent; }
+.tile { --fill: var(--l); --rad: 15px 18px 14px 19px / 18px 14px 19px 15px; display: grid; place-items: center; width: 62px; height: 62px; transition: transform .15s ease; }
+.tile .ic { width: 31px; height: 31px; }
+.tile-btn:nth-child(odd) .tile { transform: rotate(-2.5deg); }
+.tile-btn:nth-child(even) .tile { transform: rotate(2deg); }
+@media (hover: hover) { .tile-btn:hover .tile { --fill: var(--d); transform: rotate(-6deg) scale(1.06); } }
+.tile-btn:focus-visible { outline: none; }
+.tile-btn:focus-visible .tile { --fill: var(--d); outline: 3px dashed var(--blue); outline-offset: 5px; }
+.tile-btn:active .tile, .tile-btn[aria-pressed="true"] .tile, .tile-btn[aria-expanded="true"] .tile { --fill: var(--d); --bw: 4px; }
+.tile-btn:active .tile { transform: translateY(2px) scale(.95); }
+.tile-btn:disabled { color: var(--grey); cursor: not-allowed; }
+.tile-btn:disabled .tile { --fill: var(--h-grey); transform: none; }
+.tile-btn:disabled .tile::before { border-style: dashed; border-color: var(--grey); filter: none; }
+.tile-btn:disabled .tile::after { display: none; }
+.tile-btn.is-armed .tile { animation: shake .4s ease infinite; }
+.tile-btn.is-armed { color: #c4157c; font-weight: 700; }
+.tile-btn.is-spinning .tile .ic { animation: spin .6s ease; }
+.tile-clock { cursor: default; }
+.tile-clock .tile { --fill: var(--d); }
+.tile-clock .t-val { font-family: var(--f-mono); font-weight: 700; font-size: 16px; }
+.tile-clock.is-low { color: #c4157c; }
+.tile-clock.is-low .tile { animation: shake .6s ease infinite; }
+
+/* Laci: nama kustom & QR */
+.drawer { margin-top: 22px; padding: 22px 14px 16px; --fill: none; animation: drop .3s ease; }
+@media (min-width: 520px) { .drawer { padding: 24px 18px 18px; } }
+.drawer > .tag { position: absolute; top: -15px; left: 14px; transform: rotate(-1.5deg); z-index: 3; }
+.drawer-x { position: absolute; top: 8px; right: 8px; z-index: 3; }
+.custom-grid { display: grid; gap: 12px; }
+@media (min-width: 540px) { .custom-grid { grid-template-columns: 1.2fr auto 1fr auto; align-items: end; } }
+.at { font-family: var(--f-mono); font-weight: 700; font-size: 22px; align-self: center; text-align: center; padding-top: 18px; }
+@media (max-width: 539px) { .at { display: none; } }
+@media (min-width: 540px) { .one-domain .custom-grid { grid-template-columns: 1fr auto; } }
+.one-domain .at, .one-domain #customDomainField { display: none; }
+.preview { font-family: var(--f-mono); font-size: 14px; color: var(--ink); overflow-wrap: anywhere; margin-top: 10px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field-label { font-size: 16px; color: var(--ink-soft); padding-left: 6px; }
+.inp { --fill: var(--h-yel); display: flex; align-items: center; min-height: 52px; padding: 0 14px; --rad: 14px 18px 13px 19px / 18px 13px 19px 14px; }
+.inp:focus-within { --bw: 4px; outline: 3px dashed var(--blue); outline-offset: 4px; border-radius: 16px; }
+.inp input, .inp select, .inp textarea { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; outline: none; font-size: 19px; padding: 10px 0; }
+.inp input.mono, .inp select { font-family: var(--f-mono); font-size: 16px; font-weight: 700; }
+.inp input::placeholder, .inp textarea::placeholder { color: rgba(22, 22, 22, .42); }
+.inp.sel { position: relative; padding-right: 8px; }
+.inp.sel select { -webkit-appearance: none; appearance: none; padding-right: 34px; cursor: pointer; }
+.inp.sel .ic { position: absolute; right: 12px; top: 50%; translate: 0 -50%; pointer-events: none; }
+.inp.area { align-items: stretch; padding: 4px 14px; }
+.inp.area textarea { resize: vertical; min-height: 150px; line-height: 1.4; }
+.hint { font-size: 16px; color: var(--ink-soft); margin-top: 8px; padding-left: 6px; }
+.hint.bad { color: #c4157c; }
+
+.qr-wrap { display: grid; justify-items: center; gap: 10px; text-align: center; padding-top: 6px; }
+.qr-box { width: min(240px, 72vw); padding: 12px; background: #fff; --fill: none; }
+.qr-box svg { width: 100%; height: auto; display: block; border-radius: 6px; }
+.qr-addr { font-family: var(--f-mono); font-weight: 700; font-size: 15px; overflow-wrap: anywhere; }
+
+/* ============ Area pemberitahuan: ledakan kuning bergerigi ============ */
+.notice { position: relative; }
+.burst { position: relative; padding: 34px 30px 32px; filter: var(--sticker); animation: burst-in .5s cubic-bezier(.2, 1.6, .4, 1) both; }
+.burst-bg { position: absolute; inset: 0; z-index: 0; overflow: visible; }
+.burst-in { position: relative; z-index: 1; display: grid; gap: 10px; justify-items: center; text-align: center; }
+.burst-top { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+.burst-x { position: absolute; top: -8px; right: -8px; width: 40px; height: 40px; min-height: 0; padding: 0; --rad: 50%; }
+.burst-x .ic { width: 18px; height: 18px; }
+.burst-title { font-family: var(--f-disp); font-size: clamp(22px, 6.4vw, 30px); line-height: 1.05; letter-spacing: .01em; max-width: 18ch; }
+.burst-from { font-size: 16px; color: var(--ink-soft); max-width: 36ch; overflow-wrap: anywhere; }
+.code-box { display: inline-block; padding: 8px 20px; background: none; --fill: none; font-family: var(--f-mono); font-weight: 700; font-size: clamp(26px, 8vw, 36px); letter-spacing: .14em; line-height: 1.1; transform: rotate(-1.5deg); }
+.code-box.link { font-size: 15px; letter-spacing: 0; max-width: 100%; overflow-wrap: anywhere; text-align: left; }
+.burst-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 4px; }
+.burst-nav { display: flex; align-items: center; gap: 10px; font-size: 16px; }
+.burst .d1 { top: -18px; left: 6px; width: 40px; height: 40px; transform: rotate(-14deg); }
+.burst .d2 { bottom: -14px; right: 18px; width: 34px; height: 34px; transform: rotate(12deg); }
+
+/* ============ Tab & daftar ============ */
+.mail { min-width: 0; }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 10px; }
+.tab { --fill: var(--l); position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 66px; padding: 8px 4px; background: none; border: 0; font-size: 17px; line-height: 1.05; text-align: center; -webkit-tap-highlight-color: transparent; transition: transform .15s ease; }
+@media (min-width: 420px) { .tab { flex-direction: row; gap: 8px; font-size: 19px; } }
+.tab .ic { width: 24px; height: 24px; }
+.tab:nth-child(1) { transform: rotate(-1deg); }
+.tab:nth-child(3) { transform: rotate(1deg); }
+@media (hover: hover) { .tab:hover { --fill: var(--d); } }
+.tab[aria-selected="true"] { --fill: var(--d); --bw: 4px; transform: translateY(-4px) rotate(0); font-weight: 700; }
+.badge { position: absolute; top: -12px; right: -6px; min-width: 28px; height: 28px; padding: 0 7px; display: grid; place-items: center; font: 700 14px/1 var(--f-mono); border: 2.5px solid var(--ink); border-radius: 14px 15px 13px 16px; background: #fff var(--h-pink-d); background-size: 96px 192px; transform: rotate(7deg); z-index: 3; }
+.badge.blue { background-image: var(--h-blue); }
+.badge.pop { animation: pop .5s cubic-bezier(.2, 1.8, .4, 1); }
+
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; margin: 16px 2px 14px; }
+.refresh { display: flex; align-items: center; gap: 10px; font-size: 16px; color: var(--ink-soft); }
+.refresh .ic.spin { animation: spin .9s linear infinite; }
+.switch { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 4px; font-size: 16px; -webkit-tap-highlight-color: transparent; }
+.sw-track { --fill: var(--h-lime-d); --rad: 16px 17px 15px 18px; display: block; width: 56px; height: 32px; }
+.switch[aria-checked="false"] .sw-track { --fill: var(--h-grey); }
+.sw-knob { position: absolute; top: 5px; left: 5px; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 2.5px solid var(--ink); transition: transform .2s cubic-bezier(.3, 1.5, .5, 1); }
+.switch[aria-checked="true"] .sw-knob { transform: translateX(24px); }
+.switch .ic { width: 22px; height: 22px; }
+
+.note { position: relative; padding: 16px 18px 18px 46px; margin-bottom: 14px; font-size: 17px; --fill: var(--h-pink); --rad: 6px 8px 22px 7px / 7px 6px 26px 8px; }
+.note > svg { position: absolute; left: 14px; top: 16px; width: 22px; height: 22px; fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.note.lime { --fill: var(--h-lime); }
+
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.row { --fill: none; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%; padding: 12px 12px 12px 14px; background: none; border: 0; text-align: left; -webkit-tap-highlight-color: transparent; transition: transform .12s ease; }
+.row.is-unread { --fill: var(--l); }
+@media (hover: hover) { .row:hover { --fill: var(--d); transform: rotate(-.4deg); } }
+.row:active { --fill: var(--d); --bw: 4px; transform: translateY(1px); }
+.row.is-new { animation: drop-in .55s cubic-bezier(.2, 1.4, .4, 1) both; }
+.mark { width: 24px; height: 24px; border: 3px solid var(--ink); border-radius: 5px 7px 4px 6px; background: #fff var(--h-yel); background-size: 96px 192px; transform: rotate(-3deg); }
+.is-unread .mark { background-image: var(--h-blue-d); }
+.row-main { display: grid; gap: 1px; min-width: 0; }
+.row-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-width: 0; }
+.row-from { font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.is-unread .row-from { font-weight: 700; }
+.row-time { flex: none; font-family: var(--f-mono); font-size: 13px; color: var(--ink-soft); }
+.row-subj { font-size: 18px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.row-snip { font-size: 15px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-tags { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.row-tags:empty { display: none; }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border: 2px solid var(--ink); border-radius: 8px 10px 7px 11px; font: 700 12px/1.5 var(--f-mono); background: #fff var(--h-pink-d); background-size: 96px 192px; }
+.chip.att { background-image: var(--h-blue); }
+.chip .ic { width: 14px; height: 14px; stroke-width: 2.6; }
+.row > .chev { width: 22px; height: 22px; }
+
+.empty { display: grid; justify-items: center; gap: 10px; padding: 30px 20px; text-align: center; --fill: var(--l); }
+.empty svg.big { width: 64px; height: 64px; }
+.empty p { max-width: 32ch; font-size: 18px; }
+.loading { text-align: center; padding: 26px; color: var(--ink-soft); }
+
+/* ============ Fitur & kaki ============ */
+.feats { display: grid; gap: 14px; margin-top: 10px; }
+@media (min-width: 560px) { .feats { grid-template-columns: 1fr 1fr; } }
+.feats-title { font-family: var(--f-disp); font-size: 24px; letter-spacing: .02em; margin: 18px 0 2px; }
+.feat { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; padding: 14px; --fill: none; }
+.feat .tile { width: 52px; height: 52px; --fill: var(--d); }
+.feat .tile .ic { width: 26px; height: 26px; }
+.feat h3 { font-size: 19px; }
+.feat p { font-size: 16px; color: var(--ink-soft); }
+.foot { max-width: 1180px; margin: 0 auto; padding: 0 16px calc(40px + env(safe-area-inset-bottom)); text-align: center; font-size: 16px; color: var(--ink-soft); }
+.foot .banana { width: 46px; height: 46px; margin: 0 auto 8px; filter: var(--sticker); transform: rotate(-12deg); }
+
+/* ============ Pembaca pesan ============ */
+dialog.reader { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 10px; border: 0; background: var(--paper); background-image: var(--gridpaper); background-size: 24px 24px; color: var(--ink); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+dialog.reader::backdrop { background: rgba(22, 22, 22, .5); }
+@media (min-width: 780px) {
+  dialog.reader { width: min(760px, calc(100% - 48px)); height: auto; max-height: calc(100% - 40px); margin: auto; padding: 14px; background: transparent; }
+}
+.sheet { padding: 14px 14px 22px; --fill: var(--gridpaper); min-height: 100%; }
+.sheet::before { background-size: 24px 24px; }
+@media (min-width: 520px) { .sheet { padding: 18px 22px 26px; } }
+.sheet-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.r-subject { font-family: var(--f-disp); font-weight: 400; font-size: clamp(23px, 6vw, 30px); line-height: 1.08; letter-spacing: .01em; margin: 18px 0 12px; overflow-wrap: anywhere; }
+.r-meta { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; margin: 0; font-size: 17px; }
+.r-meta dt { color: var(--ink-soft); }
+.r-meta dd { margin: 0; overflow-wrap: anywhere; }
+.r-meta .addr { font-family: var(--f-mono); font-size: 14px; }
+.r-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.r-body { padding: 7px; --fill: none; }
+.r-body iframe { display: block; width: 100%; height: 160px; border: 0; border-radius: 12px 16px 10px 18px / 16px 10px 18px 12px; background: #fff; }
+.r-att { margin-top: 18px; }
+.r-att h3 { font-family: var(--f-disp); font-weight: 400; font-size: 18px; letter-spacing: .04em; margin-bottom: 10px; }
+.att-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.att-list .btn { justify-content: flex-start; text-align: left; max-width: 100%; padding: 12px 18px; gap: 12px; }
+.att-list .att-txt { display: grid; gap: 3px; min-width: 0; }
+.att-list .att-name { overflow-wrap: anywhere; line-height: 1.15; }
+.att-list small { font-family: var(--f-mono); font-size: 12px; line-height: 1; color: var(--ink-soft); }
+.reply { margin-top: 26px; padding: 26px 14px 16px; --fill: none; display: grid; gap: 12px; animation: drop .3s ease; }
+@media (min-width: 520px) { .reply { padding: 28px 18px 18px; } }
+.reply > .tag { position: absolute; top: -15px; left: 14px; transform: rotate(-1.5deg); z-index: 3; }
+.reply-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.btn-send .ic { width: 26px; height: 26px; }
+.sent-ok { display: flex; align-items: center; gap: 8px; margin-top: 18px; font-size: 18px; }
+
+/* ============ Toast & animasi ============ */
+.toasts { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 60; display: grid; gap: 8px; justify-items: center; width: max-content; max-width: calc(100% - 32px); pointer-events: none; }
+.toast { padding: 13px 30px 14px; background: var(--tape-yel) center / 100% 100% no-repeat; filter: var(--sticker); font-size: 18px; text-align: center; animation: toast-in .4s cubic-bezier(.2, 1.5, .4, 1) both; }
+.toast.pink { background-image: var(--tape-pink); }
+.toast.lime { background-image: var(--tape-lime); }
+.toast.out { animation: toast-out .3s ease both; }
+.fly-plane { position: fixed; z-index: 70; width: 52px; height: 52px; pointer-events: none; filter: var(--sticker); animation: fly 1.15s cubic-bezier(.45, 0, .2, 1) forwards; }
+
+@keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes spin { to { rotate: 360deg; } }
+@keyframes shake { 0%, 100% { rotate: 0deg; } 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+@keyframes swap { 0% { opacity: 0; transform: translateY(8px) rotate(-2deg); } 100% { opacity: 1; transform: none; } }
+@keyframes drop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes drop-in { 0% { opacity: 0; transform: translateY(-18px) rotate(-3deg) scale(.96); } 100% { opacity: 1; transform: none; } }
+@keyframes burst-in { 0% { opacity: 0; transform: scale(.55) rotate(-6deg); } 100% { opacity: 1; transform: scale(1) rotate(-1deg); } }
+@keyframes pop { 0% { scale: .4; } 100% { scale: 1; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(16px) rotate(-3deg) scale(.9); } to { opacity: 1; transform: rotate(-1deg); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(10px) scale(.9); } }
+@keyframes fly {
+  0% { transform: translate(-50%, -50%) rotate(0) scale(1); opacity: 1; }
+  25% { transform: translate(-40%, -140%) rotate(-12deg) scale(1.2); opacity: 1; }
+  100% { transform: translate(70vw, -95vh) rotate(-28deg) scale(.5); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .fly-plane { display: none; }
+}
+</style>
+</head>
+<body>
+<!-- Filter garis goyang, pola arsiran SVG, dan ikon -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="wob" x="-5%" y="-15%" width="110%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="wob2" x="-5%" y="-15%" width="110%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="G" yChannelSelector="R"/>
+    </filter>
+    <filter id="wob-s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="5" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- arsiran untuk ikon 24×24 -->
+    <pattern id="hp-yel" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="2.4" height="2.4" fill="#ffe500" fill-opacity=".35"/><path d="M.7 -1V4" stroke="#ffe500" stroke-width="1.15"/></pattern>
+    <pattern id="hp-pink" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="2.4" height="2.4" fill="#ff3fae" fill-opacity=".35"/><path d="M.7 -1V4" stroke="#ff3fae" stroke-width="1.15"/></pattern>
+    <pattern id="hp-lime" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="2.4" height="2.4" fill="#52e03c" fill-opacity=".35"/><path d="M.7 -1V4" stroke="#52e03c" stroke-width="1.15"/></pattern>
+    <pattern id="hp-blue" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="2.4" height="2.4" fill="#2d62e6" fill-opacity=".35"/><path d="M.7 -1V4" stroke="#2d62e6" stroke-width="1.15"/></pattern>
+    <!-- arsiran ukuran piksel untuk ledakan -->
+    <pattern id="hpx-yel" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="7" height="7" fill="#ffe500" fill-opacity=".45"/><path d="M2 -1V8" stroke="#ffe500" stroke-width="3.8"/></pattern>
+
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="3.5" y="3" width="11" height="14" rx="2.2" fill="#fff"/><rect x="9.5" y="7" width="11" height="14" rx="2.2" fill="#fff"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 10.5A7.8 7.8 0 0 0 5.6 7.4"/><path d="M4.5 3.5v4.4h4.4"/><path d="M4.5 13.5a7.8 7.8 0 0 0 13.9 3.1"/><path d="M19.5 20.5v-4.4h-4.4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M6 7.5 7.2 21h9.6L18 7.5z" fill="#fff"/><path d="M3.8 7.5h16.4M9 7.3V4h6v3.3M10.3 11v6.5M13.7 11v6.5"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.8" y="5" width="18.4" height="14" rx="2" fill="#fff"/><path d="m3.2 6.2 8.8 6.6 8.8-6.6"/></symbol>
+    <symbol id="i-mail-open" viewBox="0 0 24 24"><path d="M3 10.2 12 4l9 6.2V20H3z" fill="#fff"/><path d="M6 12.5V7.5h12v5" fill="#fff"/><path d="M8.8 9.6h6.4M8.8 11.8h4"/><path d="m3.2 10.6 8.8 6 8.8-6"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21.5 2.6 2.6 10.2l7 2.6 2.4 8.4z" fill="#fff"/><path d="m21.5 2.6-11.9 10.2M12 21.2l1.4-5.9"/></symbol>
+    <symbol id="i-dice" viewBox="0 0 24 24"><path d="M12 2.5 3.5 7v10l8.5 4.5 8.5-4.5V7z" fill="#fff"/><path d="m3.6 7.1 8.4 4.5 8.4-4.5M12 11.6v9.8"/><circle cx="12" cy="6.9" r="1.1" fill="#161616" stroke="none"/><circle cx="7.2" cy="12.2" r="1.1" fill="#161616" stroke="none"/><circle cx="8.6" cy="16.4" r="1.1" fill="#161616" stroke="none"/><circle cx="16.8" cy="12.4" r="1.1" fill="#161616" stroke="none"/><circle cx="15.4" cy="16.6" r="1.1" fill="#161616" stroke="none"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#fff"/><path d="M12 6.8V12l3.4 2.2"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.4" fill="#fff"/><rect x="14" y="3" width="7" height="7" rx="1.4" fill="#fff"/><rect x="3" y="14" width="7" height="7" rx="1.4" fill="#fff"/><path d="M14 14h3v3h-3zM17.5 17.5H21V21h-3.5zM14 20.5h1.4M20.5 14v1.4"/><rect x="5.6" y="5.6" width="1.8" height="1.8" fill="#161616" stroke="none"/><rect x="16.6" y="5.6" width="1.8" height="1.8" fill="#161616" stroke="none"/><rect x="5.6" y="16.6" width="1.8" height="1.8" fill="#161616" stroke="none"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4.6L16.2 4.2a2 2 0 0 1 2.8 0l.8.8a2 2 0 0 1 0 2.8L8.6 19z" fill="#fff"/><path d="m14.6 5.8 3.6 3.6M4 20l4.6-1"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16.5v-5.3a6 6 0 0 1 12 0v5.3l1.8 2H4.2z" fill="#fff"/><path d="M10 21a2.2 2.2 0 0 0 4 0M12 3v2"/></symbol>
+    <symbol id="i-bell-off" viewBox="0 0 24 24"><path d="M6 16.5v-5.3a6 6 0 0 1 12 0v5.3l1.8 2H4.2z" fill="#fff"/><path d="M10 21a2.2 2.2 0 0 0 4 0M3.5 3.5l17 17"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2" fill="#fff"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7M12 14.4v2.6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M10 5 3.5 12l6.5 7M4 12h16.5"/></symbol>
+    <symbol id="i-reply" viewBox="0 0 24 24"><path d="M9.5 14.5 4 9l5.5-5.5"/><path d="M4.5 9H14a6 6 0 0 1 6 6v5"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13.5 5.6 5h12.8l2.6 8.5V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" fill="#fff"/><path d="M3.2 13.5h5.3l1.2 2.4h4.6l1.2-2.4h5.3"/></symbol>
+    <symbol id="i-spam" viewBox="0 0 24 24"><path d="M12 3 2.8 19.5h18.4z" fill="#fff"/><path d="M12 9.5v4.6"/><circle cx="12" cy="16.9" r="1.1" fill="#161616" stroke="none"/></symbol>
+    <symbol id="i-clip" viewBox="0 0 24 24"><path d="m20 11.5-8 8a5 5 0 0 1-7.1-7.1l8.6-8.6a3.4 3.4 0 0 1 4.8 4.8L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3.5v12M6.8 10.6 12 15.8l5.2-5.2M4 20.5h16"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4 6v5.6c0 4.8 3.4 8.4 8 9.6 4.6-1.2 8-4.8 8-9.6V6z" fill="#fff"/><path d="m8.5 12 2.5 2.5 4.6-5"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 4.5 13.6h6.4L9.6 22l9.9-12.4h-6.6z" fill="#fff"/></symbol>
+    <!-- hiasan berwarna: isi diwarisi dari <use fill="url(#hp-…)"> -->
+    <symbol id="d-star" viewBox="0 0 24 24"><path d="m12 2.2 2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.4l-6.1 3.4 1.4-6.8-5.1-4.7 6.9-.8z" stroke="#161616" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="d-sparkle" viewBox="0 0 24 24"><path d="M12 1.8c.9 5.6 2.4 7.2 8.6 8.3-6.2 1.1-7.7 2.7-8.6 8.3-.9-5.6-2.4-7.2-8.6-8.3 6.2-1.1 7.7-2.7 8.6-8.3z" stroke="#161616" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="d-bolt" viewBox="0 0 24 24"><path d="M14 1.5 4.2 13.8h6.6L8.9 22.5 19.8 9.6h-6.9z" stroke="#161616" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="d-plane" viewBox="0 0 24 24"><path d="M22 2.2 2 10.2l7.4 2.8 2.6 8.8z" stroke="#161616" stroke-width="1.5" stroke-linejoin="round"/><path d="m22 2.2-12.6 10.8M12 21.8l1.5-6.2" fill="none" stroke="#161616" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="d-banana" viewBox="0 0 24 24"><path d="M3 14.2c3.6 4.8 11.4 5.4 15.2-.6 1.5-2.4 2-5.4 1.6-8.6l1.6-1.4-2.2-.9c-.9 4.2-3 7.6-6.4 9.5-3 1.7-6.2 1.9-9.8 2z" stroke="#161616" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.4 16.2c3.6 1 7.6.2 10.2-3" fill="none" stroke="#161616" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 1.6"/></symbol>
+  </defs>
+</svg>
+
+<noscript><p style="padding:16px;text-align:center">BanaMail butuh JavaScript untuk membuat alamat dan menampilkan surat.</p></noscript>
+
+<div class="page">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="BanaMail">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#d-banana" fill="url(#hp-yel)"/></svg>
+      <span><span class="w1">Bana</span><span class="w2">Mail</span></span>
+    </a>
+    <div class="lang" role="group" aria-label="Bahasa" data-i18n-aria="lang.label">
+      <button type="button" class="btn sk c-yel" data-lang="id" aria-pressed="true">ID</button>
+      <button type="button" class="btn sk c-yel" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ===== HERO ===== -->
+    <section class="hero" aria-labelledby="heroTitle">
+      <h1 id="heroTitle" class="sr-only" data-i18n="hero.title">BanaMail — email sementara tanpa daftar</h1>
+      <svg class="doodle float" style="top:6px;left:-6px;width:38px;height:38px;rotate:-14deg" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-star" fill="url(#hp-yel)"/></svg>
+      <svg class="doodle float slow" style="top:34%;right:-8px;width:34px;height:34px;rotate:10deg" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-bolt" fill="url(#hp-pink)"/></svg>
+      <svg class="doodle float" style="bottom:118px;left:-10px;width:30px;height:30px" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-sparkle" fill="url(#hp-blue)"/></svg>
+      <figure class="hero-fig sk">
+        <span class="tape-strip a" aria-hidden="true"></span>
+        <span class="tape-strip b" aria-hidden="true"></span>
+        <picture>
+          <source srcset="hero.webp" type="image/webp">
+          <img src="hero.png" width="940" height="1672" fetchpriority="high" decoding="async"
+               alt="Ilustrasi BanaMail: maskot pisang berlidah pink dikelilingi geng anak skater berambut warna-warni, di atas sketsa kotak masuk email."
+               data-i18n-alt="hero.alt">
+        </picture>
+      </figure>
+      <p class="tagline"><b data-i18n="hero.tag1">Email sementara, langsung jadi.</b><br><span data-i18n="hero.tag2">Tanpa daftar. Semua pengirim diterima. Spam tetap disimpan.</span></p>
+      <a class="hero-cta" href="#mailbox">
+        <svg viewBox="0 0 60 60" aria-hidden="true"><path d="M12 8c-6 18 2 34 26 40" fill="none" stroke="#161616" stroke-width="9" stroke-linecap="round"/><path d="M12 8c-6 18 2 34 26 40" fill="none" stroke="#52e03c" stroke-width="5" stroke-linecap="round"/><path d="m32 37 13 12-17 5z" fill="#52e03c" stroke="#161616" stroke-width="3" stroke-linejoin="round"/></svg>
+        <span data-i18n="hero.cta">Alamatmu sudah siap di bawah!</span>
+      </a>
+    </section>
+
+    <div class="app">
+      <!-- ===== BILAH ALAMAT + TOMBOL AKSI ===== -->
+      <section class="card sk" id="mailbox" aria-labelledby="addrLabel">
+        <span class="tag pink card-head" id="addrLabel" data-i18n="addr.label">Alamat sementaramu</span>
+        <span class="live"><i aria-hidden="true"></i><span data-i18n="addr.live">aktif</span></span>
+        <svg class="doodle float" style="top:-22px;right:30px;width:36px;height:36px;rotate:16deg" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-bolt" fill="url(#hp-yel)"/></svg>
+        <svg class="doodle float slow" style="bottom:-16px;left:-12px;width:32px;height:32px" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-star" fill="url(#hp-lime)"/></svg>
+
+        <div class="addr-bar sk">
+          <output id="addr" class="addr-text" aria-live="polite" title="Ketuk untuk menyalin" data-i18n-title="addr.tapCopy">…</output>
+          <button type="button" class="icon-btn sk c-blue" id="copyAddr" aria-label="Salin alamat" data-i18n-aria="addr.copy"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>
+        </div>
+        <p class="addr-note"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#d-sparkle" fill="url(#hp-lime)"/></svg><span data-i18n="addr.note">Langsung aktif tanpa daftar. Website mana pun bisa kirim ke sini — tidak ada pengirim yang diblokir.</span></p>
+
+        <div class="tiles">
+          <button type="button" class="tile-btn c-yel" data-act="copy"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></span><span data-i18n="act.copy">Salin</span></button>
+          <button type="button" class="tile-btn c-pink" data-act="random"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-dice"/></svg></span><span data-i18n="act.random">Acak</span></button>
+          <button type="button" class="tile-btn c-lime" data-act="custom" aria-expanded="false" aria-controls="customForm"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-pencil"/></svg></span><span data-i18n="act.custom">Kustom</span></button>
+          <button type="button" class="tile-btn c-blue" data-act="qr" aria-expanded="false" aria-controls="qrPanel"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-qr"/></svg></span><span data-i18n="act.qr">QR</span></button>
+          <button type="button" class="tile-btn c-pink" data-act="delete"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg></span><span class="t-label" data-i18n="act.delete">Hapus</span></button>
+          <div class="tile-btn tile-clock c-yel" role="timer" aria-live="off"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg></span><span><span class="sr-only" data-i18n="act.timer">Sisa waktu</span> <span class="t-val" id="countdown">60:00</span></span></div>
+        </div>
+
+        <form class="drawer sk" id="customForm" hidden novalidate>
+          <span class="tag lime" data-i18n="custom.title">Bikin nama sendiri</span>
+          <div class="custom-grid">
+            <label class="field">
+              <span class="field-label" data-i18n="custom.name">Nama</span>
+              <span class="inp sk"><input id="customName" class="mono" name="local" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="20" placeholder="nama-kamu" data-i18n-ph="custom.ph" aria-describedby="customPreview customHint"></span>
+            </label>
+            <span class="at" aria-hidden="true">@</span>
+            <label class="field" id="customDomainField">
+              <span class="field-label" data-i18n="custom.domain">Domain</span>
+              <span class="inp sel sk"><select id="customDomain" name="domain"></select><svg class="ic" aria-hidden="true"><use href="#i-chev-d"/></svg></span>
+            </label>
+            <button type="submit" class="btn sk c-lime" id="customUse" disabled><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="custom.use">Pakai</span></button>
+          </div>
+          <p class="preview" id="customPreview" aria-live="polite"></p>
+          <p class="hint" id="customHint"></p>
+        </form>
+
+        <div class="drawer sk" id="qrPanel" hidden>
+          <span class="tag blue" data-i18n="qr.title">Pindai pakai HP</span>
+          <button type="button" class="btn btn-sm sk c-yel drawer-x" data-act="qr-close" aria-label="Tutup" data-i18n-aria="close"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+          <div class="qr-wrap">
+            <div class="qr-box sk" id="qrBox"></div>
+            <p class="qr-addr" id="qrAddr"></p>
+            <p class="hint" data-i18n="qr.hint">Isi QR = alamat email ini, siap ditempel di HP.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== AREA PEMBERITAHUAN (ledakan kuning) ===== -->
+      <div class="notice" id="notice" aria-live="polite" hidden></div>
+
+      <!-- ===== TAB + DAFTAR PESAN ===== -->
+      <section class="mail" aria-label="Surat" data-i18n-aria="mail.label">
+        <div class="tabs" role="tablist" aria-label="Folder surat" data-i18n-aria="tabs.label">
+          <button type="button" class="tab sk c-yel" role="tab" id="tab-inbox" data-tab="inbox" aria-selected="true" aria-controls="panel"><svg class="ic" aria-hidden="true"><use href="#i-inbox"/></svg><span data-i18n="tab.inbox">Kotak Masuk</span><span class="badge blue" id="badge-inbox" hidden></span></button>
+          <button type="button" class="tab sk c-pink" role="tab" id="tab-spam" data-tab="spam" aria-selected="false" aria-controls="panel" tabindex="-1"><svg class="ic" aria-hidden="true"><use href="#i-spam"/></svg><span data-i18n="tab.spam">Spam</span><span class="badge" id="badge-spam" hidden></span></button>
+          <button type="button" class="tab sk c-lime" role="tab" id="tab-sent" data-tab="sent" aria-selected="false" aria-controls="panel" tabindex="-1"><svg class="ic" aria-hidden="true"><use href="#i-plane"/></svg><span data-i18n="tab.sent">Terkirim</span><span class="badge blue" id="badge-sent" hidden></span></button>
+        </div>
+
+        <div class="toolbar">
+          <div class="refresh">
+            <button type="button" class="btn btn-sm sk c-lime" id="refreshBtn"><svg class="ic" id="refreshIc" aria-hidden="true"><use href="#i-refresh"/></svg><span data-i18n="refresh.now">Segarkan</span></button>
+            <span id="refreshTxt" aria-live="off"></span>
+          </div>
+          <button type="button" class="switch" id="soundSwitch" role="switch" aria-checked="true">
+            <span class="sw-track sk"><span class="sw-knob"></span></span>
+            <svg class="ic" aria-hidden="true"><use id="soundIcon" href="#i-bell"/></svg>
+            <span data-i18n="sound.label">Bunyi lonceng</span>
+          </button>
+        </div>
+
+        <div id="panel" role="tabpanel" aria-labelledby="tab-inbox" class="c-yel" data-tab="inbox">
+          <p class="note sk" id="spamNote" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg><span data-i18n="spam.note">Spam tidak ditolak dan tidak dihapus. Semuanya tersimpan di sini dan bisa dibuka penuh.</span></p>
+          <ul class="list" id="list"><li class="loading" data-i18n="list.loading">Memuat surat…</li></ul>
+        </div>
+      </section>
+
+      <section aria-labelledby="featTitle">
+        <h2 class="feats-title" id="featTitle" data-i18n="feat.title">Kenapa BanaMail?</h2>
+        <div class="feats">
+          <div class="feat sk c-yel"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg></span><div><h3 data-i18n="feat.1.t">Tanpa daftar</h3><p data-i18n="feat.1.d">Alamat acak langsung muncul begitu halaman dibuka.</p></div></div>
+          <div class="feat sk c-blue"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg></span><div><h3 data-i18n="feat.2.t">Semua pengirim masuk</h3><p data-i18n="feat.2.d">Tidak ada daftar blokir. Website mana pun bisa kirim.</p></div></div>
+          <div class="feat sk c-pink"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-spam"/></svg></span><div><h3 data-i18n="feat.3.t">Spam disimpan</h3><p data-i18n="feat.3.d">Spam tidak ditolak, tidak dihapus, dan bisa dibuka penuh.</p></div></div>
+          <div class="feat sk c-lime"><span class="tile sk"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3 data-i18n="feat.4.t">Penyelamat kode</h3><p data-i18n="feat.4.d">OTP dan tautan verifikasi di Spam langsung kami munculkan.</p></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <svg class="banana" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-banana" fill="url(#hp-yel)"/></svg>
+    <p id="footTxt"></p>
+  </footer>
+</div>
+
+<!-- ===== PEMBACA PESAN ===== -->
+<dialog class="reader" id="reader" aria-labelledby="rSubject">
+  <article class="sheet sk">
+    <header class="sheet-top">
+      <button type="button" class="btn btn-sm sk c-yel" data-act="close-reader"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg><span data-i18n="reader.back">Kembali</span></button>
+      <span class="tag" id="rFolder"></span>
+    </header>
+    <h2 class="r-subject" id="rSubject"></h2>
+    <dl class="r-meta">
+      <dt data-i18n="reader.from">Dari</dt><dd id="rFrom"></dd>
+      <dt data-i18n="reader.to">Kepada</dt><dd id="rTo"></dd>
+      <dt data-i18n="reader.date">Waktu</dt><dd id="rDate"></dd>
+    </dl>
+    <div class="r-actions">
+      <button type="button" class="btn sk c-lime" id="rNotSpam" data-act="not-spam"><svg class="ic" aria-hidden="true"><use href="#i-inbox"/></svg><span data-i18n="reader.notSpam">Bukan spam</span></button>
+      <button type="button" class="btn sk c-yel" id="rReply" data-act="reply"><svg class="ic" aria-hidden="true"><use href="#i-reply"/></svg><span data-i18n="reader.reply">Balas</span></button>
+      <button type="button" class="btn sk c-pink" id="rCopyCode" data-act="copy-code"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span id="rCopyCodeTxt"></span></button>
+    </div>
+    <p class="note sk" id="rWarn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg><span data-i18n="reader.spamWarn">Pesan ini ada di Spam. Isinya ditampilkan penuh, tapi skrip dan pelacak berbahaya sudah dibuang.</span></p>
+    <div class="r-body sk">
+      <iframe id="rFrame" title="Isi pesan" data-i18n-title="reader.frame" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer"></iframe>
+    </div>
+    <section class="r-att" id="rAtt" hidden>
+      <h3 data-i18n="reader.att">Lampiran</h3>
+      <p class="note sk" id="rAttWarn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spam"/></svg><span data-i18n="reader.attWarn">Lampiran dari Spam — buka dengan hati-hati.</span></p>
+      <ul class="att-list" id="rAttList"></ul>
+    </section>
+    <p class="sent-ok" id="rSentOk" hidden><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="reader.sentOk">Balasan terkirim dan tersimpan di tab Terkirim.</span></p>
+
+    <form class="reply sk" id="replyForm" hidden novalidate>
+      <span class="tag blue" data-i18n="reply.title">Balas pesan</span>
+      <label class="field"><span class="field-label" data-i18n="reply.to">Kepada</span><span class="inp sk"><input name="to" type="email" class="mono" autocomplete="off" spellcheck="false" required></span></label>
+      <label class="field"><span class="field-label" data-i18n="reply.subject">Subjek</span><span class="inp sk"><input name="subject" type="text" maxlength="200"></span></label>
+      <label class="field"><span class="field-label" data-i18n="reply.body">Pesan</span><span class="inp area sk"><textarea name="body" rows="6" maxlength="10000" placeholder="Tulis balasanmu di sini…" data-i18n-ph="reply.ph" required></textarea></span></label>
+      <div class="reply-actions">
+        <button type="button" class="btn sk c-pink" data-act="cancel-reply"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg><span data-i18n="reply.cancel">Batal</span></button>
+        <button type="submit" class="btn sk c-lime btn-send" id="sendBtn" disabled><span id="sendTxt" data-i18n="reply.send">Kirim</span><svg class="ic" aria-hidden="true"><use href="#i-plane"/></svg></button>
+      </div>
+    </form>
+  </article>
+  <div class="toasts" id="toastsDlg" aria-live="polite"></div>
+</dialog>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+'use strict';
+
+/* =====================================================================
+   KONFIGURASI
+   Domain pertama = bawaan. Kalau cuma satu domain, dropdown domain disembunyikan.
+   ===================================================================== */
+const CONFIG = {
+  DOMAINS: ['venbeemail.com'],
+  RANDOM_LENGTH: 10,    // nama acak, mis. ifhew8883d: huruf pertama a–z, sisanya a–z/0–9 (~52 bit)
+  SUFFIX_LENGTH: 6,     // akhiran acak untuk nama kustom, mis. budi.k7m2x9
+  TTL_MINUTES: 60,      // umur alamat
+  REFRESH_MS: 10000,    // segar otomatis semua tab
+};
+
+/* =====================================================================
+   TEKS ID / EN
+   ===================================================================== */
+const I18N = {
+  id: {
+    'meta.title': 'BanaMail — Email Sementara Instan, Tanpa Daftar',
+    'lang.label': 'Bahasa',
+    'hero.title': 'BanaMail — email sementara tanpa daftar',
+    'hero.alt': 'Ilustrasi BanaMail: maskot pisang berlidah pink dikelilingi geng anak skater berambut warna-warni, di atas sketsa kotak masuk email.',
+    'hero.tag1': 'Email sementara, langsung jadi.',
+    'hero.tag2': 'Tanpa daftar. Semua pengirim diterima. Spam tetap disimpan.',
+    'hero.cta': 'Alamatmu sudah siap di bawah!',
+    'addr.label': 'Alamat sementaramu',
+    'addr.live': 'aktif',
+    'addr.copy': 'Salin alamat',
+    'addr.tapCopy': 'Ketuk untuk menyalin',
+    'addr.note': 'Langsung aktif tanpa daftar. Website mana pun bisa kirim ke sini — tidak ada pengirim yang diblokir.',
+    'act.copy': 'Salin', 'act.random': 'Acak', 'act.custom': 'Kustom', 'act.qr': 'QR', 'act.delete': 'Hapus', 'act.sure': 'Yakin?', 'act.timer': 'Sisa waktu',
+    'custom.title': 'Bikin nama sendiri', 'custom.name': 'Nama', 'custom.ph': 'nama-kamu', 'custom.domain': 'Domain', 'custom.use': 'Pakai',
+    'custom.hint': '3–20 karakter: huruf kecil, angka, titik, minus, garis bawah. Kami tambahkan {n} karakter acak di belakangnya supaya alamatmu tidak bisa ditebak orang lain.',
+    'custom.bad': 'Belum valid — pakai 3–20 huruf kecil/angka; titik, minus, garis bawah boleh di tengah (tidak dobel).',
+    'custom.preview': 'Jadinya: {addr}',
+    'qr.title': 'Pindai pakai HP', 'qr.hint': 'Isi QR = alamat email ini, siap ditempel di HP.', 'close': 'Tutup',
+    'toast.copied': 'Alamat disalin!', 'toast.copyFail': 'Gagal menyalin — tahan lalu salin manual ya.', 'toast.new': 'Alamat baru siap!',
+    'toast.expired': 'Waktu habis — alamat baru sudah dibuat.', 'toast.deleted': 'Alamat lama dihapus. Ini yang baru.',
+    'toast.moved': 'Dipindah ke Kotak Masuk.', 'toast.sent': 'Terkirim! Tersimpan di tab Terkirim.', 'toast.error': 'Ups, gagal. Coba lagi ya.',
+    'toast.codeCopied': 'Kode disalin!', 'toast.linkCopied': 'Tautan disalin!', 'toast.gone': 'Pesan itu sudah tidak ada.', 'toast.empty': 'Pesannya masih kosong.',
+    'rescue.tag': 'Penyelamat kode', 'rescue.title': 'Kode kamu nyasar ke Spam!', 'rescue.titleLink': 'Tautan verifikasimu nyasar ke Spam!',
+    'rescue.from': 'dari {from} · “{subject}”', 'rescue.copy': 'Salin', 'rescue.open': 'Buka Pesan', 'rescue.count': '{i} dari {n}',
+    'rescue.next': 'Berikutnya', 'rescue.dismiss': 'Tutup pemberitahuan',
+    'mail.label': 'Surat', 'tabs.label': 'Folder surat', 'tab.inbox': 'Kotak Masuk', 'tab.spam': 'Spam', 'tab.sent': 'Terkirim',
+    'badge.unread': '{n} belum dibaca',
+    'refresh.in': 'segar otomatis dalam {s} dtk', 'refresh.now': 'Segarkan', 'refresh.busy': 'menyegarkan…',
+    'sound.label': 'Bunyi lonceng',
+    'spam.note': 'Spam tidak ditolak dan tidak dihapus. Semuanya tersimpan di sini dan bisa dibuka penuh.',
+    'empty.inbox': 'Belum ada surat. Pakai alamat di atas di website mana pun — semua pengirim diterima.',
+    'empty.spam': 'Spam masih kosong. Kalau ada yang nyasar, tetap kami simpan di sini.',
+    'empty.sent': 'Belum ada balasan terkirim. Buka pesan lalu tekan Balas.',
+    'list.loading': 'Memuat surat…', 'list.to': 'Ke: {to}', 'list.noSubject': '(tanpa subjek)', 'list.code': 'KODE', 'list.link': 'TAUTAN', 'list.unread': 'belum dibaca',
+    'time.now': 'baru saja', 'time.min': '{n} mnt', 'time.hour': '{n} jam',
+    'reader.back': 'Kembali', 'reader.from': 'Dari', 'reader.to': 'Kepada', 'reader.date': 'Waktu', 'reader.notSpam': 'Bukan spam', 'reader.reply': 'Balas',
+    'reader.copyCode': 'Salin kode {code}', 'reader.copyLink': 'Salin tautan verifikasi', 'reader.frame': 'Isi pesan',
+    'reader.spamWarn': 'Pesan ini ada di Spam. Isinya ditampilkan penuh, tapi skrip dan pelacak berbahaya sudah dibuang.',
+    'reader.att': 'Lampiran', 'reader.attWarn': 'Lampiran dari Spam — buka dengan hati-hati.', 'reader.download': 'Unduh',
+    'reader.you': 'Kamu', 'reader.sentOk': 'Balasan terkirim dan tersimpan di tab Terkirim.',
+    'reply.title': 'Balas pesan', 'reply.to': 'Kepada', 'reply.subject': 'Subjek', 'reply.body': 'Pesan', 'reply.ph': 'Tulis balasanmu di sini…',
+    'reply.send': 'Kirim', 'reply.sending': 'Mengirim…', 'reply.cancel': 'Batal',
+    'feat.title': 'Kenapa BanaMail?',
+    'feat.1.t': 'Tanpa daftar', 'feat.1.d': 'Alamat acak langsung muncul begitu halaman dibuka.',
+    'feat.2.t': 'Semua pengirim masuk', 'feat.2.d': 'Tidak ada daftar blokir. Website mana pun bisa kirim.',
+    'feat.3.t': 'Spam disimpan', 'feat.3.d': 'Spam tidak ditolak, tidak dihapus, dan bisa dibuka penuh.',
+    'feat.4.t': 'Penyelamat kode', 'feat.4.d': 'OTP dan tautan verifikasi di Spam langsung kami munculkan.',
+    'foot': 'BanaMail · email sementara di {domain} · data contoh untuk demo',
+  },
+  en: {
+    'meta.title': 'BanaMail — Instant Temporary Email, No Sign-up',
+    'lang.label': 'Language',
+    'hero.title': 'BanaMail — temporary email with no sign-up',
+    'hero.alt': 'BanaMail illustration: a banana mascot with a pink tongue surrounded by a gang of rainbow-haired skater kids, above a sketch of an email inbox.',
+    'hero.tag1': 'Temporary email, ready instantly.',
+    'hero.tag2': 'No sign-up. Every sender gets through. Spam is kept, not trashed.',
+    'hero.cta': 'Your address is ready below!',
+    'addr.label': 'Your temporary address',
+    'addr.live': 'live',
+    'addr.copy': 'Copy address',
+    'addr.tapCopy': 'Tap to copy',
+    'addr.note': 'Live right away, no sign-up. Any website can send here — no sender is ever blocked.',
+    'act.copy': 'Copy', 'act.random': 'Shuffle', 'act.custom': 'Custom', 'act.qr': 'QR', 'act.delete': 'Delete', 'act.sure': 'Sure?', 'act.timer': 'Time left',
+    'custom.title': 'Pick your own name', 'custom.name': 'Name', 'custom.ph': 'your-name', 'custom.domain': 'Domain', 'custom.use': 'Use it',
+    'custom.hint': '3–20 characters: lowercase letters, digits, dot, dash, underscore. We add {n} random characters at the end so nobody else can guess your address.',
+    'custom.bad': 'Not valid yet — use 3–20 lowercase letters/digits; dot, dash and underscore only in the middle (not doubled).',
+    'custom.preview': 'You get: {addr}',
+    'qr.title': 'Scan with your phone', 'qr.hint': 'The QR holds this email address, ready to paste on your phone.', 'close': 'Close',
+    'toast.copied': 'Address copied!', 'toast.copyFail': 'Could not copy — long-press and copy it manually.', 'toast.new': 'New address ready!',
+    'toast.expired': 'Time is up — a new address has been made.', 'toast.deleted': 'Old address deleted. Here is a new one.',
+    'toast.moved': 'Moved to Inbox.', 'toast.sent': 'Sent! Saved in the Sent tab.', 'toast.error': 'Oops, that failed. Try again.',
+    'toast.codeCopied': 'Code copied!', 'toast.linkCopied': 'Link copied!', 'toast.gone': 'That message is gone.', 'toast.empty': 'Your message is empty.',
+    'rescue.tag': 'Code rescue', 'rescue.title': 'Your code landed in Spam!', 'rescue.titleLink': 'Your verification link landed in Spam!',
+    'rescue.from': 'from {from} · “{subject}”', 'rescue.copy': 'Copy', 'rescue.open': 'Open message', 'rescue.count': '{i} of {n}',
+    'rescue.next': 'Next', 'rescue.dismiss': 'Dismiss notice',
+    'mail.label': 'Mail', 'tabs.label': 'Mail folders', 'tab.inbox': 'Inbox', 'tab.spam': 'Spam', 'tab.sent': 'Sent',
+    'badge.unread': '{n} unread',
+    'refresh.in': 'auto-refresh in {s}s', 'refresh.now': 'Refresh', 'refresh.busy': 'refreshing…',
+    'sound.label': 'Bell sound',
+    'spam.note': 'Spam is never rejected or deleted. It all stays here and opens in full.',
+    'empty.inbox': 'No mail yet. Use the address above on any website — every sender gets through.',
+    'empty.spam': 'Spam is empty. If anything strays here, we keep it.',
+    'empty.sent': 'No replies sent yet. Open a message and hit Reply.',
+    'list.loading': 'Loading mail…', 'list.to': 'To: {to}', 'list.noSubject': '(no subject)', 'list.code': 'CODE', 'list.link': 'LINK', 'list.unread': 'unread',
+    'time.now': 'just now', 'time.min': '{n} min', 'time.hour': '{n} h',
+    'reader.back': 'Back', 'reader.from': 'From', 'reader.to': 'To', 'reader.date': 'Date', 'reader.notSpam': 'Not spam', 'reader.reply': 'Reply',
+    'reader.copyCode': 'Copy code {code}', 'reader.copyLink': 'Copy verification link', 'reader.frame': 'Message body',
+    'reader.spamWarn': 'This message is in Spam. It is shown in full, but scripts and harmful trackers have been stripped.',
+    'reader.att': 'Attachments', 'reader.attWarn': 'Attachment from Spam — open with care.', 'reader.download': 'Download',
+    'reader.you': 'You', 'reader.sentOk': 'Reply sent and saved in the Sent tab.',
+    'reply.title': 'Reply', 'reply.to': 'To', 'reply.subject': 'Subject', 'reply.body': 'Message', 'reply.ph': 'Write your reply here…',
+    'reply.send': 'Send', 'reply.sending': 'Sending…', 'reply.cancel': 'Cancel',
+    'feat.title': 'Why BanaMail?',
+    'feat.1.t': 'No sign-up', 'feat.1.d': 'A random address appears the moment the page opens.',
+    'feat.2.t': 'Every sender gets in', 'feat.2.d': 'No blocklist. Any website can send to you.',
+    'feat.3.t': 'Spam is kept', 'feat.3.d': 'Spam is never rejected or deleted, and opens in full.',
+    'feat.4.t': 'Code rescue', 'feat.4.d': 'OTPs and verification links in Spam pop up right away.',
+    'foot': 'BanaMail · temporary email at {domain} · sample data for the demo',
+  },
+};
+
+/* =====================================================================
+   UTILITAS
+   ===================================================================== */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const randInt = (n) => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
+const b64 = (str) => { let bin = ''; new TextEncoder().encode(str).forEach((b) => { bin += String.fromCharCode(b); }); return btoa(bin); };
+const LOCAL_RE = /^[a-z0-9](?:[a-z0-9._-]{1,28})[a-z0-9]$/;
+const isValidLocal = (s) => LOCAL_RE.test(s) && !/[._-]{2}/.test(s);
+const PREFIX_RE = /^[a-z0-9](?:[a-z0-9._-]{1,18})[a-z0-9]$/; // nama kustom 3–20, sebelum akhiran acak
+const isValidPrefix = (s) => PREFIX_RE.test(s) && !/[._-]{2}/.test(s);
+
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+const ALNUM = ALPHA + '0123456789';
+/** n karakter acak dari `alphabet` (crypto, tanpa bias modulo: byte di atas kelipatan terbesar dibuang). */
+function randomChars(n, alphabet) {
+  const out = [], limit = 256 - (256 % alphabet.length), buf = new Uint8Array(n * 2);
+  while (out.length < n) {
+    crypto.getRandomValues(buf);
+    for (const b of buf) if (b < limit && out.length < n) out.push(alphabet[b % alphabet.length]);
+  }
+  return out.join('');
+}
+/** Nama acak, mis. ifhew8883d — diawali huruf supaya lolos validator formulir yang rewel. */
+const randomLocal = () => randomChars(1, ALPHA) + randomChars(CONFIG.RANDOM_LENGTH - 1, ALNUM);
+const randomSuffix = () => randomChars(CONFIG.SUFFIX_LENGTH, ALNUM);
+
+/* =====================================================================
+   BACKEND CONTOH (mock, di memori)
+   Semua aksi UI hanya lewat objek `api` di bawah. Untuk backend asli,
+   ganti isi tiap fungsi `api` dengan fetch — bentuk datanya tetap:
+
+   Message = { id, folder: 'inbox'|'spam'|'sent', from: { name, address }, to,
+               subject, date (ISO), text?, html?, read?, inReplyTo?,
+               attachments: [{ name, type, size, data (base64) | url, cid? }] }
+
+   Contoh REST:
+     newAddress:    POST   /api/addresses                     body { prefix?, domain? }
+     getInbox:      GET    /api/addresses/:addr/messages?folder=inbox
+     getSpam:       GET    /api/addresses/:addr/messages?folder=spam
+     getSent:       GET    /api/addresses/:addr/messages?folder=sent
+     moveMessage:   PATCH  /api/addresses/:addr/messages/:id   body { folder }
+     sendReply:     POST   /api/addresses/:addr/replies        body { inReplyTo, to, subject, text }
+     deleteAddress: DELETE /api/addresses/:addr
+   Server tidak boleh menolak pengirim mana pun, dan spam disimpan ke folder
+   'spam' — tidak ditolak, tidak dihapus.
+   Nama alamat sebaiknya dibuat di server (acak penuh, atau prefix + akhiran
+   acak), dicek belum dipakai, dan alamat kedaluwarsa tidak pernah dipakai
+   ulang. Batasi laju permintaan per IP supaya alamat tidak bisa ditebak massal.
+   ===================================================================== */
+const Mock = (() => {
+  const boxes = new Map();
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+  const uid = () => 'm_' + Date.now().toString(36) + randInt(1e9).toString(36);
+  const att = (name, type, content) => ({ name, type, size: new TextEncoder().encode(content).length, data: b64(content) });
+
+  const STICKER_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80"><rect x="3" y="3" width="114" height="74" rx="16" fill="#2d62e6" stroke="#161616" stroke-width="5"/><path d="M24 50c20 17 58 15 74-13l6-5-7-2c-7 15-24 24-43 25-11 1-21-1-30-5z" fill="#ffe500" stroke="#161616" stroke-width="4" stroke-linejoin="round"/></svg>';
+
+  function demo(address) {
+    return {
+      inbox: [
+        {
+          ago: 4, from: { name: 'Pisang Skate Club', address: 'halo@pisangskate.example' },
+          subject: 'Selamat datang di Pisang Skate Club 🛹',
+          text: 'Akunmu sudah aktif. Latihan perdana Sabtu 16.00 di lapangan belakang pasar. Jadwal lengkap ada di lampiran.',
+          html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;border:3px solid #161616;border-radius:16px;padding:20px;background:#fff9c9">
+  <img src="data:image/svg+xml;base64,${b64(STICKER_SVG)}" width="120" height="80" alt="Stiker pisang">
+  <h1 style="font-size:24px;margin:12px 0 6px">Selamat datang, skater! 🛹</h1>
+  <p>Akunmu sudah aktif. Latihan perdana <b>Sabtu 16.00</b> di lapangan belakang pasar.</p>
+  <p><a href="https://pisangskate.example/jadwal" style="display:inline-block;background:#ff3fae;color:#161616;padding:9px 16px;border:2px solid #161616;border-radius:12px;text-decoration:none;font-weight:bold">Lihat jadwal</a></p>
+  <img src="x" onerror="alert('xss')">
+  <script>alert('xss')<\/script>
+  <iframe src="https://evil.example/"></iframe>
+  <p style="font-size:13px;color:#555">Jangan lupa helm. <a href="javascript:alert(1)" onclick="alert(2)">Tautan jahil</a> ini sudah dijinakkan.</p>
+</div>`,
+          attachments: [
+            att('jadwal-latihan.txt', 'text/plain', 'JADWAL LATIHAN PISANG SKATE CLUB\n\nSabtu 16.00  Ollie dasar\nMinggu 08.00 Manual & kickturn\nRabu 19.00   Sesi malam (bawa lampu)\n\nBawa helm, air minum, dan pisang.\n'),
+            att('stiker-pisang.svg', 'image/svg+xml', STICKER_SVG),
+          ],
+        },
+        {
+          ago: 9, from: { name: 'Toko Kertas Kotak', address: 'pesanan@tokokertas.example' },
+          subject: 'Pesanan #BNM-2041 sudah dikirim',
+          text: 'Halo!\n\nPesananmu #BNM-2041 sudah dikirim:\n- 3 buku kotak-kotak A5\n- 1 set krayon neon (kuning, pink, hijau limau, biru)\n\nLacak paketnya di https://tokokertas.example/lacak/BNM-2041.\n\nSalam coret-coret,\nToko Kertas Kotak',
+          attachments: [att('struk-BNM-2041.txt', 'text/plain', 'STRUK #BNM-2041\n3x Buku kotak-kotak A5   Rp 45.000\n1x Krayon neon (4 warna) Rp 28.000\nOngkir                   Rp 12.000\nTOTAL                    Rp 85.000\n')],
+        },
+        {
+          ago: 38, read: true, from: { name: 'Krayon Mingguan', address: 'kabar@krayon.example' },
+          subject: 'Edisi #42: 5 trik arsir biar gambarmu nyala',
+          html: `<h2 style="font-family:Georgia,serif">5 trik arsir biar gambarmu nyala</h2>
+<ol><li>Arsir miring searah — jangan bolak-balik.</li><li>Sisakan celah putih, biar kertasnya ikut bernapas.</li><li>Tumpuk dua lapis untuk warna pekat.</li><li>Garis luar tebal dulu, baru isi.</li><li>Tambah bintang dan petir kecil di sekitar. Selalu.</li></ol>
+<p>Sampai minggu depan! — <a href="https://krayon.example/edisi/42">baca di web</a></p>`,
+        },
+      ],
+      spam: [
+        {
+          ago: 1, from: { name: 'PixelPasar', address: 'no-reply@pixelpasar.example' },
+          subject: 'Kode verifikasi kamu',
+          text: 'Kode verifikasi PixelPasar kamu: 482913. Berlaku 10 menit. Jangan bagikan ke siapa pun.',
+          html: `<div style="font-family:Arial,sans-serif;padding:8px">
+  <p>Hai!</p><p>Kode verifikasi PixelPasar kamu:</p>
+  <p style="font-size:32px;letter-spacing:8px;font-weight:bold;background:#ffe500;display:inline-block;padding:6px 16px;border:2px solid #161616;border-radius:10px">482913</p>
+  <p>Berlaku 10 menit. Jangan bagikan kode ini ke siapa pun, termasuk yang mengaku petugas PixelPasar.</p>
+</div>`,
+        },
+        {
+          ago: 26, from: { name: 'UNDIAN PISANG NASIONAL', address: 'pemenang@undian-pisang.example' },
+          subject: 'SELAMAT!!! Kamu menang 1 TON PISANG 🍌🍌🍌',
+          html: `<div style="text-align:center;font-family:Impact,sans-serif;background:#ff3fae;padding:18px;border-radius:12px">
+  <h1 style="font-size:34px;margin:0">SELAMAT!!!</h1>
+  <p style="font-size:22px">Kamu terpilih memenangkan <u>1 TON PISANG</u> + uang tunai Rp 50.000.000!!!</p>
+  <p><a href="https://undian-pisang.example/klaim?id=88" style="background:#ffe500;padding:10px 18px;color:#161616;font-size:20px">KLAIM HADIAH SEKARANG</a></p>
+  <p style="font-family:Arial;font-size:11px">Penawaran terbatas. Pisang tidak dapat ditukar.</p>
+</div>`,
+          attachments: [att('cara-klaim.txt', 'text/plain', 'Kirim nama, alamat, dan foto pisang favoritmu. (Ini contoh spam — jangan dipercaya.)\n')],
+        },
+      ],
+      // Pesan yang "datang" setelah alamat dibuat (detik) — terlihat lewat segar otomatis.
+      queue: [
+        {
+          after: 25, folder: 'inbox', from: { name: 'Gamejam Pisang', address: 'panitia@gamejam-pisang.example' },
+          subject: 'Konfirmasi pendaftaran Gamejam Pisang',
+          text: 'Terima kasih sudah mendaftar!\nKonfirmasi emailmu lewat tautan ini: https://gamejam-pisang.example/verify?token=gjp-77a1c0\n\nSampai jumpa di garis start.',
+        },
+        {
+          after: 50, folder: 'spam', from: { name: 'KlubKomik', address: 'akun@klubkomik.example' },
+          subject: 'Satu langkah lagi: aktifkan akunmu',
+          text: 'Aktifkan akun KlubKomik kamu: https://klubkomik.example/verify?token=kk_9f3a2c7e',
+          html: `<p>Halo pembaca komik!</p><p>Tekan tombol ini untuk mengaktifkan akun KlubKomik kamu:</p>
+<p><a href="https://klubkomik.example/verify?token=kk_9f3a2c7e" style="background:#2d62e6;color:#fff;padding:10px 16px;border-radius:10px;text-decoration:none">Aktifkan akun</a></p>
+<p style="color:#666;font-size:12px">Kalau bukan kamu yang daftar, abaikan saja.</p>`,
+        },
+        {
+          after: 95, folder: 'spam', from: { name: 'Warung Daring', address: 'keamanan@warungdaring.example' },
+          subject: 'Kode masuk kamu',
+          text: 'Seseorang (semoga kamu) mencoba masuk ke Warung Daring.\nKode masuk: 551 204\nKode ini kedaluwarsa dalam 5 menit.',
+        },
+      ],
+    };
+  }
+
+  function create(address) {
+    const now = Date.now();
+    const d = demo(address);
+    const msg = (folder, m, date) => {
+      const { ago, after, ...rest } = m;
+      return { attachments: [], ...rest, id: uid(), folder, to: address, date: new Date(date).toISOString() };
+    };
+    const box = {
+      address,
+      inbox: d.inbox.map((m) => msg('inbox', m, now - m.ago * 60000)),
+      spam: d.spam.map((m) => msg('spam', m, now - m.ago * 60000)),
+      sent: [],
+      queue: d.queue.map((m) => ({ at: now + m.after * 1000, folder: m.folder, m })),
+    };
+    boxes.set(address, box);
+    return box;
+  }
+  function box(address) {
+    const b = boxes.get(address) || create(address);
+    const now = Date.now();
+    b.queue = b.queue.filter((q) => {
+      if (q.at > now) return true;
+      const { after, folder, ...rest } = q.m;
+      b[q.folder].push({ attachments: [], ...rest, id: uid(), folder: q.folder, to: address, date: new Date(q.at).toISOString() });
+      return false;
+    });
+    return b;
+  }
+  return {
+    create,
+    list: (address, folder) => clone(box(address)[folder]),
+    move(address, id, to) {
+      const b = box(address);
+      for (const f of ['inbox', 'spam']) {
+        const i = b[f].findIndex((m) => m.id === id);
+        if (i < 0) continue;
+        const [m] = b[f].splice(i, 1);
+        m.folder = to;
+        b[to].push(m);
+        return clone(m);
+      }
+      throw new Error('not-found');
+    },
+    send(address, { inReplyTo, to, subject, text }) {
+      const m = { id: uid(), folder: 'sent', from: { name: '', address }, to, subject, text, inReplyTo, date: new Date().toISOString(), attachments: [] };
+      box(address).sent.push(m);
+      return clone(m);
+    },
+    exists: (address) => boxes.has(address),
+    remove: (address) => boxes.delete(address),
+  };
+})();
+
+const lag = (base = 120) => sleep(base + randInt(160));
+
+/* =====================================================================
+   API — satu-satunya pintu aksi (ganti isinya untuk backend asli)
+   ===================================================================== */
+const api = {
+  /** Tanpa prefix: nama acak penuh. Dengan prefix: prefix + '.' + akhiran acak. */
+  async newAddress({ prefix, domain } = {}) {
+    await lag();
+    const dom = CONFIG.DOMAINS.includes(domain) ? domain : CONFIG.DOMAINS[0];
+    const base = prefix ? String(prefix).trim().toLowerCase() : '';
+    if (base && !isValidPrefix(base)) throw new Error('invalid-prefix');
+    let name, address;
+    do {
+      name = base ? `${base}.${randomSuffix()}` : randomLocal();
+      address = `${name}@${dom}`;
+    } while (Mock.exists(address)); // nama yang sudah dipakai diulang
+    Mock.create(address);
+    return { address, local: name, domain: dom, expiresAt: Date.now() + CONFIG.TTL_MINUTES * 60000 };
+  },
+  async getInbox(address) { await lag(); return Mock.list(address, 'inbox'); },
+  async getSpam(address) { await lag(); return Mock.list(address, 'spam'); },
+  async getSent(address) { await lag(); return Mock.list(address, 'sent'); },
+  async moveMessage(address, id, folder) { await lag(); return Mock.move(address, id, folder); },
+  async sendReply(address, { inReplyTo, to, subject, text }) { await lag(450); return Mock.send(address, { inReplyTo, to, subject, text }); },
+  async deleteAddress(address) { await lag(); Mock.remove(address); return { ok: true }; },
+};
+
+/* =====================================================================
+   SANITASI HTML — daftar izin tag/atribut, buang skrip & event handler,
+   lalu ditampilkan di iframe sandbox (tanpa allow-scripts) + CSP.
+   ===================================================================== */
+const Sanitize = (() => {
+  const ALLOWED = new Set(('a abbr address article aside b bdi bdo big blockquote br caption center cite code col colgroup dd del details dfn div dl dt em ' +
+    'figcaption figure font footer h1 h2 h3 h4 h5 h6 header hr i img ins kbd li main mark nav ol p pre q s samp section small span strike strong ' +
+    'sub summary sup table tbody td tfoot th thead time tr tt u ul var wbr').split(' '));
+  const DROP = new Set(('script style iframe frame frameset object embed applet noscript template svg math form input button select textarea option ' +
+    'link meta base title head audio video source track canvas portal dialog slot').split(' '));
+  const ATTRS = new Set(('href src alt title width height align valign bgcolor color border cellpadding cellspacing colspan rowspan style dir lang ' +
+    'face size start type reversed span scope headers datetime cite').split(' '));
+  const HREF_OK = /^(https?:|mailto:)/i;
+  const SRC_OK = /^(https?:|data:image\/(png|gif|jpe?g|webp|svg\+xml)[;,])/i;
+  const css = (t) => String(t)
+    .replace(/@import[^;]*;?/gi, '')
+    .replace(/expression\s*\(/gi, '(')
+    .replace(/javascript\s*:/gi, '')
+    .replace(/behavior\s*:/gi, '')
+    .replace(/-moz-binding/gi, '');
+
+  function clean(html, { cid } = {}) {
+    const doc = new DOMParser().parseFromString(String(html ?? ''), 'text/html'); // dokumen inert: skrip tidak jalan
+    const styles = $$('style', doc).map((s) => css(s.textContent)).join('\n');
+    const out = document.implementation.createHTMLDocument('');
+    const walk = (src, dst) => {
+      for (const node of [...src.childNodes]) {
+        if (node.nodeType === Node.TEXT_NODE) { dst.appendChild(out.createTextNode(node.nodeValue)); continue; }
+        if (node.nodeType !== Node.ELEMENT_NODE) continue;
+        const tag = node.localName;
+        if (DROP.has(tag)) continue;
+        if (!ALLOWED.has(tag)) { walk(node, dst); continue; } // tag asing: buang bungkusnya, simpan isinya
+        const el = out.createElement(tag);
+        for (const { name, value } of [...node.attributes]) {
+          const n = name.toLowerCase();
+          let v = value;
+          if (!ATTRS.has(n)) continue; // termasuk semua on*
+          if (n === 'href' && !HREF_OK.test(v.trim())) continue;
+          if (n === 'src') {
+            if (/^cid:/i.test(v.trim())) { v = cid ? cid(v.trim().slice(4)) : ''; if (!v) continue; }
+            else if (!SRC_OK.test(v.trim())) continue;
+          }
+          if (n === 'style') v = css(v);
+          el.setAttribute(n, v);
+        }
+        if (tag === 'img') {
+          if (!el.hasAttribute('src')) continue;
+          el.setAttribute('referrerpolicy', 'no-referrer');
+        }
+        if (tag === 'a') { el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener noreferrer nofollow'); }
+        walk(node, el);
+        dst.appendChild(el);
+      }
+    };
+    const wrap = out.createElement('div');
+    walk(doc.body, wrap);
+    return { html: wrap.innerHTML, css: styles };
+  }
+
+  function page({ html, css: style }) {
+    return '<!doctype html><html><head><meta charset="utf-8">' +
+      '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src https: http: data:; style-src \'unsafe-inline\'; font-src https: data:">' +
+      '<meta name="referrer" content="no-referrer"><base target="_blank">' +
+      '<style>html,body{margin:0;padding:0}body{padding:16px;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#161616;background:#fff;overflow-wrap:anywhere}' +
+      'img{max-width:100%;height:auto}table{max-width:100%}a{color:#2d62e6}pre{white-space:pre-wrap}</style>' +
+      '<style>' + String(style).replace(/<\/?style/gi, '') + '</style></head><body>' + html + '</body></html>';
+  }
+
+  return { clean, page };
+})();
+
+const URL_RE = /https?:\/\/[^\s<>"']+/g;
+const trimUrl = (u) => u.replace(/[.,;:!?)\]]+$/, '');
+const textToHtml = (t) => esc(t).replace(URL_RE, (u) => { const clean = trimUrl(u); return `<a href="${clean}">${clean}</a>${u.slice(clean.length)}`; }).replace(/\n/g, '<br>');
+function htmlText(html) {
+  if (!html) return '';
+  const d = new DOMParser().parseFromString(html, 'text/html');
+  $$('script,style,noscript', d).forEach((n) => n.remove());
+  return d.body.textContent || '';
+}
+const plain = (m) => (m.text || htmlText(m.html) || '').replace(/\s+/g, ' ').trim();
+
+/* =====================================================================
+   PEMINDAI KODE: OTP (angka 4–8 digit / alfanumerik) dekat kata kunci,
+   atau tautan verifikasi.
+   ===================================================================== */
+const Scan = (() => {
+  const KW = /\b(kode|code|otp|pin|passcode|verifikasi|verification|verify|token|sandi|password|one[- ]?time|sekali pakai|login|masuk|konfirmasi|confirmation|aktivasi|activation)\b/gi;
+  const NUM = /(^|[^\d.,:/#])(\d{3}[ -]\d{3}|\d{4,8})(?![\d,:/]|\.\d)/g;
+  const ALNUM = /\b(?=[A-Z0-9-]*\d)(?=[A-Z0-9-]*[A-Z])([A-Z0-9]{3,4}-[A-Z0-9]{3,4}|[A-Z0-9]{6,8})\b/g;
+  const LINK_HINT = /verif|confirm|konfirmasi|activat|aktivasi|aktifkan|magic|token=|validat|validasi|reset/i;
+
+  function code(text) {
+    const kws = [...text.matchAll(KW)].map((m) => [m.index, m.index + m[0].length]);
+    if (!kws.length) return null;
+    const cands = [
+      ...[...text.matchAll(NUM)].map((m) => ({ v: m[2], i: m.index + m[1].length, num: true })),
+      ...[...text.matchAll(ALNUM)].map((m) => ({ v: m[1], i: m.index, num: false })),
+    ];
+    let best = null;
+    for (const c of cands) {
+      const end = c.i + c.v.length;
+      let dist = Infinity;
+      for (const [a, b] of kws) dist = Math.min(dist, b <= c.i ? c.i - b : a >= end ? (a - end) * 1.5 : 0);
+      if (dist > 80) continue;
+      if (c.num && /^(19|20)\d\d$/.test(c.v) && dist > 12) continue; // kemungkinan tahun
+      const score = dist + (c.num ? 0 : 10);
+      if (!best || score < best.score) best = { ...c, score };
+    }
+    return best ? { code: best.v, copy: best.num ? best.v.replace(/[ -]/g, '') : best.v } : null;
+  }
+
+  function link(m) {
+    const links = [];
+    if (m.html) $$('a[href]', new DOMParser().parseFromString(m.html, 'text/html')).forEach((a) => links.push({ href: a.getAttribute('href').trim(), text: a.textContent }));
+    for (const u of (m.text || '').match(URL_RE) || []) links.push({ href: trimUrl(u), text: '' });
+    const hit = links.find((l) => /^https?:\/\//i.test(l.href) && (LINK_HINT.test(l.href) || LINK_HINT.test(l.text)));
+    return hit ? hit.href : null;
+  }
+
+  return function scan(m) {
+    const text = [m.subject, m.text, htmlText(m.html)].filter(Boolean).join('\n');
+    const c = code(text);
+    const l = link(m);
+    if (!c && !l) return null;
+    return { code: c?.code || null, copy: c?.copy || l, link: l };
+  };
+})();
+
+/* =====================================================================
+   QR (mode byte, koreksi M, versi 1–10) → SVG
+   ===================================================================== */
+const QR = (() => {
+  const ECC = [0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26];
+  const BLK = [0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5];
+  const mul = (x, y) => { let z = 0; for (let i = 7; i >= 0; i--) { z = (z << 1) ^ ((z >>> 7) * 0x11d); z ^= ((y >>> i) & 1) * x; } return z; };
+  const rawModules = (v) => { let r = (16 * v + 128) * v + 64; if (v >= 2) { const n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if (v >= 7) r -= 36; } return r; };
+  const dataCap = (v) => Math.floor(rawModules(v) / 8) - ECC[v] * BLK[v];
+  function rsDiv(deg) {
+    const r = new Array(deg).fill(0); r[deg - 1] = 1; let root = 1;
+    for (let i = 0; i < deg; i++) { for (let j = 0; j < deg; j++) { r[j] = mul(r[j], root); if (j + 1 < deg) r[j] ^= r[j + 1]; } root = mul(root, 2); }
+    return r;
+  }
+  function rsRem(data, div) {
+    const r = div.map(() => 0);
+    for (const b of data) { const f = b ^ r.shift(); r.push(0); div.forEach((c, i) => { r[i] ^= mul(c, f); }); }
+    return r;
+  }
+  function penalty(M, n) {
+    let p = 0, dark = 0;
+    for (let a = 0; a < n; a++) {
+      for (const horiz of [true, false]) {
+        let run = 0, prev = null, str = '';
+        for (let b = 0; b < n; b++) {
+          const c = horiz ? M[a][b] : M[b][a];
+          str += c ? '1' : '0';
+          if (c === prev) { run++; if (run === 5) p += 3; else if (run > 5) p++; } else { run = 1; prev = c; }
+        }
+        for (const pat of ['10111010000', '00001011101']) for (let i = str.indexOf(pat); i !== -1; i = str.indexOf(pat, i + 1)) p += 40;
+      }
+      for (let b = 0; b < n; b++) {
+        if (M[a][b]) dark++;
+        if (a < n - 1 && b < n - 1) { const c = M[a][b]; if (c === M[a][b + 1] && c === M[a + 1][b] && c === M[a + 1][b + 1]) p += 3; }
+      }
+    }
+    return p + Math.floor(Math.abs(dark * 20 - n * n * 10) / (n * n)) * 10;
+  }
+  function encode(text) {
+    const bytes = [...new TextEncoder().encode(text)];
+    let v = 1;
+    while (v <= 10 && 4 + (v < 10 ? 8 : 16) + bytes.length * 8 > dataCap(v) * 8) v++;
+    if (v > 10) throw new Error('qr-too-long');
+    const bits = [];
+    const put = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >>> i) & 1); };
+    put(4, 4); put(bytes.length, v < 10 ? 8 : 16); bytes.forEach((b) => put(b, 8));
+    const cap = dataCap(v) * 8;
+    put(0, Math.min(4, cap - bits.length));
+    put(0, (8 - (bits.length % 8)) % 8);
+    for (let pad = 0xec; bits.length < cap; pad ^= 0xec ^ 0x11) put(pad, 8);
+    const data = [];
+    for (let i = 0; i < bits.length; i += 8) data.push(bits.slice(i, i + 8).reduce((a, b) => (a << 1) | b, 0));
+
+    const nb = BLK[v], ecl = ECC[v], raw = Math.floor(rawModules(v) / 8), nShort = nb - (raw % nb), shortLen = Math.floor(raw / nb), div = rsDiv(ecl);
+    const blocks = [];
+    for (let i = 0, k = 0; i < nb; i++) {
+      const dat = data.slice(k, k + shortLen - ecl + (i < nShort ? 0 : 1));
+      k += dat.length;
+      const ecc = rsRem(dat, div);
+      if (i < nShort) dat.push(0);
+      blocks.push(dat.concat(ecc));
+    }
+    const cw = [];
+    for (let i = 0; i < blocks[0].length; i++) blocks.forEach((b, j) => { if (i !== shortLen - ecl || j >= nShort) cw.push(b[i]); });
+
+    const size = v * 4 + 17;
+    const M = Array.from({ length: size }, () => Array(size).fill(false));
+    const F = Array.from({ length: size }, () => Array(size).fill(false));
+    const set = (x, y, d) => { M[y][x] = d; F[y][x] = true; };
+    for (let i = 0; i < size; i++) { set(6, i, i % 2 === 0); set(i, 6, i % 2 === 0); }
+    for (const [cx, cy] of [[3, 3], [size - 4, 3], [3, size - 4]]) {
+      for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) {
+        const x = cx + dx, y = cy + dy;
+        if (x >= 0 && x < size && y >= 0 && y < size) { const d = Math.max(Math.abs(dx), Math.abs(dy)); set(x, y, d !== 2 && d !== 4); }
+      }
+    }
+    if (v > 1) {
+      const n = Math.floor(v / 7) + 2, step = Math.ceil((v * 4 + 4) / (n * 2 - 2)) * 2, pos = [6];
+      for (let p = size - 7; pos.length < n; p -= step) pos.splice(1, 0, p);
+      pos.forEach((a, i) => pos.forEach((b, j) => {
+        if ((i === 0 && j === 0) || (i === 0 && j === n - 1) || (i === n - 1 && j === 0)) return;
+        for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(a + dx, b + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1);
+      }));
+    }
+    const fmt = (mask) => {
+      const d = mask; // ECL M = 00
+      let r = d;
+      for (let i = 0; i < 10; i++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+      const b = ((d << 10) | r) ^ 0x5412;
+      const g = (i) => ((b >>> i) & 1) === 1;
+      for (let i = 0; i <= 5; i++) set(8, i, g(i));
+      set(8, 7, g(6)); set(8, 8, g(7)); set(7, 8, g(8));
+      for (let i = 9; i < 15; i++) set(14 - i, 8, g(i));
+      for (let i = 0; i < 8; i++) set(size - 1 - i, 8, g(i));
+      for (let i = 8; i < 15; i++) set(8, size - 15 + i, g(i));
+      set(8, size - 8, true);
+    };
+    fmt(0);
+    if (v >= 7) {
+      let r = v;
+      for (let i = 0; i < 12; i++) r = (r << 1) ^ ((r >>> 11) * 0x1f25);
+      const b = (v << 12) | r;
+      for (let i = 0; i < 18; i++) { const bit = ((b >>> i) & 1) === 1, a = size - 11 + (i % 3), c = Math.floor(i / 3); set(a, c, bit); set(c, a, bit); }
+    }
+    let bi = 0;
+    for (let right = size - 1; right >= 1; right -= 2) {
+      if (right === 6) right = 5;
+      for (let vert = 0; vert < size; vert++) for (let j = 0; j < 2; j++) {
+        const x = right - j, up = ((right + 1) & 2) === 0, y = up ? size - 1 - vert : vert;
+        if (!F[y][x] && bi < cw.length * 8) { M[y][x] = ((cw[bi >>> 3] >>> (7 - (bi & 7))) & 1) === 1; bi++; }
+      }
+    }
+    const masks = [
+      (x, y) => (x + y) % 2 === 0, (x, y) => y % 2 === 0, (x) => x % 3 === 0, (x, y) => (x + y) % 3 === 0,
+      (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0, (x, y) => ((x * y) % 2) + ((x * y) % 3) === 0,
+      (x, y) => (((x * y) % 2) + ((x * y) % 3)) % 2 === 0, (x, y) => (((x + y) % 2) + ((x * y) % 3)) % 2 === 0,
+    ];
+    const apply = (m) => { for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) if (!F[y][x] && masks[m](x, y)) M[y][x] = !M[y][x]; };
+    let best = 0, bestP = Infinity;
+    for (let m = 0; m < 8; m++) { apply(m); fmt(m); const p = penalty(M, size); if (p < bestP) { bestP = p; best = m; } apply(m); }
+    apply(best); fmt(best);
+    return M;
+  }
+  function svg(text, label) {
+    const M = encode(text), n = M.length, q = 4;
+    let d = '';
+    M.forEach((row, y) => row.forEach((on, x) => { if (on) d += `M${x + q} ${y + q}h1v1h-1z`; }));
+    return `<svg viewBox="0 0 ${n + 2 * q} ${n + 2 * q}" shape-rendering="crispEdges" role="img" aria-label="${esc(label)}"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#161616"/></svg>`;
+  }
+  return { encode, svg };
+})();
+
+/* =====================================================================
+   BUNYI LONCENG (Web Audio, tanpa file)
+   ===================================================================== */
+const Sound = (() => {
+  let ctx = null;
+  function unlock() {
+    try {
+      if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === 'suspended') ctx.resume();
+    } catch { /* audio tidak tersedia */ }
+  }
+  ['pointerdown', 'keydown', 'touchend'].forEach((ev) => addEventListener(ev, unlock, { passive: true }));
+  function bell() {
+    if (!S.sound || !ctx || ctx.state !== 'running') return;
+    const t0 = ctx.currentTime + 0.02;
+    const out = ctx.createGain();
+    out.gain.value = 0.2;
+    out.connect(ctx.destination);
+    [[0, 880], [0.17, 1174.7]].forEach(([dt, f]) => {
+      [[1, 1], [2.76, 0.42], [5.4, 0.18], [8.93, 0.07]].forEach(([mult, amp], k) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), t = t0 + dt, dur = 1.7 / (1 + k * 0.9);
+        o.type = 'sine';
+        o.frequency.value = f * mult;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(amp, t + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g); g.connect(out);
+        o.start(t); o.stop(t + dur + 0.05);
+      });
+    });
+  }
+  return { unlock, bell };
+})();
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const STORE_KEY = 'banamail:v1';
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; } },
+  set(patch) { try { localStorage.setItem(STORE_KEY, JSON.stringify({ ...store.get(), ...patch })); } catch { /* penyimpanan tidak tersedia */ } },
+};
+const saved = store.get();
+const S = {
+  lang: saved.lang === 'en' ? 'en' : 'id',
+  sound: saved.sound !== false,
+  address: null, local: null, domain: CONFIG.DOMAINS[0], expiresAt: 0,
+  tab: 'inbox',
+  folders: { inbox: [], spam: [], sent: [] },
+  loaded: false,
+  read: new Set(), seen: new Set(), fresh: new Set(),
+  scans: new Map(),
+  rescues: [], rescueIdx: 0,
+  openId: null,
+  nextRefreshAt: Date.now() + CONFIG.REFRESH_MS,
+  busy: false, expiring: false,
+  badgeCounts: { inbox: 0, spam: 0, sent: 0 },
+};
+
+const t = (key, vars) => {
+  let s = I18N[S.lang]?.[key] ?? I18N.id[key] ?? key;
+  if (vars) s = s.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  return s;
+};
+const locale = () => (S.lang === 'id' ? 'id-ID' : 'en-GB');
+const reader = $('#reader');
+const sortDesc = (arr) => [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
+const allMail = () => [...S.folders.inbox, ...S.folders.spam, ...S.folders.sent];
+const findMsg = (id) => allMail().find((m) => m.id === id) || null;
+const unread = (f) => S.folders[f].filter((m) => !S.read.has(m.id)).length;
+
+/* =====================================================================
+   TOAST, SALIN, UNDUH
+   ===================================================================== */
+function toast(msg, tone = '') {
+  const host = reader.open ? $('#toastsDlg') : $('#toasts');
+  const el = document.createElement('div');
+  el.className = 'toast ' + tone;
+  el.textContent = msg;
+  host.append(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 320); }, 2600);
+}
+
+async function copyText(s) {
+  try { await navigator.clipboard.writeText(s); return true; } catch { /* lanjut ke cara lama */ }
+  const ta = document.createElement('textarea');
+  ta.value = s; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+  (reader.open ? reader : document.body).append(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch { ok = false; }
+  ta.remove();
+  return ok;
+}
+async function copyAndTell(s, okKey) { toast((await copyText(s)) ? t(okKey) : t('toast.copyFail'), 'lime'); }
+
+const safeName = (n) => String(n || 'lampiran').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '_').slice(0, 120);
+function downloadAttachment(a) {
+  const link = document.createElement('a');
+  link.download = safeName(a.name);
+  link.rel = 'noopener';
+  let url = a.url;
+  if (!url) {
+    const bin = atob(a.data || '');
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    url = URL.createObjectURL(new Blob([bytes], { type: a.type || 'application/octet-stream' }));
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+  link.href = url;
+  (reader.open ? reader : document.body).append(link);
+  link.click();
+  link.remove();
+}
+const fmtSize = (n) => (n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`);
+
+/* =====================================================================
+   WAKTU
+   ===================================================================== */
+function relTime(iso) {
+  const d = new Date(iso), diff = Date.now() - d.getTime();
+  if (diff < 60000) return t('time.now');
+  if (diff < 3600000) return t('time.min', { n: Math.floor(diff / 60000) });
+  if (diff < 86400000 && new Date().getDate() === d.getDate()) return new Intl.DateTimeFormat(locale(), { hour: '2-digit', minute: '2-digit' }).format(d);
+  return new Intl.DateTimeFormat(locale(), { day: 'numeric', month: 'short' }).format(d);
+}
+const fullTime = (iso) => new Intl.DateTimeFormat(locale(), { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
+const mmss = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
+
+/* =====================================================================
+   I18N
+   ===================================================================== */
+function applyI18n() {
+  document.documentElement.lang = S.lang;
+  document.title = t('meta.title');
+  $$('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  $$('[data-i18n-aria]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+  $$('[data-i18n-ph]').forEach((el) => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
+  $$('[data-i18n-alt]').forEach((el) => el.setAttribute('alt', t(el.dataset.i18nAlt)));
+  $$('[data-i18n-title]').forEach((el) => el.setAttribute('title', t(el.dataset.i18nTitle)));
+  $$('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === S.lang)));
+  $('#footTxt').textContent = t('foot', { domain: CONFIG.DOMAINS[0] });
+}
+function setLang(l) {
+  S.lang = l;
+  store.set({ lang: l });
+  applyI18n();
+  renderAll(true);
+  if (reader.open && S.openId) fillReader(findMsg(S.openId), { keepForm: true });
+  validateCustom();
+}
+
+/* =====================================================================
+   ALAMAT
+   ===================================================================== */
+function setAddress(a) {
+  Object.assign(S, { address: a.address, local: a.local, domain: a.domain, expiresAt: a.expiresAt });
+  S.folders = { inbox: [], spam: [], sent: [] };
+  S.read = new Set(); S.seen = new Set(); S.fresh = new Set(); S.scans = new Map();
+  S.rescues = []; S.rescueIdx = 0; S.loaded = false;
+  S.badgeCounts = { inbox: 0, spam: 0, sent: 0 };
+  store.set({ address: a.address, local: a.local, domain: a.domain, expiresAt: a.expiresAt });
+  const out = $('#addr');
+  out.innerHTML = `${esc(a.local)}<wbr>@${esc(a.domain)}`; // patah baris di '@', bukan di tengah domain
+  out.classList.remove('swap'); void out.offsetWidth; out.classList.add('swap');
+  if (!$('#qrPanel').hidden) renderQR();
+  $('#customDomain').value = a.domain;
+  renderAll(true);
+  if (inflight) inflight.finally(() => refresh()); else refresh();
+}
+
+async function makeAddress(opts = {}, toastKey = '') {
+  try {
+    const a = await api.newAddress(opts);
+    if (reader.open) closeReader();
+    setAddress(a);
+    if (toastKey) toast(t(toastKey));
+    return true;
+  } catch (e) {
+    console.error(e);
+    toast(t('toast.error'), 'pink');
+    return false;
+  }
+}
+
+async function expireNow() {
+  if (S.expiring) return;
+  S.expiring = true;
+  const old = S.address;
+  api.deleteAddress(old).catch(() => {});
+  await makeAddress({}, 'toast.expired');
+  S.expiring = false;
+}
+
+let deleteTimer = 0;
+async function onDelete(btn) {
+  if (!btn.classList.contains('is-armed')) {
+    btn.classList.add('is-armed');
+    $('.t-label', btn).textContent = t('act.sure');
+    clearTimeout(deleteTimer);
+    deleteTimer = setTimeout(() => disarm(btn), 3000);
+    return;
+  }
+  disarm(btn);
+  btn.disabled = true;
+  const old = S.address;
+  try { await api.deleteAddress(old); } catch (e) { console.error(e); }
+  await makeAddress({}, 'toast.deleted');
+  btn.disabled = false;
+}
+function disarm(btn) {
+  clearTimeout(deleteTimer);
+  btn.classList.remove('is-armed');
+  $('.t-label', btn).textContent = t('act.delete');
+}
+
+function renderQR() {
+  $('#qrBox').innerHTML = QR.svg(S.address, 'QR ' + S.address);
+  $('#qrAddr').textContent = S.address;
+}
+function toggleDrawer(which, force) {
+  const el = which === 'qr' ? $('#qrPanel') : $('#customForm');
+  const btn = $(`[data-act="${which}"]`);
+  const open = force ?? el.hidden;
+  el.hidden = !open;
+  btn.setAttribute('aria-expanded', String(open));
+  if (open && which === 'qr') { toggleDrawer('custom', false); renderQR(); }
+  if (open && which === 'custom') { toggleDrawer('qr', false); validateCustom(); $('#customName').focus(); }
+}
+function validateCustom() {
+  const v = $('#customName').value.trim().toLowerCase();
+  const ok = isValidPrefix(v);
+  $('#customUse').disabled = !ok;
+  const hint = $('#customHint');
+  hint.textContent = v && !ok ? t('custom.bad') : t('custom.hint', { n: CONFIG.SUFFIX_LENGTH });
+  hint.classList.toggle('bad', !!v && !ok);
+  const dom = CONFIG.DOMAINS.length > 1 ? $('#customDomain').value : CONFIG.DOMAINS[0];
+  $('#customPreview').textContent = t('custom.preview', { addr: `${v || t('custom.ph')}.${'•'.repeat(CONFIG.SUFFIX_LENGTH)}@${dom}` });
+  return ok;
+}
+
+/* =====================================================================
+   SEGAR (semua tab sekaligus)
+   ===================================================================== */
+let inflight = null;
+function refresh() {
+  if (!S.address) return Promise.resolve();
+  if (inflight) return inflight;
+  const addr = S.address;
+  setBusy(true);
+  inflight = (async () => {
+    try {
+      const [inbox, spam, sent] = await Promise.all([api.getInbox(addr), api.getSpam(addr), api.getSent(addr)]);
+      if (addr !== S.address) return;
+      const first = !S.loaded;
+      const incoming = [...inbox, ...spam];
+      const fresh = incoming.filter((m) => !S.seen.has(m.id));
+      [...incoming, ...sent].forEach((m) => S.seen.add(m.id));
+      sent.forEach((m) => S.read.add(m.id));
+      fresh.forEach((m) => { if (m.read) S.read.add(m.id); });
+      incoming.forEach((m) => { if (!S.scans.has(m.id)) S.scans.set(m.id, Scan(m)); });
+      S.folders = { inbox: sortDesc(inbox), spam: sortDesc(spam), sent: sortDesc(sent) };
+
+      // Penyelamat kode: hanya pesan BARU yang mendarat di Spam.
+      const rescued = sortDesc(fresh.filter((m) => m.folder === 'spam'))
+        .map((m) => ({ m, r: S.scans.get(m.id) }))
+        .filter((x) => x.r)
+        .map(({ m, r }) => ({ id: m.id, from: m.from?.name || m.from?.address || '?', subject: m.subject || t('list.noSubject'), ...r }));
+      if (rescued.length) { S.rescues = [...rescued, ...S.rescues.filter((x) => !rescued.some((y) => y.id === x.id))]; S.rescueIdx = 0; }
+
+      S.fresh = first ? new Set() : new Set(fresh.map((m) => m.id));
+      S.loaded = true;
+      if (!first && fresh.length) Sound.bell();
+      renderAll();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      inflight = null;
+      setBusy(false);
+      S.nextRefreshAt = Date.now() + CONFIG.REFRESH_MS;
+      renderRefresh();
+    }
+  })();
+  return inflight;
+}
+function setBusy(on) {
+  S.busy = on;
+  $('#refreshIc').classList.toggle('spin', on);
+  renderRefresh();
+}
+function renderRefresh() {
+  $('#refreshTxt').textContent = S.busy ? t('refresh.busy') : t('refresh.in', { s: Math.max(0, Math.ceil((S.nextRefreshAt - Date.now()) / 1000)) });
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+function renderAll(force = false) {
+  renderTabs();
+  renderList(force);
+  renderRescue();
+}
+
+function renderTabs() {
+  for (const f of ['inbox', 'spam', 'sent']) {
+    const tab = $(`#tab-${f}`), sel = S.tab === f;
+    tab.setAttribute('aria-selected', String(sel));
+    tab.tabIndex = sel ? 0 : -1;
+    const n = f === 'sent' ? 0 : unread(f); // Terkirim tidak punya 'belum dibaca'
+    const b = $(`#badge-${f}`);
+    b.hidden = n === 0;
+    b.textContent = n > 99 ? '99+' : String(n);
+    b.setAttribute('aria-label', t('badge.unread', { n }));
+    if (n > S.badgeCounts[f]) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+    S.badgeCounts[f] = n;
+  }
+  const panel = $('#panel');
+  panel.setAttribute('aria-labelledby', `tab-${S.tab}`);
+  panel.dataset.tab = S.tab;
+  panel.className = { inbox: 'c-yel', spam: 'c-pink', sent: 'c-lime' }[S.tab];
+  $('#spamNote').hidden = S.tab !== 'spam';
+}
+
+let lastSig = '';
+function renderList(force = false) {
+  const ul = $('#list');
+  const list = S.folders[S.tab];
+  const sig = [S.tab, S.lang, S.loaded, Math.floor(Date.now() / 30000), ...list.map((m) => m.id + (S.read.has(m.id) ? 'r' : 'u'))].join('|');
+  if (!force && sig === lastSig && !S.fresh.size) return;
+  lastSig = sig;
+  const focusId = document.activeElement?.closest?.('#list [data-open]')?.dataset.open;
+
+  if (!S.loaded) {
+    ul.innerHTML = `<li class="loading">${esc(t('list.loading'))}</li>`;
+  } else if (!list.length) {
+    const icon = { inbox: 'i-inbox', spam: 'i-shield', sent: 'i-plane' }[S.tab];
+    ul.innerHTML = `<li class="empty sk"><svg class="ic big" aria-hidden="true"><use href="#${icon}"/></svg><p>${esc(t('empty.' + S.tab))}</p></li>`;
+  } else {
+    ul.innerHTML = list.map(rowHTML).join('');
+  }
+  S.fresh = new Set();
+  if (focusId) $$('#list [data-open]').find((b) => b.dataset.open === focusId)?.focus({ preventScroll: true });
+}
+
+function rowHTML(m) {
+  const sent = m.folder === 'sent';
+  const isUnread = !sent && !S.read.has(m.id);
+  const who = sent ? t('list.to', { to: m.to }) : (m.from?.name || m.from?.address || '?');
+  const scan = S.scans.get(m.id);
+  const tags = [
+    scan?.code ? `<span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg>${esc(t('list.code'))}</span>` : '',
+    !scan?.code && scan?.link ? `<span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>${esc(t('list.link'))}</span>` : '',
+    m.attachments?.length ? `<span class="chip att"><svg class="ic" aria-hidden="true"><use href="#i-clip"/></svg>${m.attachments.length}</span>` : '',
+  ].join('');
+  const snippet = plain(m).slice(0, 120);
+  return `<li><button type="button" class="row sk${isUnread ? ' is-unread' : ''}${S.fresh.has(m.id) ? ' is-new' : ''}" data-open="${esc(m.id)}">
+    <span class="mark" aria-hidden="true"></span>
+    <span class="row-main">
+      <span class="row-top"><span class="row-from">${esc(who)}</span><time class="row-time" datetime="${esc(m.date)}">${esc(relTime(m.date))}</time></span>
+      <span class="row-subj">${esc(m.subject || t('list.noSubject'))}${isUnread ? `<span class="sr-only"> (${esc(t('list.unread'))})</span>` : ''}</span>
+      <span class="row-snip">${esc(snippet)}</span>
+      <span class="row-tags">${tags}</span>
+    </span>
+    <svg class="ic chev" aria-hidden="true"><use href="#i-chev-r"/></svg>
+  </button></li>`;
+}
+
+/* ----- Ledakan kuning bergerigi ----- */
+function rng(a) { return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let x = Math.imul(a ^ (a >>> 15), 1 | a); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+const hashStr = (s) => [...s].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261);
+function burstPoints(w, h, seed) {
+  const r = rng(seed), pad = 15, x0 = pad, y0 = pad, wR = w - 2 * pad, hR = h - 2 * pad;
+  const P = 2 * (wR + hR), n = Math.max(18, Math.round(P / 24)) & ~1, pts = [];
+  for (let k = 0; k < n; k++) {
+    let d = ((k + (r() - 0.5) * 0.35) / n) * P, x, y, nx, ny;
+    if (d < wR) { x = x0 + d; y = y0; nx = 0; ny = -1; }
+    else if ((d -= wR) < hR) { x = x0 + wR; y = y0 + d; nx = 1; ny = 0; }
+    else if ((d -= hR) < wR) { x = x0 + wR - d; y = y0 + hR; nx = 0; ny = 1; }
+    else { d -= wR; x = x0; y = y0 + hR - d; nx = -1; ny = 0; }
+    const out = k % 2 === 0 ? 6 + r() * 8.5 : -2 - r() * 4;
+    pts.push(`${(x + nx * out).toFixed(1)},${(y + ny * out).toFixed(1)}`);
+  }
+  return pts.join(' ');
+}
+function drawBurst(box) {
+  const svg = $('.burst-bg', box);
+  const w = box.offsetWidth, h = box.offsetHeight;
+  if (!svg || !w || !h) return;
+  const pts = burstPoints(w, h, hashStr(box.dataset.seed || 'x'));
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.innerHTML = `<polygon points="${pts}" fill="#fffbe0"/>` +
+    `<polygon points="${pts}" fill="url(#hpx-yel)" stroke="#161616" stroke-width="3.6" stroke-linejoin="round" filter="url(#wob-s)"/>` +
+    `<polygon points="${pts}" fill="none" stroke="#161616" stroke-width="1.4" stroke-linejoin="round" opacity=".45" transform="translate(2.5 2.5)"/>`;
+}
+const burstObserver = new ResizeObserver((entries) => entries.forEach((e) => requestAnimationFrame(() => drawBurst(e.target))));
+
+let rescueSig = '';
+function renderRescue() {
+  const area = $('#notice');
+  if (!S.rescues.length) { area.hidden = true; area.innerHTML = ''; rescueSig = ''; return; }
+  S.rescueIdx = Math.min(S.rescueIdx, S.rescues.length - 1);
+  const r = S.rescues[S.rescueIdx];
+  const sig = [r.id, S.rescueIdx, S.rescues.length, S.lang].join('|');
+  if (sig === rescueSig) return;
+  rescueSig = sig;
+  const title = r.code ? t('rescue.title') : t('rescue.titleLink');
+  area.hidden = false;
+  area.innerHTML = `<div class="burst" data-seed="${esc(r.id)}" role="group" aria-label="${esc(title)}">
+    <svg class="burst-bg" aria-hidden="true"></svg>
+    <svg class="doodle d1" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-bolt" fill="url(#hp-pink)"/></svg>
+    <svg class="doodle d2" viewBox="0 0 24 24" aria-hidden="true"><use href="#d-star" fill="url(#hp-blue)"/></svg>
+    <div class="burst-in">
+      <div class="burst-top"><span class="tag pink"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>${esc(t('rescue.tag'))}</span></div>
+      <button type="button" class="btn btn-sm sk c-yel burst-x" data-act="r-dismiss" aria-label="${esc(t('rescue.dismiss'))}"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+      <p class="burst-title">${esc(title)}</p>
+      <p class="burst-from">${esc(t('rescue.from', { from: r.from, subject: r.subject }))}</p>
+      ${r.code ? `<span class="code-box sk">${esc(r.code)}</span>` : `<span class="code-box link sk">${esc(r.link)}</span>`}
+      <div class="burst-actions">
+        <button type="button" class="btn sk c-pink" data-act="r-copy"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>${esc(t('rescue.copy'))}</button>
+        <button type="button" class="btn sk c-lime" data-act="r-open"><svg class="ic" aria-hidden="true"><use href="#i-mail-open"/></svg>${esc(t('rescue.open'))}</button>
+      </div>
+      ${S.rescues.length > 1 ? `<div class="burst-nav"><span>${esc(t('rescue.count', { i: S.rescueIdx + 1, n: S.rescues.length }))}</span><button type="button" class="btn btn-sm sk c-yel" data-act="r-next">${esc(t('rescue.next'))}<svg class="ic" aria-hidden="true"><use href="#i-chev-r"/></svg></button></div>` : ''}
+    </div>
+  </div>`;
+  const box = $('.burst', area);
+  burstObserver.disconnect();
+  burstObserver.observe(box);
+  drawBurst(box);
+}
+
+/* =====================================================================
+   PEMBACA PESAN
+   ===================================================================== */
+function openMessage(id) {
+  const m = findMsg(id);
+  if (!m) { toast(t('toast.gone'), 'pink'); return; }
+  S.read.add(id);
+  S.openId = id;
+  fillReader(m);
+  if (!reader.open) {
+    reader.showModal();
+    history.pushState({ bana: 'reader' }, '');
+  }
+  reader.scrollTop = 0;
+  $('[data-act="close-reader"]', reader).focus({ preventScroll: true });
+  renderTabs();
+  renderList();
+}
+
+function fillReader(m, { keepForm = false } = {}) {
+  if (!m) return;
+  const sent = m.folder === 'sent', spam = m.folder === 'spam';
+  const folderTag = $('#rFolder');
+  folderTag.textContent = t('tab.' + m.folder);
+  folderTag.className = 'tag ' + ({ inbox: '', spam: 'pink', sent: 'lime' }[m.folder]);
+  $('#rSubject').textContent = m.subject || t('list.noSubject');
+  const from = sent ? { name: t('reader.you'), address: S.address } : (m.from || {});
+  $('#rFrom').innerHTML = `${esc(from.name || '')} <span class="addr">&lt;${esc(from.address || '')}&gt;</span>`;
+  $('#rTo').innerHTML = `<span class="addr">${esc(m.to || S.address)}</span>`;
+  $('#rDate').textContent = fullTime(m.date);
+  $('#rNotSpam').hidden = !spam;
+  $('#rNotSpam').disabled = false;
+  $('#rReply').hidden = sent;
+  $('#rWarn').hidden = !spam;
+  const scan = S.scans.get(m.id);
+  $('#rCopyCode').hidden = !scan;
+  if (scan) $('#rCopyCodeTxt').textContent = scan.code ? t('reader.copyCode', { code: scan.code }) : t('reader.copyLink');
+
+  // isi: HTML disanitasi, atau teks biasa → HTML aman
+  const cid = (id) => {
+    const a = (m.attachments || []).find((x) => x.cid === id);
+    return a?.data && /^image\/(png|gif|jpe?g|webp)$/i.test(a.type) ? `data:${a.type};base64,${a.data}` : '';
+  };
+  const frame = $('#rFrame');
+  frame.style.height = '160px';
+  frame.srcdoc = Sanitize.page(Sanitize.clean(m.html || textToHtml(m.text || ''), { cid }));
+
+  const atts = m.attachments || [];
+  $('#rAtt').hidden = !atts.length;
+  $('#rAttWarn').hidden = !spam;
+  $('#rAttList').innerHTML = atts.map((a, i) => `<li><button type="button" class="btn sk c-blue" data-att="${i}" aria-label="${esc(t('reader.download'))} ${esc(a.name)}">
+      <svg class="ic" aria-hidden="true"><use href="#i-clip"/></svg><span class="att-txt"><span class="att-name">${esc(a.name)}</span><small>${esc(fmtSize(a.size || 0))}</small></span>
+      <svg class="ic" aria-hidden="true"><use href="#i-down"/></svg></button></li>`).join('');
+
+  if (!keepForm) { $('#replyForm').hidden = true; $('#rSentOk').hidden = true; }
+}
+
+let frameRO = null;
+function fitFrame() {
+  const frame = $('#rFrame');
+  const d = frame.contentDocument;
+  if (!d || !d.body) return;
+  const fit = () => { frame.style.height = Math.max(120, Math.ceil(d.documentElement.getBoundingClientRect().height)) + 'px'; };
+  fit();
+  $$('img', d).forEach((img) => img.addEventListener('load', fit));
+  frameRO?.disconnect();
+  frameRO = new ResizeObserver(fit);
+  frameRO.observe(d.body);
+}
+
+function closeReader() {
+  if (history.state?.bana === 'reader') history.back();
+  else hideReader();
+}
+function hideReader() {
+  if (!reader.open) return;
+  const id = S.openId;
+  reader.close();
+  S.openId = null;
+  $('#rFrame').srcdoc = '';
+  $$('#list [data-open]').find((b) => b.dataset.open === id)?.focus({ preventScroll: true });
+}
+
+function openReply() {
+  const m = findMsg(S.openId);
+  if (!m) return;
+  const f = $('#replyForm');
+  f.to.value = m.from?.address || '';
+  const subj = m.subject || '';
+  f.subject.value = /^re:/i.test(subj) ? subj : `Re: ${subj}`;
+  f.body.value = '';
+  $('#sendBtn').disabled = true;
+  $('#rSentOk').hidden = true;
+  f.hidden = false;
+  f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => f.body.focus({ preventScroll: true }), 250);
+}
+
+async function sendReply(e) {
+  e.preventDefault();
+  const f = $('#replyForm'), btn = $('#sendBtn');
+  const text = f.body.value.trim();
+  if (!text) { toast(t('toast.empty'), 'pink'); return; }
+  if (!f.to.checkValidity()) { f.to.focus(); return; }
+  btn.disabled = true;
+  $('#sendTxt').textContent = t('reply.sending');
+  try {
+    const m = await api.sendReply(S.address, { inReplyTo: S.openId, to: f.to.value.trim(), subject: f.subject.value.trim(), text });
+    S.seen.add(m.id); S.read.add(m.id);
+    S.folders.sent = sortDesc([m, ...S.folders.sent]);
+    flyPlane(btn);
+    f.hidden = true;
+    $('#rSentOk').hidden = false;
+    toast(t('toast.sent'), 'lime');
+    renderTabs();
+    renderList();
+  } catch (err) {
+    console.error(err);
+    toast(t('toast.error'), 'pink');
+    btn.disabled = false;
+  } finally {
+    $('#sendTxt').textContent = t('reply.send');
+  }
+}
+
+function flyPlane(from) {
+  const r = from.getBoundingClientRect();
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  p.setAttribute('viewBox', '0 0 24 24');
+  p.setAttribute('class', 'fly-plane');
+  p.setAttribute('aria-hidden', 'true');
+  p.innerHTML = '<use href="#d-plane" fill="url(#hp-blue)"/>';
+  p.style.left = `${r.left + r.width / 2}px`;
+  p.style.top = `${r.top + r.height / 2}px`;
+  (reader.open ? reader : document.body).append(p);
+  p.addEventListener('animationend', () => p.remove());
+  setTimeout(() => p.remove(), 1600);
+}
+
+async function markNotSpam(id) {
+  const btn = $('#rNotSpam');
+  btn.disabled = true;
+  try {
+    const m = await api.moveMessage(S.address, id, 'inbox');
+    S.folders.spam = S.folders.spam.filter((x) => x.id !== id);
+    S.folders.inbox = sortDesc([m, ...S.folders.inbox.filter((x) => x.id !== id)]);
+    toast(t('toast.moved'), 'lime');
+    if (S.openId === id) fillReader(m, { keepForm: true });
+    renderAll();
+  } catch (e) {
+    console.error(e);
+    toast(t('toast.error'), 'pink');
+    btn.disabled = false;
+  }
+}
+
+/* =====================================================================
+   TAB
+   ===================================================================== */
+function selectTab(name, focus = false) {
+  S.tab = name;
+  renderTabs();
+  renderList(true);
+  if (focus) $(`#tab-${name}`).focus();
+}
+
+/* =====================================================================
+   EVENT
+   ===================================================================== */
+function bind() {
+  $$('[data-lang]').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+  $('#copyAddr').addEventListener('click', () => copyAndTell(S.address, 'toast.copied'));
+  $('#addr').addEventListener('click', () => copyAndTell(S.address, 'toast.copied'));
+
+  $('.tiles').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    const act = btn.dataset.act;
+    if (act !== 'delete') disarm($('[data-act="delete"]'));
+    if (act === 'copy') copyAndTell(S.address, 'toast.copied');
+    if (act === 'random') { btn.classList.remove('is-spinning'); void btn.offsetWidth; btn.classList.add('is-spinning'); makeAddress({}, 'toast.new'); }
+    if (act === 'custom') toggleDrawer('custom');
+    if (act === 'qr') toggleDrawer('qr');
+    if (act === 'delete') onDelete(btn);
+  });
+  $('[data-act="qr-close"]').addEventListener('click', () => toggleDrawer('qr', false));
+
+  const domSel = $('#customDomain');
+  domSel.innerHTML = CONFIG.DOMAINS.map((d) => `<option value="${esc(d)}">@${esc(d)}</option>`).join('');
+  $('#customForm').classList.toggle('one-domain', CONFIG.DOMAINS.length === 1);
+  $('#customName').addEventListener('input', validateCustom);
+  domSel.addEventListener('change', validateCustom);
+  $('#customForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validateCustom()) return;
+    const ok = await makeAddress({ prefix: $('#customName').value.trim().toLowerCase(), domain: domSel.value }, 'toast.new');
+    if (ok) { $('#customName').value = ''; toggleDrawer('custom', false); }
+  });
+
+  // Ledakan penyelamat kode
+  $('#notice').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const r = S.rescues[S.rescueIdx];
+    if (!r) return;
+    if (btn.dataset.act === 'r-copy') copyAndTell(r.copy, r.code ? 'toast.codeCopied' : 'toast.linkCopied');
+    if (btn.dataset.act === 'r-open') { const m = findMsg(r.id); if (m && m.folder !== S.tab) selectTab(m.folder); openMessage(r.id); }
+    if (btn.dataset.act === 'r-next') { S.rescueIdx = (S.rescueIdx + 1) % S.rescues.length; renderRescue(); $('#notice [data-act="r-next"]')?.focus(); }
+    if (btn.dataset.act === 'r-dismiss') { S.rescues.splice(S.rescueIdx, 1); renderRescue(); }
+  });
+
+  // Tab
+  const tabs = $$('[role="tab"]');
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => selectTab(tab.dataset.tab));
+    tab.addEventListener('keydown', (e) => {
+      const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      let j = null;
+      if (k) j = (i + k + tabs.length) % tabs.length;
+      if (e.key === 'Home') j = 0;
+      if (e.key === 'End') j = tabs.length - 1;
+      if (j === null) return;
+      e.preventDefault();
+      selectTab(tabs[j].dataset.tab, true);
+    });
+  });
+
+  $('#list').addEventListener('click', (e) => {
+    const row = e.target.closest('[data-open]');
+    if (row) openMessage(row.dataset.open);
+  });
+  $('#refreshBtn').addEventListener('click', () => refresh());
+
+  const sw = $('#soundSwitch');
+  const paintSound = () => { sw.setAttribute('aria-checked', String(S.sound)); $('#soundIcon').setAttribute('href', S.sound ? '#i-bell' : '#i-bell-off'); };
+  paintSound();
+  sw.addEventListener('click', () => {
+    S.sound = !S.sound;
+    store.set({ sound: S.sound });
+    paintSound();
+    if (S.sound) { Sound.unlock(); setTimeout(Sound.bell, 60); }
+  });
+
+  // Pembaca
+  reader.addEventListener('cancel', (e) => { e.preventDefault(); closeReader(); });
+  reader.addEventListener('click', (e) => {
+    if (e.target === reader) { closeReader(); return; }
+    const btn = e.target.closest('[data-act],[data-att]');
+    if (!btn) return;
+    if (btn.dataset.att) { const m = findMsg(S.openId); const a = m?.attachments?.[+btn.dataset.att]; if (a) downloadAttachment(a); return; }
+    const act = btn.dataset.act;
+    if (act === 'close-reader') closeReader();
+    if (act === 'not-spam') markNotSpam(S.openId);
+    if (act === 'reply') openReply();
+    if (act === 'cancel-reply') { $('#replyForm').hidden = true; $('#rReply').focus(); }
+    if (act === 'copy-code') { const s = S.scans.get(S.openId); if (s) copyAndTell(s.copy, s.code ? 'toast.codeCopied' : 'toast.linkCopied'); }
+  });
+  addEventListener('popstate', () => hideReader());
+  $('#rFrame').addEventListener('load', fitFrame);
+  $('#replyForm').addEventListener('submit', sendReply);
+  $('#replyForm').body.addEventListener('input', (e) => { $('#sendBtn').disabled = !e.target.value.trim(); });
+
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() > S.nextRefreshAt - CONFIG.REFRESH_MS + 2000) refresh(); });
+}
+
+/* =====================================================================
+   DETAK: hitung mundur alamat + segar otomatis tiap 10 detik
+   ===================================================================== */
+function tick() {
+  const now = Date.now();
+  if (S.address) {
+    const left = S.expiresAt - now;
+    $('#countdown').textContent = mmss(left);
+    $('.tile-clock').classList.toggle('is-low', left < 5 * 60000);
+    if (left <= 0) expireNow();
+  }
+  if (!S.busy && now >= S.nextRefreshAt) refresh();
+  else renderRefresh();
+  renderList(); // hanya menggambar ulang kalau isi/menit berubah
+}
+
+/* =====================================================================
+   MULAI
+   ===================================================================== */
+(async function boot() {
+  applyI18n();
+  bind();
+  const ok = saved.address && saved.expiresAt > Date.now() + 5000 && CONFIG.DOMAINS.includes(saved.domain) && isValidLocal(saved.local || '');
+  if (ok) setAddress({ address: saved.address, local: saved.local, domain: saved.domain, expiresAt: saved.expiresAt });
+  else await makeAddress();
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>
