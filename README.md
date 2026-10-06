@@ -26,6 +26,23 @@ production domain is picked up automatically.
 One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions**,
 then re-run the workflow from the **Actions** tab (or push to `main`).
 
+## BanaMail (standalone page)
+
+`public/banamail/index.html` is a separate, single-file landing page (HTML + CSS + JS, no build
+step) for **BanaMail**, a temporary email service drawn in a crayon-on-grid-paper style. The hero
+is the supplied illustration, used as is (`hero.webp`, with the original `hero.png` as fallback).
+It is served at `/banamail/` (on GitHub Pages: `/Venbeemail/banamail/`).
+
+- Replace `[DOMAIN]` in `CONFIG.DOMAINS` at the top of the script with the real domain(s).
+- All actions go through one `api` object (`newAddress`, `getInbox`, `getSpam`, `getSent`,
+  `moveMessage`, `sendReply`, `deleteAddress`). It currently talks to an in-memory mock with
+  sample mail (including an OTP in Spam). The comment above `Mock` describes the message shape
+  and a matching REST layout for a real backend.
+- Spam is never rejected or deleted. New Spam messages are scanned for OTP codes and
+  verification links, and a hit shows the yellow "Kode kamu nyasar ke Spam!" burst.
+- Mail HTML is sanitised (allow-list) and rendered in a sandboxed iframe without scripts, under
+  a CSP. Attachments download as files.
+
 ## What's on the page
 
 | Panel | What happens |
