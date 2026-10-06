@@ -33,7 +33,11 @@ step) for **BanaMail**, a temporary email service drawn in a crayon-on-grid-pape
 is the supplied illustration, used as is (`hero.webp`, with the original `hero.png` as fallback).
 It is served at `/banamail/` (on GitHub Pages: `/Venbeemail/banamail/`).
 
-- Replace `[DOMAIN]` in `CONFIG.DOMAINS` at the top of the script with the real domain(s).
+- Addresses look like `ifhew8883d@venbeemail.com`: 10 random characters (`a–z`, `0–9`, always
+  starting with a letter, about 52 bits), drawn with `crypto.getRandomValues` without modulo
+  bias. A custom name gets a 6-character random suffix (`budi` → `budi.k7m2x9`) so it cannot be
+  guessed. Domain(s), lengths and the address lifetime are in `CONFIG` at the top of the script;
+  with a single domain the domain dropdown is hidden.
 - All actions go through one `api` object (`newAddress`, `getInbox`, `getSpam`, `getSent`,
   `moveMessage`, `sendReply`, `deleteAddress`). It currently talks to an in-memory mock with
   sample mail (including an OTP in Spam). The comment above `Mock` describes the message shape

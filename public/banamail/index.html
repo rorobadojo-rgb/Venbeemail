@@ -190,7 +190,7 @@ h1, h2, h3, p { margin: 0; }
 .live i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ink); background: var(--lime); animation: blink 1.6s ease-in-out infinite; }
 
 .addr-bar { --fill: var(--h-yel); display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 6px 6px 6px 16px; min-height: 64px; }
-.addr-text { flex: 1; min-width: 0; font-family: var(--f-mono); font-weight: 700; font-size: clamp(15px, 4.4vw, 21px); line-height: 1.25; overflow-wrap: anywhere; cursor: copy; padding: 8px 0; }
+.addr-text { flex: 1; min-width: 0; font-family: var(--f-mono); font-weight: 700; font-size: clamp(14px, 3.9vw, 21px); line-height: 1.25; overflow-wrap: anywhere; cursor: copy; padding: 8px 0; }
 .addr-text.swap { animation: swap .45s ease; }
 .icon-btn { --fill: var(--l); display: grid; place-items: center; width: 50px; height: 50px; padding: 0; background: none; border: 0; flex: none; --rad: 14px 16px 13px 17px / 16px 13px 17px 14px; }
 @media (hover: hover) { .icon-btn:hover { --fill: var(--d); } }
@@ -234,6 +234,9 @@ h1, h2, h3, p { margin: 0; }
 @media (min-width: 540px) { .custom-grid { grid-template-columns: 1.2fr auto 1fr auto; align-items: end; } }
 .at { font-family: var(--f-mono); font-weight: 700; font-size: 22px; align-self: center; text-align: center; padding-top: 18px; }
 @media (max-width: 539px) { .at { display: none; } }
+@media (min-width: 540px) { .one-domain .custom-grid { grid-template-columns: 1fr auto; } }
+.one-domain .at, .one-domain #customDomainField { display: none; }
+.preview { font-family: var(--f-mono); font-size: 14px; color: var(--ink); overflow-wrap: anywhere; margin-top: 10px; }
 .field { display: grid; gap: 4px; min-width: 0; }
 .field-label { font-size: 16px; color: var(--ink-soft); padding-left: 6px; }
 .inp { --fill: var(--h-yel); display: flex; align-items: center; min-height: 52px; padding: 0 14px; --rad: 14px 18px 13px 19px / 18px 13px 19px 14px; }
@@ -525,16 +528,17 @@ dialog.reader::backdrop { background: rgba(22, 22, 22, .5); }
           <div class="custom-grid">
             <label class="field">
               <span class="field-label" data-i18n="custom.name">Nama</span>
-              <span class="inp sk"><input id="customName" class="mono" name="local" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="30" placeholder="nama-kamu" data-i18n-ph="custom.ph" aria-describedby="customHint"></span>
+              <span class="inp sk"><input id="customName" class="mono" name="local" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="20" placeholder="nama-kamu" data-i18n-ph="custom.ph" aria-describedby="customPreview customHint"></span>
             </label>
             <span class="at" aria-hidden="true">@</span>
-            <label class="field">
+            <label class="field" id="customDomainField">
               <span class="field-label" data-i18n="custom.domain">Domain</span>
               <span class="inp sel sk"><select id="customDomain" name="domain"></select><svg class="ic" aria-hidden="true"><use href="#i-chev-d"/></svg></span>
             </label>
             <button type="submit" class="btn sk c-lime" id="customUse" disabled><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="custom.use">Pakai</span></button>
           </div>
-          <p class="hint" id="customHint" data-i18n="custom.hint">3–30 karakter: huruf kecil, angka, titik, minus, garis bawah.</p>
+          <p class="preview" id="customPreview" aria-live="polite"></p>
+          <p class="hint" id="customHint"></p>
         </form>
 
         <div class="drawer sk" id="qrPanel" hidden>
@@ -644,11 +648,13 @@ dialog.reader::backdrop { background: rgba(22, 22, 22, .5); }
 'use strict';
 
 /* =====================================================================
-   KONFIGURASI — ganti [DOMAIN] dengan domain asli (mis. banamail.id).
-   Domain pertama = bawaan untuk alamat acak.
+   KONFIGURASI
+   Domain pertama = bawaan. Kalau cuma satu domain, dropdown domain disembunyikan.
    ===================================================================== */
 const CONFIG = {
-  DOMAINS: ['[DOMAIN]', 'pisang.[DOMAIN]', 'kupas.[DOMAIN]'],
+  DOMAINS: ['venbeemail.com'],
+  RANDOM_LENGTH: 10,    // nama acak, mis. ifhew8883d: huruf pertama a–z, sisanya a–z/0–9 (~52 bit)
+  SUFFIX_LENGTH: 6,     // akhiran acak untuk nama kustom, mis. budi.k7m2x9
   TTL_MINUTES: 60,      // umur alamat
   REFRESH_MS: 10000,    // segar otomatis semua tab
 };
@@ -672,8 +678,9 @@ const I18N = {
     'addr.note': 'Langsung aktif tanpa daftar. Website mana pun bisa kirim ke sini — tidak ada pengirim yang diblokir.',
     'act.copy': 'Salin', 'act.random': 'Acak', 'act.custom': 'Kustom', 'act.qr': 'QR', 'act.delete': 'Hapus', 'act.sure': 'Yakin?', 'act.timer': 'Sisa waktu',
     'custom.title': 'Bikin nama sendiri', 'custom.name': 'Nama', 'custom.ph': 'nama-kamu', 'custom.domain': 'Domain', 'custom.use': 'Pakai',
-    'custom.hint': '3–30 karakter: huruf kecil, angka, titik, minus, garis bawah.',
-    'custom.bad': 'Belum valid — pakai 3–30 huruf kecil/angka, boleh titik, minus, garis bawah (tidak di ujung).',
+    'custom.hint': '3–20 karakter: huruf kecil, angka, titik, minus, garis bawah. Kami tambahkan {n} karakter acak di belakangnya supaya alamatmu tidak bisa ditebak orang lain.',
+    'custom.bad': 'Belum valid — pakai 3–20 huruf kecil/angka; titik, minus, garis bawah boleh di tengah (tidak dobel).',
+    'custom.preview': 'Jadinya: {addr}',
     'qr.title': 'Pindai pakai HP', 'qr.hint': 'Isi QR = alamat email ini, siap ditempel di HP.', 'close': 'Tutup',
     'toast.copied': 'Alamat disalin!', 'toast.copyFail': 'Gagal menyalin — tahan lalu salin manual ya.', 'toast.new': 'Alamat baru siap!',
     'toast.expired': 'Waktu habis — alamat baru sudah dibuat.', 'toast.deleted': 'Alamat lama dihapus. Ini yang baru.',
@@ -721,8 +728,9 @@ const I18N = {
     'addr.note': 'Live right away, no sign-up. Any website can send here — no sender is ever blocked.',
     'act.copy': 'Copy', 'act.random': 'Shuffle', 'act.custom': 'Custom', 'act.qr': 'QR', 'act.delete': 'Delete', 'act.sure': 'Sure?', 'act.timer': 'Time left',
     'custom.title': 'Pick your own name', 'custom.name': 'Name', 'custom.ph': 'your-name', 'custom.domain': 'Domain', 'custom.use': 'Use it',
-    'custom.hint': '3–30 characters: lowercase letters, digits, dot, dash, underscore.',
-    'custom.bad': 'Not valid yet — use 3–30 lowercase letters/digits; dot, dash and underscore allowed (not at the ends).',
+    'custom.hint': '3–20 characters: lowercase letters, digits, dot, dash, underscore. We add {n} random characters at the end so nobody else can guess your address.',
+    'custom.bad': 'Not valid yet — use 3–20 lowercase letters/digits; dot, dash and underscore only in the middle (not doubled).',
+    'custom.preview': 'You get: {addr}',
     'qr.title': 'Scan with your phone', 'qr.hint': 'The QR holds this email address, ready to paste on your phone.', 'close': 'Close',
     'toast.copied': 'Address copied!', 'toast.copyFail': 'Could not copy — long-press and copy it manually.', 'toast.new': 'New address ready!',
     'toast.expired': 'Time is up — a new address has been made.', 'toast.deleted': 'Old address deleted. Here is a new one.',
@@ -765,10 +773,26 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const randInt = (n) => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
-const pick = (arr) => arr[randInt(arr.length)];
 const b64 = (str) => { let bin = ''; new TextEncoder().encode(str).forEach((b) => { bin += String.fromCharCode(b); }); return btoa(bin); };
 const LOCAL_RE = /^[a-z0-9](?:[a-z0-9._-]{1,28})[a-z0-9]$/;
 const isValidLocal = (s) => LOCAL_RE.test(s) && !/[._-]{2}/.test(s);
+const PREFIX_RE = /^[a-z0-9](?:[a-z0-9._-]{1,18})[a-z0-9]$/; // nama kustom 3–20, sebelum akhiran acak
+const isValidPrefix = (s) => PREFIX_RE.test(s) && !/[._-]{2}/.test(s);
+
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+const ALNUM = ALPHA + '0123456789';
+/** n karakter acak dari `alphabet` (crypto, tanpa bias modulo: byte di atas kelipatan terbesar dibuang). */
+function randomChars(n, alphabet) {
+  const out = [], limit = 256 - (256 % alphabet.length), buf = new Uint8Array(n * 2);
+  while (out.length < n) {
+    crypto.getRandomValues(buf);
+    for (const b of buf) if (b < limit && out.length < n) out.push(alphabet[b % alphabet.length]);
+  }
+  return out.join('');
+}
+/** Nama acak, mis. ifhew8883d — diawali huruf supaya lolos validator formulir yang rewel. */
+const randomLocal = () => randomChars(1, ALPHA) + randomChars(CONFIG.RANDOM_LENGTH - 1, ALNUM);
+const randomSuffix = () => randomChars(CONFIG.SUFFIX_LENGTH, ALNUM);
 
 /* =====================================================================
    BACKEND CONTOH (mock, di memori)
@@ -780,7 +804,7 @@ const isValidLocal = (s) => LOCAL_RE.test(s) && !/[._-]{2}/.test(s);
                attachments: [{ name, type, size, data (base64) | url, cid? }] }
 
    Contoh REST:
-     newAddress:    POST   /api/addresses                     body { local?, domain? }
+     newAddress:    POST   /api/addresses                     body { prefix?, domain? }
      getInbox:      GET    /api/addresses/:addr/messages?folder=inbox
      getSpam:       GET    /api/addresses/:addr/messages?folder=spam
      getSent:       GET    /api/addresses/:addr/messages?folder=sent
@@ -789,6 +813,9 @@ const isValidLocal = (s) => LOCAL_RE.test(s) && !/[._-]{2}/.test(s);
      deleteAddress: DELETE /api/addresses/:addr
    Server tidak boleh menolak pengirim mana pun, dan spam disimpan ke folder
    'spam' — tidak ditolak, tidak dihapus.
+   Nama alamat sebaiknya dibuat di server (acak penuh, atau prefix + akhiran
+   acak), dicek belum dipakai, dan alamat kedaluwarsa tidak pernah dipakai
+   ulang. Batasi laju permintaan per IP supaya alamat tidak bisa ditebak massal.
    ===================================================================== */
 const Mock = (() => {
   const boxes = new Map();
@@ -929,25 +956,28 @@ const Mock = (() => {
       box(address).sent.push(m);
       return clone(m);
     },
+    exists: (address) => boxes.has(address),
     remove: (address) => boxes.delete(address),
   };
 })();
 
-const WORDS_A = ['pisang', 'kulit', 'krayon', 'spidol', 'skate', 'stiker', 'petir', 'bintang', 'kertas', 'roda', 'monyet', 'pita', 'arsir', 'coret', 'kardus', 'lolipop'];
-const WORDS_B = ['ngebut', 'goyang', 'kuning', 'lompat', 'santuy', 'kilat', 'nyala', 'jail', 'ceria', 'ngacir', 'licin', 'manis', 'gosong', 'meletup'];
-const randomLocal = () => `${pick(WORDS_A)}.${pick(WORDS_B)}${10 + randInt(990)}`;
 const lag = (base = 120) => sleep(base + randInt(160));
 
 /* =====================================================================
    API — satu-satunya pintu aksi (ganti isinya untuk backend asli)
    ===================================================================== */
 const api = {
-  async newAddress({ local, domain } = {}) {
+  /** Tanpa prefix: nama acak penuh. Dengan prefix: prefix + '.' + akhiran acak. */
+  async newAddress({ prefix, domain } = {}) {
     await lag();
     const dom = CONFIG.DOMAINS.includes(domain) ? domain : CONFIG.DOMAINS[0];
-    const name = local ? String(local).trim().toLowerCase() : randomLocal();
-    if (!isValidLocal(name)) throw new Error('invalid-local');
-    const address = `${name}@${dom}`;
+    const base = prefix ? String(prefix).trim().toLowerCase() : '';
+    if (base && !isValidPrefix(base)) throw new Error('invalid-prefix');
+    let name, address;
+    do {
+      name = base ? `${base}.${randomSuffix()}` : randomLocal();
+      address = `${name}@${dom}`;
+    } while (Mock.exists(address)); // nama yang sudah dipakai diulang
     Mock.create(address);
     return { address, local: name, domain: dom, expiresAt: Date.now() + CONFIG.TTL_MINUTES * 60000 };
   },
@@ -1451,11 +1481,13 @@ function toggleDrawer(which, force) {
 }
 function validateCustom() {
   const v = $('#customName').value.trim().toLowerCase();
-  const ok = isValidLocal(v);
+  const ok = isValidPrefix(v);
   $('#customUse').disabled = !ok;
   const hint = $('#customHint');
-  hint.textContent = v && !ok ? t('custom.bad') : t('custom.hint');
+  hint.textContent = v && !ok ? t('custom.bad') : t('custom.hint', { n: CONFIG.SUFFIX_LENGTH });
   hint.classList.toggle('bad', !!v && !ok);
+  const dom = CONFIG.DOMAINS.length > 1 ? $('#customDomain').value : CONFIG.DOMAINS[0];
+  $('#customPreview').textContent = t('custom.preview', { addr: `${v || t('custom.ph')}.${'•'.repeat(CONFIG.SUFFIX_LENGTH)}@${dom}` });
   return ok;
 }
 
@@ -1838,11 +1870,13 @@ function bind() {
 
   const domSel = $('#customDomain');
   domSel.innerHTML = CONFIG.DOMAINS.map((d) => `<option value="${esc(d)}">@${esc(d)}</option>`).join('');
+  $('#customForm').classList.toggle('one-domain', CONFIG.DOMAINS.length === 1);
   $('#customName').addEventListener('input', validateCustom);
+  domSel.addEventListener('change', validateCustom);
   $('#customForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!validateCustom()) return;
-    const ok = await makeAddress({ local: $('#customName').value.trim().toLowerCase(), domain: domSel.value }, 'toast.new');
+    const ok = await makeAddress({ prefix: $('#customName').value.trim().toLowerCase(), domain: domSel.value }, 'toast.new');
     if (ok) { $('#customName').value = ''; toggleDrawer('custom', false); }
   });
 
