@@ -1,0 +1,22 @@
+{
+  "name": "banamail-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BanaMail server for a VPS (aaPanel): receives *@venbeemail.com on SMTP port 25, stores mail in SQLite, serves the page and the /api",
+  "type": "module",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.js"
+  },
+  "dependencies": {
+    "mailauth": "^7.1.1",
+    "postal-mime": "^4.0.4",
+    "smtp-server": "^3.19.17"
+  },
+  "devDependencies": {
+    "nodemailer": "^10.0.15"
+  }
+}

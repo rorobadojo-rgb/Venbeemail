@@ -39,13 +39,14 @@ It is served at `/banamail/` (on GitHub Pages: `/Venbeemail/banamail/`).
   guessed. Domain(s), lengths and the address lifetime are in `CONFIG` at the top of the script;
   with a single domain the domain dropdown is hidden.
 - All actions go through one `api` object. On load the page calls `/api/health`. If the
-  backend in `worker/` answers, the page uses it (real mail and a per-address access token);
+  backend in `server/` answers, the page uses it (real mail and a per-address access token);
   otherwise it falls back to an in-memory mock with sample mail, labelled "mode demo". That is
   what GitHub Pages shows.
-- **Backend:** `worker/` is a Cloudflare Worker that receives `*@venbeemail.com` through Email
-  Routing, stores mail in D1 + R2, serves the page and `/api/*`, and deletes expired addresses on
-  a cron. Setup steps (DomaiNesia → Cloudflare nameservers, D1/R2, deploy, catch-all route) are in
-  [`worker/README.md`](worker/README.md).
+- **Backend:** `server/` is a Node.js service for a VPS with aaPanel. It receives
+  `*@venbeemail.com` directly on SMTP port 25 (checking SPF/DKIM/DMARC itself), stores mail in
+  SQLite, serves the page and `/api/*` behind aaPanel's Nginx, and purges expired addresses.
+  Setup steps (DomaiNesia DNS records, Node.js, systemd service, SSL, reverse proxy) are in
+  [`server/README.md`](server/README.md).
 - Spam is never rejected or deleted. New Spam messages are scanned for OTP codes and
   verification links, and a hit shows the yellow "Kode kamu nyasar ke Spam!" burst.
 - Mail HTML is sanitised (allow-list) and rendered in a sandboxed iframe without scripts, under

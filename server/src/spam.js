@@ -7,19 +7,22 @@ export const SPAM_THRESHOLD = 3;
 
 const SPAM_WORDS = /(menang(kan)?|pemenang|hadiah|undian|lottery|winner|you have won|jackpot|klaim hadiah|claim (your )?prize|giveaway|bitcoin|pinjaman cepat|pinjol|tanpa jaminan|slot gacor|casino|viagra|100% free|act now|urgent action)/g;
 
-/** @param {import('postal-mime').Email} email → {score, isSpam, reasons} */
-export function scoreSpam(email) {
+/**
+ * @param {import('postal-mime').Email} email
+ * @param {{spf?: string, dkim?: string, dmarc?: string}} auth  Hasil pemeriksaan server ini sendiri
+ *   (mailauth). Header Authentication-Results di dalam surat TIDAK dipakai: itu tulisan pengirim.
+ * @returns {{score: number, isSpam: boolean, reasons: string[]}}
+ */
+export function scoreSpam(email, auth = {}) {
   let score = 0;
   const reasons = [];
   const add = (n, why) => { score += n; reasons.push(why); };
   const header = (key) => (email.headers || []).filter((h) => h.key === key).map((h) => h.value).join('\n').toLowerCase();
 
-  // Hasil SPF/DKIM/DMARC, kalau server di depan Worker menambahkan header hasil autentikasi.
-  const auth = `${header('authentication-results')}\n${header('arc-authentication-results')}`;
-  if (/\bspf=fail\b/.test(auth) || /^\s*fail\b/m.test(header('received-spf'))) add(2.5, 'spf-fail');
-  else if (/\bspf=softfail\b/.test(auth) || /^\s*softfail\b/m.test(header('received-spf'))) add(1, 'spf-softfail');
-  if (/\bdkim=fail\b/.test(auth)) add(1.5, 'dkim-fail');
-  if (/\bdmarc=fail\b/.test(auth)) add(3, 'dmarc-fail');
+  if (auth.spf === 'fail') add(2.5, 'spf-fail');
+  else if (auth.spf === 'softfail') add(1, 'spf-softfail');
+  if (auth.dkim === 'fail') add(1.5, 'dkim-fail');
+  if (auth.dmarc === 'fail') add(3, 'dmarc-fail');
   if (/^\s*yes\b/m.test(header('x-spam-flag')) || /^\s*yes\b/m.test(header('x-spam-status'))) add(5, 'upstream-spam-flag');
 
   const subject = email.subject || '';

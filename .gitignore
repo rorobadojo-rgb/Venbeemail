@@ -7,4 +7,5 @@ next-env.d.ts
 .env*.local
 __pycache__/
 out/
-.wrangler/
+server/data/
+server/.env

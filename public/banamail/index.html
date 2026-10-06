@@ -657,7 +657,7 @@ const CONFIG = {
   SUFFIX_LENGTH: 6,     // akhiran acak untuk nama kustom, mis. budi.k7m2x9
   TTL_MINUTES: 60,      // umur alamat
   REFRESH_MS: 10000,    // segar otomatis semua tab
-  // Backend sungguhan (worker/). '' = domain yang sama dengan halaman. Kalau /api/health tidak
+  // Backend sungguhan (server/). '' = domain yang sama dengan halaman. Kalau /api/health tidak
   // menjawab (mis. di GitHub Pages), halaman otomatis memakai mode demo dengan surat contoh.
   API_BASE: '',
 };
@@ -1001,7 +1001,7 @@ const mockApi = {
 };
 
 /* =====================================================================
-   API SUNGGUHAN — Worker di folder worker/ (lihat worker/README.md).
+   API SUNGGUHAN — server Node.js di folder server/ (lihat server/README.md).
    Token akses dari newAddress dikirim di setiap permintaan; hanya pemegang
    token yang bisa membaca kotak masuknya.
    ===================================================================== */

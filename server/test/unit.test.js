@@ -51,7 +51,9 @@ const mail = (over = {}) => ({ headers: [], from: { name: 'A', address: 'a@x.exa
 test('spam scoring', () => {
   assert.equal(scoreSpam(mail()).isSpam, false);
   assert.equal(scoreSpam(mail({ subject: 'SELAMAT!!! KAMU MENANG UNDIAN', text: 'Klaim hadiah sekarang' })).isSpam, true);
-  assert.equal(scoreSpam(mail({ headers: [{ key: 'authentication-results', value: 'mx.cloudflare.net; dmarc=fail' }] })).isSpam, true);
+  assert.equal(scoreSpam(mail(), { spf: 'fail', dkim: 'none', dmarc: 'fail' }).isSpam, true);
+  assert.equal(scoreSpam(mail(), { spf: 'pass', dkim: 'pass', dmarc: 'pass' }).isSpam, false);
   assert.equal(scoreSpam(mail({ headers: [{ key: 'x-spam-flag', value: 'YES' }] })).isSpam, true);
-  assert.equal(scoreSpam(mail({ headers: [{ key: 'authentication-results', value: 'spf=pass dkim=pass dmarc=pass' }] })).isSpam, false);
+  // Header Authentication-Results tulisan pengirim tidak dipercaya.
+  assert.equal(scoreSpam(mail({ headers: [{ key: 'authentication-results', value: 'spf=fail dmarc=fail' }] })).isSpam, false);
 });
