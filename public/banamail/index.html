@@ -657,6 +657,9 @@ const CONFIG = {
   SUFFIX_LENGTH: 6,     // akhiran acak untuk nama kustom, mis. budi.k7m2x9
   TTL_MINUTES: 60,      // umur alamat
   REFRESH_MS: 10000,    // segar otomatis semua tab
+  // Backend sungguhan (server/). '' = domain yang sama dengan halaman. Kalau /api/health tidak
+  // menjawab (mis. di GitHub Pages), halaman otomatis memakai mode demo dengan surat contoh.
+  API_BASE: '',
 };
 
 /* =====================================================================
@@ -672,7 +675,7 @@ const I18N = {
     'hero.tag2': 'Tanpa daftar. Semua pengirim diterima. Spam tetap disimpan.',
     'hero.cta': 'Alamatmu sudah siap di bawah!',
     'addr.label': 'Alamat sementaramu',
-    'addr.live': 'aktif',
+    'addr.live': 'aktif', 'addr.demo': 'mode demo · surat contoh',
     'addr.copy': 'Salin alamat',
     'addr.tapCopy': 'Ketuk untuk menyalin',
     'addr.note': 'Langsung aktif tanpa daftar. Website mana pun bisa kirim ke sini — tidak ada pengirim yang diblokir.',
@@ -686,6 +689,7 @@ const I18N = {
     'toast.expired': 'Waktu habis — alamat baru sudah dibuat.', 'toast.deleted': 'Alamat lama dihapus. Ini yang baru.',
     'toast.moved': 'Dipindah ke Kotak Masuk.', 'toast.sent': 'Terkirim! Tersimpan di tab Terkirim.', 'toast.error': 'Ups, gagal. Coba lagi ya.',
     'toast.codeCopied': 'Kode disalin!', 'toast.linkCopied': 'Tautan disalin!', 'toast.gone': 'Pesan itu sudah tidak ada.', 'toast.empty': 'Pesannya masih kosong.',
+    'toast.sendDisabled': 'Fitur balas belum aktif.', 'toast.limited': 'Terlalu banyak alamat baru. Tunggu beberapa menit ya.', 'reader.loading': 'Memuat isi surat…',
     'rescue.tag': 'Penyelamat kode', 'rescue.title': 'Kode kamu nyasar ke Spam!', 'rescue.titleLink': 'Tautan verifikasimu nyasar ke Spam!',
     'rescue.from': 'dari {from} · “{subject}”', 'rescue.copy': 'Salin', 'rescue.open': 'Buka Pesan', 'rescue.count': '{i} dari {n}',
     'rescue.next': 'Berikutnya', 'rescue.dismiss': 'Tutup pemberitahuan',
@@ -697,6 +701,7 @@ const I18N = {
     'empty.inbox': 'Belum ada surat. Pakai alamat di atas di website mana pun — semua pengirim diterima.',
     'empty.spam': 'Spam masih kosong. Kalau ada yang nyasar, tetap kami simpan di sini.',
     'empty.sent': 'Belum ada balasan terkirim. Buka pesan lalu tekan Balas.',
+    'empty.sentOff': 'Belum ada surat terkirim — fitur balas belum aktif.',
     'list.loading': 'Memuat surat…', 'list.to': 'Ke: {to}', 'list.noSubject': '(tanpa subjek)', 'list.code': 'KODE', 'list.link': 'TAUTAN', 'list.unread': 'belum dibaca',
     'time.now': 'baru saja', 'time.min': '{n} mnt', 'time.hour': '{n} jam',
     'reader.back': 'Kembali', 'reader.from': 'Dari', 'reader.to': 'Kepada', 'reader.date': 'Waktu', 'reader.notSpam': 'Bukan spam', 'reader.reply': 'Balas',
@@ -711,7 +716,8 @@ const I18N = {
     'feat.2.t': 'Semua pengirim masuk', 'feat.2.d': 'Tidak ada daftar blokir. Website mana pun bisa kirim.',
     'feat.3.t': 'Spam disimpan', 'feat.3.d': 'Spam tidak ditolak, tidak dihapus, dan bisa dibuka penuh.',
     'feat.4.t': 'Penyelamat kode', 'feat.4.d': 'OTP dan tautan verifikasi di Spam langsung kami munculkan.',
-    'foot': 'BanaMail · email sementara di {domain} · data contoh untuk demo',
+    'foot': 'BanaMail · email sementara di {domain} · mode demo dengan surat contoh',
+    'foot.live': 'BanaMail · email sementara di {domain}',
   },
   en: {
     'meta.title': 'BanaMail — Instant Temporary Email, No Sign-up',
@@ -722,7 +728,7 @@ const I18N = {
     'hero.tag2': 'No sign-up. Every sender gets through. Spam is kept, not trashed.',
     'hero.cta': 'Your address is ready below!',
     'addr.label': 'Your temporary address',
-    'addr.live': 'live',
+    'addr.live': 'live', 'addr.demo': 'demo mode · sample mail',
     'addr.copy': 'Copy address',
     'addr.tapCopy': 'Tap to copy',
     'addr.note': 'Live right away, no sign-up. Any website can send here — no sender is ever blocked.',
@@ -736,6 +742,7 @@ const I18N = {
     'toast.expired': 'Time is up — a new address has been made.', 'toast.deleted': 'Old address deleted. Here is a new one.',
     'toast.moved': 'Moved to Inbox.', 'toast.sent': 'Sent! Saved in the Sent tab.', 'toast.error': 'Oops, that failed. Try again.',
     'toast.codeCopied': 'Code copied!', 'toast.linkCopied': 'Link copied!', 'toast.gone': 'That message is gone.', 'toast.empty': 'Your message is empty.',
+    'toast.sendDisabled': 'Replying is not available yet.', 'toast.limited': 'Too many new addresses. Please wait a few minutes.', 'reader.loading': 'Loading the message…',
     'rescue.tag': 'Code rescue', 'rescue.title': 'Your code landed in Spam!', 'rescue.titleLink': 'Your verification link landed in Spam!',
     'rescue.from': 'from {from} · “{subject}”', 'rescue.copy': 'Copy', 'rescue.open': 'Open message', 'rescue.count': '{i} of {n}',
     'rescue.next': 'Next', 'rescue.dismiss': 'Dismiss notice',
@@ -747,6 +754,7 @@ const I18N = {
     'empty.inbox': 'No mail yet. Use the address above on any website — every sender gets through.',
     'empty.spam': 'Spam is empty. If anything strays here, we keep it.',
     'empty.sent': 'No replies sent yet. Open a message and hit Reply.',
+    'empty.sentOff': 'Nothing sent yet — replying is not available yet.',
     'list.loading': 'Loading mail…', 'list.to': 'To: {to}', 'list.noSubject': '(no subject)', 'list.code': 'CODE', 'list.link': 'LINK', 'list.unread': 'unread',
     'time.now': 'just now', 'time.min': '{n} min', 'time.hour': '{n} h',
     'reader.back': 'Back', 'reader.from': 'From', 'reader.to': 'To', 'reader.date': 'Date', 'reader.notSpam': 'Not spam', 'reader.reply': 'Reply',
@@ -761,7 +769,8 @@ const I18N = {
     'feat.2.t': 'Every sender gets in', 'feat.2.d': 'No blocklist. Any website can send to you.',
     'feat.3.t': 'Spam is kept', 'feat.3.d': 'Spam is never rejected or deleted, and opens in full.',
     'feat.4.t': 'Code rescue', 'feat.4.d': 'OTPs and verification links in Spam pop up right away.',
-    'foot': 'BanaMail · temporary email at {domain} · sample data for the demo',
+    'foot': 'BanaMail · temporary email at {domain} · demo mode with sample mail',
+    'foot.live': 'BanaMail · temporary email at {domain}',
   },
 };
 
@@ -957,6 +966,7 @@ const Mock = (() => {
       return clone(m);
     },
     exists: (address) => boxes.has(address),
+    get: (address, id) => { const b = box(address); const m = [...b.inbox, ...b.spam, ...b.sent].find((x) => x.id === id); if (!m) throw new Error('not-found'); return clone(m); },
     remove: (address) => boxes.delete(address),
   };
 })();
@@ -966,7 +976,7 @@ const lag = (base = 120) => sleep(base + randInt(160));
 /* =====================================================================
    API — satu-satunya pintu aksi (ganti isinya untuk backend asli)
    ===================================================================== */
-const api = {
+const mockApi = {
   /** Tanpa prefix: nama acak penuh. Dengan prefix: prefix + '.' + akhiran acak. */
   async newAddress({ prefix, domain } = {}) {
     await lag();
@@ -987,7 +997,66 @@ const api = {
   async moveMessage(address, id, folder) { await lag(); return Mock.move(address, id, folder); },
   async sendReply(address, { inReplyTo, to, subject, text }) { await lag(450); return Mock.send(address, { inReplyTo, to, subject, text }); },
   async deleteAddress(address) { await lag(); Mock.remove(address); return { ok: true }; },
+  async getMessage(address, id) { await lag(); return Mock.get(address, id); },
 };
+
+/* =====================================================================
+   API SUNGGUHAN — server Node.js di folder server/ (lihat server/README.md).
+   Token akses dari newAddress dikirim di setiap permintaan; hanya pemegang
+   token yang bisa membaca kotak masuknya.
+   ===================================================================== */
+const RealApi = (() => {
+  let token = null;
+  let box = null; // satu GET /api/mailbox dipakai bersama getInbox/getSpam/getSent
+  async function call(path, { method = 'GET', body, blob = false } = {}) {
+    const res = await fetch(CONFIG.API_BASE + path, {
+      method,
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(body ? { 'Content-Type': 'application/json' } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+      cache: 'no-store',
+    });
+    if (!res.ok) {
+      const err = new Error((await res.json().catch(() => ({}))).error || `http-${res.status}`);
+      err.status = res.status;
+      throw err;
+    }
+    return blob ? res.blob() : res.json();
+  }
+  const mailbox = () => {
+    if (!box || Date.now() - box.at > 1500) box = { at: Date.now(), promise: call('/api/mailbox') };
+    return box.promise;
+  };
+  const msgPath = (id) => `/api/messages/${encodeURIComponent(id)}`;
+  return {
+    setToken(t) { token = t; box = null; },
+    async newAddress(opts = {}) { const a = await call('/api/addresses', { method: 'POST', body: opts }); token = a.token; box = null; return a; },
+    getInbox: async () => (await mailbox()).inbox,
+    getSpam: async () => (await mailbox()).spam,
+    getSent: async () => (await mailbox()).sent,
+    getMessage: (_address, id) => call(msgPath(id)),
+    getAttachment: (_address, id, n) => call(`${msgPath(id)}/attachments/${n}`, { blob: true }),
+    moveMessage: (_address, id, folder) => { box = null; return call(msgPath(id), { method: 'PATCH', body: { folder } }); },
+    sendReply: (_address, reply) => call('/api/replies', { method: 'POST', body: reply }),
+    deleteAddress: () => { box = null; return call('/api/addresses/me', { method: 'DELETE' }); },
+  };
+})();
+
+let api = mockApi;
+const MODE = { live: false, sending: true };
+/** Pakai backend sungguhan kalau /api/health menjawab; selain itu mode demo. */
+async function detectBackend() {
+  if (location.protocol === 'file:' || location.hostname.endsWith('.github.io')) return; // GitHub Pages = demo
+  try {
+    const res = await fetch(CONFIG.API_BASE + '/api/health', { cache: 'no-store' });
+    const health = res.ok && (res.headers.get('content-type') || '').includes('json') ? await res.json() : null;
+    if (!health?.ok) return;
+    api = RealApi;
+    MODE.live = true;
+    MODE.sending = !!health.sending;
+    if (Array.isArray(health.domains) && health.domains.length) CONFIG.DOMAINS = health.domains;
+    if (health.ttlMinutes) CONFIG.TTL_MINUTES = health.ttlMinutes;
+  } catch { /* tidak ada backend → mode demo */ }
+}
 
 /* =====================================================================
    SANITASI HTML — daftar izin tag/atribut, buang skrip & event handler,
@@ -1301,7 +1370,7 @@ const S = {
   folders: { inbox: [], spam: [], sent: [] },
   loaded: false,
   read: new Set(), seen: new Set(), fresh: new Set(),
-  scans: new Map(),
+  scans: new Map(), bodies: new Map(),
   rescues: [], rescueIdx: 0,
   openId: null,
   nextRefreshAt: Date.now() + CONFIG.REFRESH_MS,
@@ -1319,6 +1388,8 @@ const reader = $('#reader');
 const sortDesc = (arr) => [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
 const allMail = () => [...S.folders.inbox, ...S.folders.spam, ...S.folders.sent];
 const findMsg = (id) => allMail().find((m) => m.id === id) || null;
+/** Metadata terbaru dari daftar + isi lengkap (kalau sudah dimuat). */
+const fullMsg = (id) => { const m = findMsg(id), b = S.bodies.get(id); return m && b ? { ...b, folder: m.folder } : m; };
 const unread = (f) => S.folders[f].filter((m) => !S.read.has(m.id)).length;
 
 /* =====================================================================
@@ -1347,18 +1418,28 @@ async function copyText(s) {
 async function copyAndTell(s, okKey) { toast((await copyText(s)) ? t(okKey) : t('toast.copyFail'), 'lime'); }
 
 const safeName = (n) => String(n || 'lampiran').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '_').slice(0, 120);
-function downloadAttachment(a) {
+function base64Blob(data, type) {
+  const bin = atob(data || '');
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: type || 'application/octet-stream' });
+}
+async function downloadAttachment(m, n) {
+  const a = m?.attachments?.[n];
+  if (!a) return;
+  let blob;
+  try {
+    blob = a.data ? base64Blob(a.data, a.type) : await api.getAttachment(S.address, m.id, n);
+  } catch (e) {
+    console.error(e);
+    toast(t('toast.error'), 'pink');
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
   const link = document.createElement('a');
   link.download = safeName(a.name);
   link.rel = 'noopener';
-  let url = a.url;
-  if (!url) {
-    const bin = atob(a.data || '');
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    url = URL.createObjectURL(new Blob([bytes], { type: a.type || 'application/octet-stream' }));
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-  }
   link.href = url;
   (reader.open ? reader : document.body).append(link);
   link.click();
@@ -1391,14 +1472,15 @@ function applyI18n() {
   $$('[data-i18n-alt]').forEach((el) => el.setAttribute('alt', t(el.dataset.i18nAlt)));
   $$('[data-i18n-title]').forEach((el) => el.setAttribute('title', t(el.dataset.i18nTitle)));
   $$('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === S.lang)));
-  $('#footTxt').textContent = t('foot', { domain: CONFIG.DOMAINS[0] });
+  $('#footTxt').textContent = t(MODE.live ? 'foot.live' : 'foot', { domain: CONFIG.DOMAINS[0] });
+  $('.live [data-i18n]').textContent = t(MODE.live ? 'addr.live' : 'addr.demo');
 }
 function setLang(l) {
   S.lang = l;
   store.set({ lang: l });
   applyI18n();
   renderAll(true);
-  if (reader.open && S.openId) fillReader(findMsg(S.openId), { keepForm: true });
+  if (reader.open && S.openId) fillReader(fullMsg(S.openId), { keepForm: true, loading: !S.bodies.has(S.openId) });
   validateCustom();
 }
 
@@ -1409,9 +1491,9 @@ function setAddress(a) {
   Object.assign(S, { address: a.address, local: a.local, domain: a.domain, expiresAt: a.expiresAt });
   S.folders = { inbox: [], spam: [], sent: [] };
   S.read = new Set(); S.seen = new Set(); S.fresh = new Set(); S.scans = new Map();
-  S.rescues = []; S.rescueIdx = 0; S.loaded = false;
+  S.rescues = []; S.rescueIdx = 0; S.loaded = false; S.bodies = new Map();
   S.badgeCounts = { inbox: 0, spam: 0, sent: 0 };
-  store.set({ address: a.address, local: a.local, domain: a.domain, expiresAt: a.expiresAt });
+  store.set({ address: a.address, local: a.local, domain: a.domain, expiresAt: a.expiresAt, token: a.token || null, mode: MODE.live ? 'live' : 'demo' });
   const out = $('#addr');
   out.innerHTML = `${esc(a.local)}<wbr>@${esc(a.domain)}`; // patah baris di '@', bukan di tengah domain
   out.classList.remove('swap'); void out.offsetWidth; out.classList.add('swap');
@@ -1430,7 +1512,7 @@ async function makeAddress(opts = {}, toastKey = '') {
     return true;
   } catch (e) {
     console.error(e);
-    toast(t('toast.error'), 'pink');
+    toast(t(e.status === 429 ? 'toast.limited' : 'toast.error'), 'pink');
     return false;
   }
 }
@@ -1510,7 +1592,8 @@ function refresh() {
       [...incoming, ...sent].forEach((m) => S.seen.add(m.id));
       sent.forEach((m) => S.read.add(m.id));
       fresh.forEach((m) => { if (m.read) S.read.add(m.id); });
-      incoming.forEach((m) => { if (!S.scans.has(m.id)) S.scans.set(m.id, Scan(m)); });
+      // Backend sungguhan sudah memindai di server (m.rescue); data contoh dipindai di sini.
+      incoming.forEach((m) => { if (!S.scans.has(m.id)) S.scans.set(m.id, 'rescue' in m ? m.rescue : Scan(m)); });
       S.folders = { inbox: sortDesc(inbox), spam: sortDesc(spam), sent: sortDesc(sent) };
 
       // Penyelamat kode: hanya pesan BARU yang mendarat di Spam.
@@ -1526,6 +1609,7 @@ function refresh() {
       renderAll();
     } catch (e) {
       console.error(e);
+      if (e.status === 401 && addr === S.address) setTimeout(expireNow); // alamat sudah kedaluwarsa/dihapus di server
     } finally {
       inflight = null;
       setBusy(false);
@@ -1586,7 +1670,7 @@ function renderList(force = false) {
     ul.innerHTML = `<li class="loading">${esc(t('list.loading'))}</li>`;
   } else if (!list.length) {
     const icon = { inbox: 'i-inbox', spam: 'i-shield', sent: 'i-plane' }[S.tab];
-    ul.innerHTML = `<li class="empty sk"><svg class="ic big" aria-hidden="true"><use href="#${icon}"/></svg><p>${esc(t('empty.' + S.tab))}</p></li>`;
+    ul.innerHTML = `<li class="empty sk"><svg class="ic big" aria-hidden="true"><use href="#${icon}"/></svg><p>${esc(t(S.tab === 'sent' && !MODE.sending ? 'empty.sentOff' : 'empty.' + S.tab))}</p></li>`;
   } else {
     ul.innerHTML = list.map(rowHTML).join('');
   }
@@ -1604,7 +1688,7 @@ function rowHTML(m) {
     !scan?.code && scan?.link ? `<span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>${esc(t('list.link'))}</span>` : '',
     m.attachments?.length ? `<span class="chip att"><svg class="ic" aria-hidden="true"><use href="#i-clip"/></svg>${m.attachments.length}</span>` : '',
   ].join('');
-  const snippet = plain(m).slice(0, 120);
+  const snippet = (m.snippet ?? plain(m)).slice(0, 120);
   return `<li><button type="button" class="row sk${isUnread ? ' is-unread' : ''}${S.fresh.has(m.id) ? ' is-new' : ''}" data-open="${esc(m.id)}">
     <span class="mark" aria-hidden="true"></span>
     <span class="row-main">
@@ -1683,12 +1767,14 @@ function renderRescue() {
 /* =====================================================================
    PEMBACA PESAN
    ===================================================================== */
-function openMessage(id) {
+async function openMessage(id) {
   const m = findMsg(id);
   if (!m) { toast(t('toast.gone'), 'pink'); return; }
   S.read.add(id);
   S.openId = id;
-  fillReader(m);
+  if (!S.bodies.has(id) && ('text' in m || 'html' in m)) S.bodies.set(id, m); // data contoh sudah lengkap
+  const cached = S.bodies.has(id);
+  fillReader(fullMsg(id), { loading: !cached });
   if (!reader.open) {
     reader.showModal();
     history.pushState({ bana: 'reader' }, '');
@@ -1697,9 +1783,18 @@ function openMessage(id) {
   $('[data-act="close-reader"]', reader).focus({ preventScroll: true });
   renderTabs();
   renderList();
+  if (cached) return;
+  // Daftar hanya berisi metadata; isi & lampiran dimuat saat surat dibuka.
+  try {
+    S.bodies.set(id, await api.getMessage(S.address, id));
+    if (S.openId === id) fillReader(fullMsg(id), { keepForm: true });
+  } catch (e) {
+    console.error(e);
+    if (S.openId === id) toast(t('toast.error'), 'pink');
+  }
 }
 
-function fillReader(m, { keepForm = false } = {}) {
+function fillReader(m, { keepForm = false, loading = false } = {}) {
   if (!m) return;
   const sent = m.folder === 'sent', spam = m.folder === 'spam';
   const folderTag = $('#rFolder');
@@ -1712,7 +1807,7 @@ function fillReader(m, { keepForm = false } = {}) {
   $('#rDate').textContent = fullTime(m.date);
   $('#rNotSpam').hidden = !spam;
   $('#rNotSpam').disabled = false;
-  $('#rReply').hidden = sent;
+  $('#rReply').hidden = sent || !MODE.sending;
   $('#rWarn').hidden = !spam;
   const scan = S.scans.get(m.id);
   $('#rCopyCode').hidden = !scan;
@@ -1725,12 +1820,13 @@ function fillReader(m, { keepForm = false } = {}) {
   };
   const frame = $('#rFrame');
   frame.style.height = '160px';
-  frame.srcdoc = Sanitize.page(Sanitize.clean(m.html || textToHtml(m.text || ''), { cid }));
+  frame.srcdoc = Sanitize.page(Sanitize.clean(loading ? `<p style="color:#777">${esc(t('reader.loading'))}</p>` : m.html || textToHtml(m.text || ''), { cid }));
 
-  const atts = m.attachments || [];
+  // Gambar inline yang sudah tampil di isi surat (cid:) tidak diulang di daftar lampiran.
+  const atts = (m.attachments || []).map((a, i) => ({ a, i })).filter(({ a }) => !(a.cid && (m.html || '').includes(`cid:${a.cid}`)));
   $('#rAtt').hidden = !atts.length;
   $('#rAttWarn').hidden = !spam;
-  $('#rAttList').innerHTML = atts.map((a, i) => `<li><button type="button" class="btn sk c-blue" data-att="${i}" aria-label="${esc(t('reader.download'))} ${esc(a.name)}">
+  $('#rAttList').innerHTML = atts.map(({ a, i }) => `<li><button type="button" class="btn sk c-blue" data-att="${i}" aria-label="${esc(t('reader.download'))} ${esc(a.name)}">
       <svg class="ic" aria-hidden="true"><use href="#i-clip"/></svg><span class="att-txt"><span class="att-name">${esc(a.name)}</span><small>${esc(fmtSize(a.size || 0))}</small></span>
       <svg class="ic" aria-hidden="true"><use href="#i-down"/></svg></button></li>`).join('');
 
@@ -1798,7 +1894,7 @@ async function sendReply(e) {
     renderList();
   } catch (err) {
     console.error(err);
-    toast(t('toast.error'), 'pink');
+    toast(t(err.status === 501 ? 'toast.sendDisabled' : 'toast.error'), 'pink');
     btn.disabled = false;
   } finally {
     $('#sendTxt').textContent = t('reply.send');
@@ -1827,7 +1923,7 @@ async function markNotSpam(id) {
     S.folders.spam = S.folders.spam.filter((x) => x.id !== id);
     S.folders.inbox = sortDesc([m, ...S.folders.inbox.filter((x) => x.id !== id)]);
     toast(t('toast.moved'), 'lime');
-    if (S.openId === id) fillReader(m, { keepForm: true });
+    if (S.openId === id) fillReader(fullMsg(id), { keepForm: true, loading: !S.bodies.has(id) });
     renderAll();
   } catch (e) {
     console.error(e);
@@ -1869,8 +1965,6 @@ function bind() {
   $('[data-act="qr-close"]').addEventListener('click', () => toggleDrawer('qr', false));
 
   const domSel = $('#customDomain');
-  domSel.innerHTML = CONFIG.DOMAINS.map((d) => `<option value="${esc(d)}">@${esc(d)}</option>`).join('');
-  $('#customForm').classList.toggle('one-domain', CONFIG.DOMAINS.length === 1);
   $('#customName').addEventListener('input', validateCustom);
   domSel.addEventListener('change', validateCustom);
   $('#customForm').addEventListener('submit', async (e) => {
@@ -1930,7 +2024,7 @@ function bind() {
     if (e.target === reader) { closeReader(); return; }
     const btn = e.target.closest('[data-act],[data-att]');
     if (!btn) return;
-    if (btn.dataset.att) { const m = findMsg(S.openId); const a = m?.attachments?.[+btn.dataset.att]; if (a) downloadAttachment(a); return; }
+    if (btn.dataset.att) { downloadAttachment(fullMsg(S.openId), +btn.dataset.att); return; }
     const act = btn.dataset.act;
     if (act === 'close-reader') closeReader();
     if (act === 'not-spam') markNotSpam(S.openId);
@@ -1965,12 +2059,26 @@ function tick() {
 /* =====================================================================
    MULAI
    ===================================================================== */
+function fillDomains() {
+  $('#customDomain').innerHTML = CONFIG.DOMAINS.map((d) => `<option value="${esc(d)}">@${esc(d)}</option>`).join('');
+  $('#customForm').classList.toggle('one-domain', CONFIG.DOMAINS.length === 1);
+}
+
 (async function boot() {
   applyI18n();
   bind();
-  const ok = saved.address && saved.expiresAt > Date.now() + 5000 && CONFIG.DOMAINS.includes(saved.domain) && isValidLocal(saved.local || '');
-  if (ok) setAddress({ address: saved.address, local: saved.local, domain: saved.domain, expiresAt: saved.expiresAt });
-  else await makeAddress();
+  await detectBackend();
+  fillDomains();
+  applyI18n();
+  const mode = MODE.live ? 'live' : 'demo';
+  const ok = saved.address && saved.mode === mode && saved.expiresAt > Date.now() + 5000 && CONFIG.DOMAINS.includes(saved.domain)
+    && isValidLocal(saved.local || '') && (!MODE.live || saved.token);
+  if (ok) {
+    if (MODE.live) RealApi.setToken(saved.token);
+    setAddress({ address: saved.address, local: saved.local, domain: saved.domain, expiresAt: saved.expiresAt, token: saved.token });
+  } else {
+    await makeAddress();
+  }
   tick();
   setInterval(tick, 1000);
 })();

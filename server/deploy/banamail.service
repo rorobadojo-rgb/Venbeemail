@@ -1,0 +1,25 @@
+# /etc/systemd/system/banamail.service
+# Ganti /www/server/nodejs/v24/bin/node dengan hasil `which node` (Node.js 22.19+),
+# dan /www/wwwroot/venbeemail dengan folder tempat repo ini kamu taruh.
+[Unit]
+Description=BanaMail (SMTP :25 + API)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/www/wwwroot/venbeemail/server
+ExecStart=/www/server/nodejs/v24/bin/node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.js
+Restart=always
+RestartSec=3
+# Berjalan sebagai root supaya bisa memakai port 25 dan membaca sertifikat aaPanel,
+# tapi dikurung: seluruh sistem berkas hanya-baca kecuali folder data.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/www/wwwroot/venbeemail/server/data
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
