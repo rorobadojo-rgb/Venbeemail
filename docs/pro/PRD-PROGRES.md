@@ -14,18 +14,30 @@ Batch 1, diterima 9 Oktober 2026. Semua disimpan di `docs/pro/referensi/`.
 | `04-wordmark-banamail-lama-hijau.webp` (1376×768) | Wordmark lama "BanaMail" dari kertas origami biru bermotif bunga putih, meneteskan cairan oranye, di latar hijau | Hanya acuan gaya dan warna. Akan diganti wordmark SVG "VENBEEMAIL" |
 | `05-monyet-rambut-merah-hijau.webp` (1024×1024) | Monyet origami rambut merah, kemeja flanel merah, kaos bergambar gigi, celana jins, skateboard penuh stiker, di latar hijau | Tokoh yang meluncur di hero dan di bagian Cara kerja |
 
+Batch 2, diterima 9 Oktober 2026.
+
+| File | Isi | Dipakai untuk |
+|---|---|---|
+| `06-referensi-huruf-advanced.png` (1179×1474) | Tulisan merah "ADVANCED!" di latar hitam: kapital tebal, potongan kertas bersudut tajam, tiap huruf miring berbeda, garis dasar bergelombang, lubang huruf berupa segitiga dan celah | Acuan gaya huruf logo dan wordmark VENBEEMAIL. Hanya gayanya yang diikuti; bentuk huruf digambar sendiri dan warnanya memakai palet halaman, bukan merah |
+| `07-monyet-rambut-biru-hijau.webp` (1024×1024) | Monyet origami rambut biru muda dikepang, topi denim, kaos hitam bergambar, stoking belang hitam-putih, skateboard biru bergambar mulut bergigi | Tokoh yang meluncur |
+| `08-monyet-rambut-cokelat-hijau.webp` (1024×1024) | Monyet origami rambut cokelat, rompi denim penuh pin, kaos putih, celana hitam, skateboard kardus bercoretan | Tokoh yang meluncur |
+| `09-monyet-rambut-pirang-hijau.webp` (1024×1024) | Monyet origami rambut pirang, kupluk biru, sweter belang biru-putih, celana kargo, skateboard oranye bermotif api putih | Tokoh yang meluncur |
+| `10-amplop-dan-pesawat-kertas-hijau.png` (1024×1024) | Amplop flanel biru berjahitan putih dengan tempelan hantu, dan pesawat kertas putih, dalam satu gambar | Amplop untuk orbit dan bagian API; pesawat kertas untuk aksen gerak. Perlu dipotong menjadi dua file terpisah |
+
+Catatan dari LO: batch 2 ini untuk tampilan bergaya Sky Estate. Screenshot referensi Sky Estate menyusul.
+
 Catatan teknis:
-- Gambar 03, 04, 05 masih berlatar hijau. Sebelum dipakai, latar hijaunya harus dibuang menjadi transparan (chroma key), lalu disimpan sebagai WebP transparan.
+- Gambar 03, 04, 05, 07, 08, 09, 10 masih berlatar hijau. Sebelum dipakai, latar hijaunya harus dibuang menjadi transparan (chroma key), lalu disimpan sebagai WebP transparan.
 - Palet dari gambar: teal gelap `#01232d` sampai `#033141`, sorotan `#35697f`, biru kobalt panggung dan wordmark sekitar `#31458c` sampai `#77a3e4`, oranye `#e7663c`, putih motif bunga. Logo dan wordmark baru memakai palet ini, bukan merah dari referensi "ADVANCED!".
 
 ## Masih ditunggu dari LO
 
 Gambar:
-- [ ] Referensi huruf: tulisan merah "ADVANCED!" di latar hitam
-- [ ] Screenshot referensi gerak Sky Estate
-- [ ] Pemisah amplop (latar transparan atau hijau #00FF00)
-- [ ] Pemisah tiga monyet lain (rambut biru muda, rambut cokelat, rambut pirang), kalau ingin dipakai
-- [ ] Pemisah pesawat kertas (opsional)
+- [x] Referensi huruf: tulisan merah "ADVANCED!" di latar hitam (06)
+- [ ] Screenshot referensi gerak Sky Estate (menyusul dari LO)
+- [x] Pemisah amplop (10)
+- [x] Pemisah tiga monyet lain: rambut biru (07), cokelat (08), pirang (09)
+- [x] Pemisah pesawat kertas (10)
 
 Data dan keputusan:
 - [ ] Empat data bagian Tentang: nama pendiri, tahun mulai, kota, fitur Claude (atau "tidak ada")
