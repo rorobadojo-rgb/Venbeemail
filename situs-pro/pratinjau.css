@@ -1,0 +1,49 @@
+/* Hanya untuk pratinjau. Tidak ikut dipasang ke server: di sana bagian bawah
+   hero adalah isi halaman /pro yang lama. */
+:root {
+  --pr-latar: #011a22;
+  --pr-teks: #e6f1f4;
+  --pr-redup: #a4c4ce;
+  --pr-garis: rgba(119, 163, 228, .3);
+  --pr-aksen: #e7663c;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--pr-latar);
+  color: var(--pr-teks);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.pratinjau-lama {
+  padding-block: 72px 120px;
+  padding-inline: 16px;
+  border-top: 1px dashed var(--pr-garis);
+}
+
+.pratinjau-isi {
+  max-width: 62ch;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.pratinjau-isi h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.pratinjau-isi p { margin: 0; color: var(--pr-redup); }
+
+.pratinjau-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--pr-aksen) !important;
+}

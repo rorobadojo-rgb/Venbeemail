@@ -292,6 +292,9 @@ Isi prompt gambar AI untuk R1, R2, dan R4 harus menyebut: gaya papercraft origam
 3. **Fase 3, Tentang, favicon, footer halaman depan.**
 4. **Fase 4, Periksa dan ajukan ulang** (bagian 14 dan 15).
 
+Kemajuan:
+- Fase 1 dirakit 9 Oktober 2026 di `situs-pro/` (lihat `situs-pro/README.md`). Karena isi /pro lama belum ada di repo dan venbeemail.com masih diblokir dari lingkungan Claude Code (R9), Fase 1 dipasang dengan **menyisipkan** hero ke `index.html` lama (`situs-pro/pasang/pasang.sh`), bukan mengganti folder. Isi lama tetap persis. Blok di 12.4 baru dipakai setelah isi lama diambil (Fase 2).
+
 ## 12. Urutan kerja dan pemasangan
 
 ### 12.1 Cek server (sekali, sebelum Fase 1)
@@ -343,6 +346,8 @@ fi
 ```
 
 Blok ini hanya menghapus isi folder /pro setelah unduhan berhasil dan cadangan dibuat, dan tidak berjalan kalau `FOLDER_PRO` kosong atau salah.
+
+Untuk Fase 1 dipakai `situs-pro/pasang/pasang.sh` (sisipkan, cadangan di `/www/backup/venbeemail-pro/`, kembali otomatis kalau aset tidak terbaca) dan `situs-pro/pasang/kembalikan.sh`.
 
 Kalau hasil cek server menunjukkan Node perlu dimulai ulang supaya file baru terbaca, tambahkan `systemctl restart banamail`.
 
