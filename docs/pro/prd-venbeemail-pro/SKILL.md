@@ -65,13 +65,13 @@ Pengolahan wajib sebelum dipakai:
 
 | No | Keputusan | Rekomendasi | Status |
 |---|---|---|---|
-| K1 | Hero (bagian 5.3) | F. Panggung Pos | belum dipilih |
-| K2 | Bahan logo dan wordmark (bagian 7) | L3. Origami biru dengan kilau holografik | belum dipilih |
-| K3 | Tingkat gerak maskot (bagian 8.1) | Tingkat 1 dan 2 | belum dipilih |
-| K4 | Latar bagian lain (bagian 9) | Digambar SVG gaya kertas, kecuali kotak surat kardus | belum dipilih |
-| K5 | Variasi favicon (bagian 3.5 versi 1, tetap berlaku) | Dipilih dari 3 pratinjau | belum dipilih |
+| K1 | Hero (bagian 5.3) | F. Panggung Pos | **dipilih: F. Panggung Pos** |
+| K2 | Bahan logo dan wordmark (bagian 7) | L3. Origami biru dengan kilau holografik | **dipilih: L3, dengan L4, L5, L7, L9** |
+| K3 | Tingkat gerak maskot (bagian 8.1) | Tingkat 1 dan 2 | **dipilih: Tingkat 1 dan 2** |
+| K4 | Latar bagian lain (bagian 9) | Digambar SVG gaya kertas, kecuali kotak surat kardus | **dipilih: SVG, kotak surat kardus dibuat LO dengan AI (R4)** |
+| K5 | Variasi favicon (bagian 7.1) | Dipilih dari 3 pratinjau | belum dipilih, ditanyakan di Fase 3 |
 
-Setelah LO memilih, ubah kolom Status di file ini menjadi pilihannya, lalu commit, supaya chat berikutnya tidak bertanya lagi.
+K1 sampai K4 dipilih LO pada 9 Oktober 2026. Jangan ditanyakan lagi kecuali LO sendiri ingin mengubahnya. Setelah LO memilih keputusan lain, ubah kolom Status di file ini menjadi pilihannya, lalu commit, supaya chat berikutnya tidak bertanya lagi.
 
 ## 5. Hero
 
