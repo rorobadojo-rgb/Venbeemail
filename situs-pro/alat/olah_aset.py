@@ -171,9 +171,6 @@ def main():
         simpan(img, nama)
         if nama == "maskot":
             catatan["maskot"]["potongan"] = pisah_maskot(potong)
-        if nama.startswith("monyet"):
-            kecil = img.resize((256, round(img.height * 256 / img.width)), Image.LANCZOS)
-            buram(kecil, 3).save(KELUAR / f"{nama}-jauh.webp", "WEBP", quality=72, alpha_quality=80, method=6)
 
     # Amplop dan pesawat dari satu gambar.
     rgba = buang_hijau(np.asarray(Image.open(REF / "10-amplop-dan-pesawat-kertas-hijau.png").convert("RGB")))
