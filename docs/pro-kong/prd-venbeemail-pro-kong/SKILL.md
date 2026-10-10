@@ -109,6 +109,13 @@ Dicek 9 Oktober 2026 (PRD pertama):
 - Server: VPS DomaiNesia dengan aaPanel. Program di `/www/wwwroot/venbeemail/server`, systemd `banamail.service`, port 3000, reverse proxy aaPanel. Mulai ulang: `systemctl restart banamail`.
 - Fase 1 PRD pertama (hero Panggung Pos) sudah dirakit di `situs-pro/` dan dipasang dengan cara menyisipkan blok bertanda `vbpro-kepala`, `vbpro-hero`, `vbpro-skrip` ke `index.html` lama. Belum pasti apakah sudah dipasang di server; cek server (bagian 18.1) akan menjawabnya.
 
+Dicek 10 Oktober 2026 (cek server Fase 0, hasil lengkap di `situs-pro-kong/README.md`):
+
+- **Halaman /pro ada di `/www/wwwroot/banamail-pro/`** (`index.html` 40.830 byte, `aset/02-maskot.webp`), bukan folder bernama `pro` di dalam `/www/wwwroot/venbeemail`. Halaman dilayani langsung oleh nginx sebagai berkas statis (header `server: nginx`, `last-modified`, `etag`); program Node tidak punya rute /pro. Karena itu semua blok server di bagian 18 memakai `PRO=/www/wwwroot/banamail-pro` (bisa diganti dengan mengetik `PRO=...` sebelum menempel blok), bukan mencari folder bernama `pro`. Alat pasang PRD pertama (`situs-pro/pasang/pasang.sh`) masih mencari folder bernama `pro`, jadi kemungkinan besar Fase 1 Panggung Pos belum pernah terpasang.
+- Tidak ada header `Content-Security-Policy`. Ada `strict-transport-security`.
+- `/api/health` menjawab 200. Node v24.21.0 di `/www/server/nodejs/v24.21.0/bin/node`. `banamail.service` (SMTP :25 + API) berjalan. Sisa disk 24 GB.
+- `/www/wwwroot/venbeemail` adalah salinan git repo ini ditambah `server/`, pemilik `www:www`.
+
 Isi teknis yang WAJIB tampil persis:
 
 - **7 endpoint:**
@@ -1678,6 +1685,7 @@ Setiap fase diakhiri commit dan push ke cabang kerja, dengan ringkasan singkat k
 
 - 10 Oktober 2026: PRD ditulis. Belum ada pekerjaan di `situs-pro-kong/`.
 - 10 Oktober 2026: Fase 0 selesai (folder, gambar, GSAP, Lenis 1.3.26, font Fontsource 5.3.0, `isian.json` kosong). `venbeemail.com` diblokir dari lingkungan Claude Code, jadi isi /pro lama (R2) dan hasil cek server (R1) masih ditunggu.
+- 10 Oktober 2026: cek server (R1) sebagian besar terjawab: /pro ada di `/www/wwwroot/banamail-pro/`, dilayani nginx statis, tanpa CSP, health 200. Blok bagian 18 disesuaikan (`PRO=`). Masih dicek: konfigurasi nginx untuk /pro, apakah Fase 1 terpasang, letak halaman depan.
 - 10 Oktober 2026: Fase 1 selesai: `huruf_gunting.py`, `olah_aset_kong.py`, `bingkai_kunci.py`, og.jpg, bingkai kunci, `seedance/PAKET-SEEDANCE.md`. Catatan: K5 memakai garis kaki y 605 (sama dengan footer) dan bibir podium di depan kaki, bukan y 630; tepi K0 diisi warna panggung gelap itu sendiri.
 
 ---
@@ -1691,10 +1699,8 @@ Semua blok di bawah ditempel LO ke terminal aaPanel. Tiap blok berjalan di dalam
 ```bash
 (
 cd /www/wwwroot/venbeemail && ls -la
-P=""
-for d in $(find /www/wwwroot/venbeemail -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
-  if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then P=$d; break; fi
-done
+P=${PRO:-/www/wwwroot/banamail-pro}
+if [ ! -f "$P/index.html" ] || [ ! -f "$P/aset/02-maskot.webp" ]; then P=""; fi
 echo "FOLDER_PRO=$P"
 ls -la "$P" "$P/aset"
 echo "--- Fase 1 Panggung Pos terpasang? (angka > 0 berarti ya)"
@@ -1733,9 +1739,7 @@ Halaman baru harus memakai isi teknis lama persis. Yang diambil adalah halaman *
 S=$(ls -1d /www/backup/venbeemail-pro/pro-* 2>/dev/null | head -1 || true)
 if [ -n "$S" ] && [ -f "$S/index.html" ]; then F="$S/index.html"; echo "Dari cadangan paling awal (sebelum Fase 1): $F"
 else
-  for d in $(find /www/wwwroot/venbeemail -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
-    if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then F="$d/index.html"; break; fi
-  done
+  F=${PRO:-/www/wwwroot/banamail-pro}/index.html
   echo "Dari halaman yang sedang dipakai: $F"
 fi
 wc -lc "$F"
@@ -1799,10 +1803,8 @@ KERJA=/tmp/vbkong-$T
 case "$MODE" in uji|utama) ;; *) echo "BERHENTI: MODE harus uji atau utama. Tidak ada yang diubah."; exit 1;; esac
 
 # 1. Folder /pro
-P=""
-for d in $(find "$AKAR" -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
-  if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then P=$d; break; fi
-done
+P=${PRO:-/www/wwwroot/banamail-pro}
+if [ ! -f "$P/index.html" ] || [ ! -f "$P/aset/02-maskot.webp" ]; then P=""; fi
 if [ -z "$P" ]; then echo "BERHENTI: folder /pro tidak ketemu. Tidak ada yang diubah."; exit 1; fi
 echo "Folder /pro : $P"
 
@@ -1899,10 +1901,8 @@ SITUS=${SITUS:-https://venbeemail.com}
 PILIH=${PILIH:-}
 if [ -n "$PILIH" ]; then C="$SIMPAN/$PILIH"; else C=$(ls -1d "$SIMPAN"/pro-* 2>/dev/null | tail -1 || true); fi
 if [ -z "$C" ] || [ ! -f "$C/index.html" ]; then echo "BERHENTI: cadangan tidak ada di $SIMPAN."; exit 1; fi
-P=""
-for d in $(find "$AKAR" -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
-  if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then P=$d; break; fi
-done
+P=${PRO:-/www/wwwroot/banamail-pro}
+if [ ! -f "$P/index.html" ] || [ ! -f "$P/aset/02-maskot.webp" ]; then P=""; fi
 if [ -z "$P" ]; then echo "BERHENTI: folder /pro tidak ketemu."; exit 1; fi
 cp -a "$C" "$P.kembali" && rm -rf "$P" && mv "$P.kembali" "$P"
 echo "Dikembalikan: $P sekarang sama dengan $C"

@@ -55,20 +55,23 @@ python3 situs-pro-kong/alat/bingkai_kunci.py      # seedance/bingkai/*.png + lem
 
 ## Hasil cek server (PRD 18.1)
 
-**Sebagian** (R1, 10 Oktober 2026). Percobaan pertama: `/www/wwwroot/venbeemail` berisi salinan git repo ini (`app`, `components`, `public`, `scripts`, `.git`, dan seterusnya) ditambah folder `server/` dan `banamail-kantor.zip`, pemilik `www:www`. Pencarian folder /pro (folder bernama `pro` berisi `index.html` dan `aset/02-maskot.webp`) **tidak menemukan apa pun** (`FOLDER_PRO=` kosong), jadi letak /pro harus dicari dengan cara lain. Sisa keluaran belum terbaca.
+Dicek LO 10 Oktober 2026 (dua kali; blok kedua mencari letak /pro dengan cara lain).
 
 | Hal | Hasil |
 |---|---|
-| Letak folder /pro | |
-| Pemilik berkas | `www:www` (akar proyek) |
-| Fase 1 Panggung Pos terpasang? | |
-| Versi Kong terpasang? | |
-| Cadangan yang ada | |
-| Header `Content-Security-Policy` | |
-| Cara Node melayani /pro | |
-| Letak halaman depan | |
-| `/api/health` | |
-| Node, layanan `banamail`, sisa disk | |
+| Letak folder /pro | **`/www/wwwroot/banamail-pro/`** (`index.html`, `aset/02-maskot.webp`). Bukan folder bernama `pro`, jadi pencarian PRD awal gagal (`FOLDER_PRO=` kosong). Blok di PRD 18 sudah diubah memakai `PRO=/www/wwwroot/banamail-pro` |
+| Pemilik berkas | `www:www` (akar proyek dan `server/`) |
+| Cara /pro dilayani | nginx langsung, berkas statis (`server: nginx`, `last-modified: Thu, 08 Oct 2026 03:32:46 GMT`, `etag`, `content-length: 40830`). Tidak ada rute /pro di program Node (`server/`). Aturan `location` nginx belum dilihat |
+| Fase 1 Panggung Pos terpasang? | Belum dicek langsung. Kemungkinan belum: `situs-pro/pasang/pasang.sh` mencari folder bernama `pro` dan akan berhenti |
+| Versi Kong terpasang? | Belum |
+| Cadangan yang ada | Belum dicek di blok kedua |
+| Header `Content-Security-Policy` | **Tidak ada.** Ada `strict-transport-security: max-age=31536000` |
+| `/api/health` | 200 |
+| Node | `/www/server/nodejs/v24.21.0/bin/node` (v24.21.0), ada di PATH |
+| Layanan | `banamail.service` (BanaMail, SMTP :25 + API), aktif sejak 8 Oktober 2026 |
+| Disk | 30 GB, terpakai 6 GB, sisa 24 GB |
+| Akar proyek | `/www/wwwroot/venbeemail` = salinan git repo ini + `server/` (`data/`, `deploy/`, `.env`, `node_modules/`, `banamail-kantor.zip`) |
+| Halaman depan | Belum ketemu. Ada folder situs `/www/wwwroot/banamail.venbeemail.com/` (berisi `proxy_cache_dir`) |
 
 ## Isi /pro lama (PRD 18.2)
 
