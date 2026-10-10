@@ -1677,6 +1677,8 @@ Setiap fase diakhiri commit dan push ke cabang kerja, dengan ringkasan singkat k
 **Kemajuan:**
 
 - 10 Oktober 2026: PRD ditulis. Belum ada pekerjaan di `situs-pro-kong/`.
+- 10 Oktober 2026: Fase 0 selesai (folder, gambar, GSAP, Lenis 1.3.26, font Fontsource 5.3.0, `isian.json` kosong). `venbeemail.com` diblokir dari lingkungan Claude Code, jadi isi /pro lama (R2) dan hasil cek server (R1) masih ditunggu.
+- 10 Oktober 2026: Fase 1 selesai: `huruf_gunting.py`, `olah_aset_kong.py`, `bingkai_kunci.py`, og.jpg, bingkai kunci, `seedance/PAKET-SEEDANCE.md`. Catatan: K5 memakai garis kaki y 605 (sama dengan footer) dan bibir podium di depan kaki, bukan y 630; tepi K0 diisi warna panggung gelap itu sendiri.
 
 ---
 

@@ -7,7 +7,7 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | Fase | Status |
 |---|---|
 | 0. Persiapan | Selesai: folder, gambar, GSAP, Lenis, font, `isian.json`. Menunggu hasil cek server (R1) dan isi /pro lama (R2) |
-| 1. Aset dan bingkai kunci | Lihat bagian "Fase 1" di bawah |
+| 1. Aset dan bingkai kunci | Selesai: turunan gambar, huruf gunting, font, og.jpg, 11 bingkai kunci + 6 referensi, paket Seedance |
 | 2 sampai 9 | Belum |
 
 ## Isi folder
@@ -27,6 +27,31 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | `lama/` | Salinan /pro lama dan inventarisnya (R2) | Tidak |
 | `alat/` | Alat olah gambar, huruf gunting, bingkai kunci, video, rakit | Tidak |
 | `pasang/` | Alat pasang dan kembalikan (Fase 7) | Dipakai dari unduhan, tidak disalin ke /pro |
+
+## Fase 1: aset dan bingkai kunci
+
+Urutan menjalankan ulang (dari akar repo, butuh Pillow, NumPy, SciPy):
+
+```bash
+python3 situs-pro-kong/alat/huruf_gunting.py      # aset/vbkong/gunting.svg (50 simbol, sekitar 14 KB)
+python3 situs-pro-kong/alat/olah_aset_kong.py     # turunan gambar + og.jpg + ukuran-kong.json
+python3 situs-pro-kong/alat/bingkai_kunci.py      # seedance/bingkai/*.png + lembar-bingkai.jpg
+```
+
+| Hasil | Isi |
+|---|---|
+| `aset/vbkong/gunting.svg` | Sprite huruf gunting A-Z, 0-9, `. , ! ? - / : @ · # & '`, plus pola isian `vbk-p-kertas`, `vbk-p-flanel`, `vbk-p-kardus`, `vbk-p-bunga`. Simbol `g-A`, `g-E2`, `g-titik`, dan seterusnya, dengan `data-w`, `data-miring`, `data-naik`. Bentuk V, E, N, B, M, A, I, L dari `situs-pro/aset/vbpro/hero.js`. Huruf E bergantian `E`, `E2`, `E3` |
+| `gambar/maskot-kotak-panjang*.webp` | Kotak surat dengan ekor lengan 40 piksel (304 piksel tinggi) |
+| `gambar/maskot-bayang*.webp` | Bayangan maskot, ruang 40 piksel di tiap sisi (656x1035) |
+| `gambar/podium-bibir*.webp` | Pinggiran depan podium x 420-935, y 645-700 dari latar (kiri 30,52 %, lebar 37,43 %, atas 83,98 %, tinggi 7,16 %) |
+| `gambar/podium-lubang.svg` | Pintu lift |
+| `gambar/monyet-*-tepi.webp` | Cahaya tepi tiap monyet |
+| `gambar/perangko-monyet-*.webp` | Kepala tiap monyet 160x160 |
+| `gambar/og.jpg` | Kartu bagikan 1200x630 (88 KB) |
+| `gambar/ukuran-kong.json` | `kaki_bawah` 943, `celah` [250,5, 63,3], mata, ukuran bayangan dan bibir |
+| `seedance/sumber/*-besar.png` | Maskot, amplop, pesawat, empat monyet resolusi asli tanpa kompresi |
+| `seedance/bingkai/` | KH, K0, K1, K2, K3a, K3b, K4, K4b, K5, K6, KF (1280x720), ref-1 sampai ref-6, `lembar-bingkai.jpg` |
+| `seedance/PAKET-SEEDANCE.md` | Prompt, setelan, urutan, tautan bingkai |
 
 ## Hasil cek server (PRD 18.1)
 
