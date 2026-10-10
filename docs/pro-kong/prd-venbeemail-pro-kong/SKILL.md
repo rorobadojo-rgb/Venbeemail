@@ -134,7 +134,20 @@ Isi teknis yang WAJIB tampil persis:
 - **Field jawaban:** `address`, `local`, `domain`, `expiresAt`, `token`, beserta keterangannya kalau ada di halaman lama.
 - **Kontak:** admin@venbeemail.com
 
-Yang belum ada di repo dan harus diambil dari halaman live sebelum Fase 2 (bagian 18.2):
+**Isi /pro lama sudah diterima (R2, 10 Oktober 2026)**: `situs-pro-kong/lama/index.html` (40.830 byte, sama dengan `content-length` server, tanpa blok `vbpro-*`), inventaris di `situs-pro-kong/lama/inventaris.json` (dibuat `alat/inventaris_lama.mjs`, semua teks diambil dari berkas). Temuan yang mengubah rancangan:
+
+- **Semua teks lama punya versi EN resmi** di kamus `T` halaman lama (60 kunci). Versi EN itu yang dipakai, tidak diterjemahkan ulang.
+- **Aturan awalan lebih ketat dari sekadar panjang**: "Awalan berisi 3 sampai 20 karakter dari huruf, angka, titik, garis bawah, dan tanda hubung. Karakter pertama dan terakhir harus huruf atau angka, dan dua tanda tidak boleh berdampingan." Pemeriksa AW1 memeriksa semua aturan ini, dan kalimatnya disalin persis.
+- **Server menambahkan akhiran acak**: `qa-signup` menjadi alamat seperti `qa-signup.62yt8v@kotak.venbeemail.com`. Karena itu pratinjau AW3, nilai contoh di resi, dan label amplop AW4 menulis alamat dengan akhiran (`{awalan}.xxxxxx@{domain}`, bertanda contoh), bukan `{awalan}@{domain}` (yang akan menjadi klaim keliru).
+- **`expiresAt` dalam milidetik epoch**. Nilai contoh di resi berupa angka bertanda contoh.
+- **Header**: "Selain `POST /api/addresses` dan `GET /api/health`, setiap panggilan wajib membawa header `Authorization: Bearer <token>`." Kalimat ini ikut tampil di bagian Semua endpoint.
+- **Arti PATCH**: memindahkan email antara inbox dan spam lewat field `folder`. Penomoran lampiran `:n` tidak dijelaskan di halaman lama, jadi tidak dijelaskan juga di halaman baru.
+- **`id` lama**: `top`, `cara`, `api`, `endpoint`, `domain`. `#cara` dan `#top` ditambahkan sebagai jangkar di halaman baru (8.2).
+- **Favicon lama** `aset/ikon.png` (relatif). Halaman baru memakai `/pro/aset/ikon.png` supaya tetap benar di `/pro/kong/`.
+- Halaman lama memuat huruf dari Google Fonts, tidak punya skrip analitik, dan menyimpan bahasa di `localStorage` kunci `bm-lang` (halaman baru ikut membacanya).
+- Isi lama yang tidak ada di PRD (pita "Dipakai untuk menguji", fakta "7 endpoint aktif · 4 domain email · masa berlaku", judul dan kalimat hero lama, penutup "Mulai dari satu alamat.") dipetakan di inventaris; penempatannya diputuskan LO (bagian 4).
+
+Yang dulu belum ada di repo dan diambil dari halaman live sebelum Fase 2 (bagian 18.2), sekarang sudah ada:
 
 - teks 4 langkah Cara kerja (ID dan EN),
 - kolom keterangan (GUNA) tiap endpoint (ID dan EN),
@@ -180,8 +193,8 @@ Rekomendasi tambahan yang dipakai sebagai bawaan selama LO tidak meminta lain (b
 
 | No | Yang ditunggu | Wajib sebelum | Kalau belum ada |
 |---|---|---|---|
-| R1 | Hasil cek server (bagian 18.1) | Fase 0 | Tidak ada pekerjaan server |
-| R2 | Isi /pro lama secara persis (izin jaringan ke venbeemail.com, atau `cat` dari server, bagian 18.2) | Fase 2 | Bagian teknis memakai tempat isian, halaman tidak boleh dipasang |
+| R1 | Hasil cek server (bagian 18.1). **Sebagian besar diterima 10 Oktober 2026** (bagian 3); masih ditunggu: apakah `/www/wwwroot/venbeemail.com/pro` symlink ke `banamail-pro`, dan letak halaman depan | Fase 0 (sisa: sebelum Fase 7) | Tidak ada pekerjaan server |
+| R2 | ~~Isi /pro lama secara persis~~ **Diterima 10 Oktober 2026** (`situs-pro-kong/lama/index.html`) | Fase 2 | |
 | R3 | Tautan akun X | Fase 4 | Ikon X tidak tampil |
 | R4 | Tautan akun Threads | Fase 4 | Ikon Threads tidak tampil |
 | R5 | Tautan akun GitHub | Fase 4 | Ikon GitHub tidak tampil |
@@ -1688,6 +1701,7 @@ Setiap fase diakhiri commit dan push ke cabang kerja, dengan ringkasan singkat k
 - 10 Oktober 2026: PRD ditulis. Belum ada pekerjaan di `situs-pro-kong/`.
 - 10 Oktober 2026: Fase 0 selesai (folder, gambar, GSAP, Lenis 1.3.26, font Fontsource 5.3.0, `isian.json` kosong). `venbeemail.com` diblokir dari lingkungan Claude Code, jadi isi /pro lama (R2) dan hasil cek server (R1) masih ditunggu.
 - 10 Oktober 2026: cek server (R1) sebagian besar terjawab: /pro ada di `/www/wwwroot/banamail-pro/`, dilayani nginx statis, tanpa CSP, health 200. Blok bagian 18 disesuaikan (`PRO=`). Masih dicek: konfigurasi nginx untuk /pro, apakah Fase 1 terpasang, letak halaman depan.
+- 10 Oktober 2026: isi /pro lama diterima dari LO (R2) dan inventarisnya dibuat. Temuan di bagian 3.
 - 10 Oktober 2026: Fase 1 selesai: `huruf_gunting.py`, `olah_aset_kong.py`, `bingkai_kunci.py`, og.jpg, bingkai kunci, `seedance/PAKET-SEEDANCE.md`. Catatan: K5 memakai garis kaki y 605 (sama dengan footer) dan bibir podium di depan kaki, bukan y 630; tepi K0 diisi warna panggung gelap itu sendiri.
 
 ---

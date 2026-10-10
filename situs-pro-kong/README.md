@@ -6,7 +6,7 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 
 | Fase | Status |
 |---|---|
-| 0. Persiapan | Selesai: folder, gambar, GSAP, Lenis, font, `isian.json`. Menunggu hasil cek server (R1) dan isi /pro lama (R2) |
+| 0. Persiapan | Selesai: folder, gambar, GSAP, Lenis, font, `isian.json`, cek server, isi /pro lama + inventaris |
 | 1. Aset dan bingkai kunci | Selesai: turunan gambar, huruf gunting, font, og.jpg, 11 bingkai kunci + 6 referensi, paket Seedance |
 | 2 sampai 9 | Belum |
 
@@ -77,7 +77,7 @@ Dicek LO 10 Oktober 2026 (dua kali; blok kedua mencari letak /pro dengan cara la
 
 ## Isi /pro lama (PRD 18.2)
 
-**Menunggu** (R2). `venbeemail.com` diblokir dari lingkungan Claude Code (10 Oktober 2026). Lihat `lama/README.md`.
+**Diterima** (R2, 10 Oktober 2026): `lama/index.html` dan `lama/inventaris.json`. Lihat `lama/README.md` dan PRD bagian 3.
 
 ## Pratinjau lokal
 

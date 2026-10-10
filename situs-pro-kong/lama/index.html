@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BanaMail Pro</title>
+<meta name="description" content="Kotak masuk uji untuk developer. Buat alamat email sekali pakai lewat API, lalu ambil teks, HTML, dan lampiran email yang masuk.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BanaMail Pro">
+<meta property="og:description" content="Kotak masuk uji untuk developer. Buat alamat email sekali pakai lewat API, lalu ambil teks, HTML, dan lampiran email yang masuk.">
+<meta property="og:url" content="https://venbeemail.com/pro/">
+<meta name="theme-color" content="#021820">
+<link rel="icon" type="image/png" href="aset/ikon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Tata letak: janji di kiri, panggung Orbit Surat di kanan; di bawahnya lembar API
+   dengan garis jahit putih seperti tepi amplop denim. Satu dunia gelap, sengaja. */
+:root{
+  color-scheme: dark;
+  --ink:#021820;        /* warna tepi panggung */
+  --ink-2:#06242f;      /* permukaan terangkat */
+  --line:#143f4e;       /* garis tipis */
+  --denim:#2b5288;      /* kain amplop */
+  --denim-hi:#7fa9e0;
+  --stitch:#e9f0f7;     /* benang jahit */
+  --slime:#eb7519;      /* lelehan tulisan */
+  --slime-hi:#fe9a34;
+  --paper:#efe9dc;      /* kertas lipat */
+  --mute:#9fb6bd;
+  --peel:#d6cd4a;       /* kulit pisang */
+  --pink:#f27ab8;       /* mata maskot */
+  --on-slime:#1d0f03;
+  --on-paper:#10222b;
+  --f-display:"Chakra Petch","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Albert Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --gutter:clamp(16px,4vw,40px);
+  --wrap:1180px;
+}
+*{box-sizing:border-box}
+body{background:var(--ink);color:var(--paper);font-family:var(--f-body);font-size:1.02rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3,p,dl,dd,ol,ul{margin:0}
+ol,ul{padding:0;list-style:none}
+code,pre,kbd{font-family:var(--f-mono)}
+:focus-visible{outline:2px solid var(--slime-hi);outline-offset:3px;border-radius:4px}
+
+.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
+.label{font-family:var(--f-mono);font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.patch{display:inline-block;font-family:var(--f-mono);font-weight:700;font-size:.66rem;letter-spacing:.16em;color:var(--stitch);background:var(--denim);padding:.38em .8em .34em .92em;border-radius:5px;outline:1.5px dashed rgb(233 240 247 / .75);outline-offset:-3.5px;transform:rotate(-3deg)}
+
+/* ---------- navigasi ---------- */
+.nav{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:1.28rem;letter-spacing:.01em}
+.nav-links{display:flex;gap:28px;font-size:.94rem;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--mute);transition:color .15s}
+.nav-links a:hover{color:var(--paper)}
+.lang{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--ink-2)}
+.lang button{font:700 .72rem/1 var(--f-mono);letter-spacing:.1em;color:var(--mute);background:none;border:0;padding:.62em .95em;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--paper);color:var(--on-paper)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow-x:clip}
+.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:center;gap:8px;padding-bottom:clamp(28px,5vw,64px)}
+.hero-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:22px;min-width:0}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.05rem,4.3vw,3.5rem);line-height:1.04;letter-spacing:-.012em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--slime-hi)}
+.lede{max-width:34em;color:#c9d6d9;font-size:1.08rem}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:.6em;font:600 .98rem/1 var(--f-body);text-decoration:none;padding:.95em 1.35em;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .15s,border-color .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-main{background:var(--slime);color:var(--on-slime)}
+.btn-main:hover{background:var(--slime-hi)}
+.btn-ghost{background:transparent;color:var(--paper);border-color:rgb(233 240 247 / .32)}
+.btn-ghost:hover{border-color:var(--stitch)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;padding-top:18px;border-top:1.5px dashed rgb(233 240 247 / .28);font-family:var(--f-mono);font-size:.8rem;color:var(--mute);width:100%}
+.facts b{color:var(--paper);font-weight:700}
+
+/* panggung */
+.stage{position:relative;z-index:1;height:clamp(420px,44vw,600px);min-width:0}
+.scene{--s:.7;position:absolute;left:50%;bottom:0;width:1376px;height:768px;transform-origin:50% 100%;transform:translateX(calc(-688px + 11.5px*var(--s))) scale(var(--s));pointer-events:none}
+.scene img{max-width:none;display:block}
+.scene > *{position:absolute}
+.cone{left:676px;top:-150px;width:1040px;height:720px;margin-left:-520px;background:radial-gradient(ellipse 50% 50% at 50% 46%,rgb(73 125 149 / .36),rgb(73 125 149 / .12) 48%,transparent 74%)}
+.bgv{inset:0;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 91%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 91%,transparent 100%)}
+.bgh{width:100%;height:100%;-webkit-mask-image:linear-gradient(to right,transparent 2%,#000 24%,#000 76%,transparent 98%);mask-image:linear-gradient(to right,transparent 2%,#000 24%,#000 76%,transparent 98%)}
+.trail{left:0;top:0;width:1376px;height:768px}
+#trail-back{z-index:1}
+#trail-front{z-index:6}
+.shadow{z-index:4;left:676px;top:627px;width:230px;height:30px;margin:-15px 0 0 -115px;border-radius:50%;background:radial-gradient(closest-side,rgb(1 12 30 / .62),transparent);animation:shade 3.6s ease-in-out infinite alternate}
+.mascot{z-index:5;left:676px;top:632px;height:396px;transform:translate(-50%,-100%)}
+.mascot img{height:396px;width:auto;transform-origin:50% 100%;animation:bob 3.6s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(-1px) rotate(-.7deg)}to{transform:translateY(-16px) rotate(.7deg)}}
+@keyframes shade{from{transform:scale(1);opacity:1}to{transform:scale(.8);opacity:.6}}
+.orb{left:0;top:0;will-change:transform}
+.wordmark{z-index:9;left:676px;top:16px;width:560px;transform:translateX(-50%)}
+.wordmark img{width:100%;height:auto}
+.drop,.ring{position:absolute;opacity:0}
+.drop{width:9px;height:12px;margin:-5px 0 0 -4.5px;border-radius:50% 50% 50% 50% / 64% 64% 40% 40%;background:radial-gradient(circle at 34% 30%,#ffd29a 0 14%,var(--slime-hi) 32%,var(--slime) 68%,#d95507);transform-origin:50% 0}
+.ring{width:26px;height:8px;margin:-4px 0 0 -13px;border-radius:50%;border:1.5px solid var(--slime-hi)}
+
+/* ---------- pita kegunaan ---------- */
+.uses{border-block:1px solid var(--line);background:var(--ink-2)}
+.uses .wrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 30px;padding-block:16px}
+.uses ul{display:flex;flex-wrap:wrap;gap:6px 30px;font-weight:500}
+.uses li::before{content:"";display:inline-block;width:.5em;height:.5em;margin-right:.7em;background:var(--slime);border-radius:50% 50% 50% 50% / 62% 62% 40% 40%;transform:translateY(-.1em)}
+
+/* ---------- bagian ---------- */
+main{display:flex;flex-direction:column;gap:clamp(64px,9vw,112px);padding-block:clamp(56px,8vw,96px)}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:clamp(24px,3.4vw,40px);max-width:44em}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(1.5rem,2.7vw,2.15rem);line-height:1.12;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:600;font-size:1.16rem;line-height:1.2}
+.sec-head p{color:var(--mute)}
+code{font-size:.88em}
+p code,dd code{background:rgb(233 240 247 / .08);padding:.12em .42em;border-radius:5px;color:var(--stitch);white-space:nowrap}
+
+/* langkah */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 26px;counter-reset:langkah}
+.steps li{display:flex;flex-direction:column;gap:10px;padding-top:18px;border-top:1.5px dashed rgb(233 240 247 / .34);min-width:0}
+.steps li::before{counter-increment:langkah;content:"0" counter(langkah);font:700 .8rem/1 var(--f-mono);letter-spacing:.12em;color:var(--slime-hi)}
+.steps p{color:#c2d0d4;font-size:.97rem}
+
+/* permintaan pertama */
+.first{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
+.envelope{position:relative;border-radius:14px;padding:22px 22px 20px;background-color:var(--denim);background-image:repeating-linear-gradient(135deg,rgb(255 255 255 / .045) 0 1px,transparent 1px 4px),linear-gradient(160deg,rgb(255 255 255 / .08),transparent 46%);outline:2px dashed rgb(233 240 247 / .8);outline-offset:-9px;min-width:0}
+.env-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;padding-inline:4px}
+.env-top .label{color:var(--stitch)}
+.copy{font:700 .7rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--on-paper);background:var(--paper);border:0;border-radius:6px;padding:.7em .9em;cursor:pointer}
+.copy:hover{background:#fff}
+.envelope pre{margin:0;padding:16px 14px;border-radius:8px;background:rgb(2 24 32 / .62);color:var(--paper);font-size:.84rem;line-height:1.7;overflow-x:auto;tab-size:2}
+.envelope pre .k{color:var(--slime-hi)}
+.envelope pre .s{color:#bfe0a8}
+.envs{display:flex;flex-direction:column;gap:18px;min-width:0}
+.note{color:var(--mute);font-size:.93rem;padding-inline:4px}
+.note code.long{white-space:normal;overflow-wrap:anywhere}
+.fields{display:flex;flex-direction:column}
+.fields > div{display:grid;grid-template-columns:7.2rem minmax(0,1fr);gap:14px;padding-block:11px;border-top:1px solid var(--line)}
+.fields > div:last-child{border-bottom:1px solid var(--line)}
+.fields dt{font:500 .86rem/1.6 var(--f-mono);color:var(--slime-hi)}
+.fields dd{color:#c2d0d4;font-size:.97rem}
+.fields-title{margin-bottom:12px}
+
+/* daftar endpoint */
+.manifest{border-bottom:1px solid var(--line)}
+.manifest li{display:grid;grid-template-columns:5.4rem minmax(0,1.05fr) minmax(0,1.35fr);gap:4px 22px;align-items:baseline;padding-block:14px;border-top:1px solid var(--line)}
+.m{font:700 .76rem/1.6 var(--f-mono);letter-spacing:.08em}
+.m-get{color:var(--peel)} .m-post{color:var(--slime-hi)} .m-patch{color:var(--denim-hi)} .m-delete{color:var(--pink)}
+.path{font:500 .9rem/1.6 var(--f-mono);color:var(--paper);overflow-wrap:anywhere}
+.path i{font-style:normal;color:var(--mute)}
+.manifest p{color:#c2d0d4;font-size:.97rem}
+
+/* domain */
+.domains{display:flex;flex-wrap:wrap;gap:14px 16px}
+.dtag{position:relative;display:flex;flex-direction:column;gap:2px;background:var(--paper);color:var(--on-paper);padding:12px 20px 12px 38px;clip-path:polygon(14px 0,100% 0,100% 100%,14px 100%,0 50%);min-width:0}
+.dtag::before{content:"";position:absolute;left:18px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--ink)}
+.dtag code{font-size:.92rem;font-weight:700;overflow-wrap:anywhere}
+.dtag small{font:500 .68rem/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:#4d626c}
+
+/* penutup */
+.close{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:end;padding-top:clamp(32px,5vw,56px);border-top:1.5px dashed rgb(233 240 247 / .34)}
+.close h2{font-size:clamp(1.8rem,3.6vw,2.9rem)}
+.close p{color:#c2d0d4;margin-top:14px;max-width:32em}
+.contact{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.mail code{font-size:1rem;color:var(--paper);user-select:all;overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-block:22px;font-size:.86rem;color:var(--mute)}
+footer a{text-decoration:none}
+footer a:hover{color:var(--paper)}
+
+@media (max-width:960px){
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav-links{display:none}
+}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}
+  .stage{order:-1;height:clamp(390px,108vw,560px);margin-inline:calc(var(--gutter)*-1)}
+  .first,.close{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:700px){
+  .manifest li{grid-template-columns:4.6rem minmax(0,1fr)}
+  .manifest p{grid-column:2}
+}
+@media (max-width:560px){
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .fields > div{grid-template-columns:6.2rem minmax(0,1fr)}
+  .envelope{padding:20px 16px 18px}
+}
+@media (prefers-reduced-motion:reduce){
+  .mascot img,.shadow{animation:none}
+  .btn{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="hero">
+  <header class="wrap nav">
+    <a class="brand" href="#top" id="top"><span>BanaMail</span><span class="patch">PRO</span></a>
+    <nav class="nav-links" aria-label="Bagian halaman" data-i18n-aria="nav.aria">
+      <a href="#cara" data-i18n="nav.how">Cara kerja</a>
+      <a href="#api" data-i18n="nav.api">API</a>
+      <a href="#domain" data-i18n="nav.domains">Domain</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Bahasa" data-i18n-aria="lang.aria">
+      <button type="button" id="lang-id" data-lang="id" aria-pressed="true">ID</button>
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="label" data-i18n="hero.eyebrow">Kotak masuk uji untuk developer</p>
+      <h1 data-i18n-html="hero.h1">Uji email aplikasi Anda tanpa <em>kotak masuk sungguhan</em>.</h1>
+      <p class="lede" data-i18n="hero.lede">Buat alamat sekali pakai lewat API, kirim email dari aplikasi Anda ke sana, lalu ambil teks, HTML, dan lampirannya.</p>
+      <div class="cta">
+        <a class="btn btn-main" href="#api" data-i18n="hero.cta1">Lihat API</a>
+        <a class="btn btn-ghost" href="/" data-i18n="hero.cta2">Buka BanaMail</a>
+      </div>
+      <p class="facts" data-i18n-html="hero.facts"><span><b>7</b> endpoint aktif</span><span><b>4</b> domain email</span><span>Tiap alamat punya <b>masa berlaku</b></span></p>
+    </div>
+
+    <div class="stage" id="stage" role="img" aria-label="Maskot pisang BanaMail mengangkat kotak surat di atas panggung, dikelilingi amplop, pesawat kertas, dan empat kera berskateboard yang mengorbit." data-i18n-aria="stage.aria">
+      <div class="scene" id="scene" aria-hidden="true">
+        <div class="cone"></div>
+        <div class="bgv"><div class="bgh"><img src="aset/01-latar.webp" alt="" width="1376" height="768"></div></div>
+        <canvas class="trail" id="trail-back"></canvas>
+        <div class="shadow"></div>
+        <div class="mascot"><img src="aset/02-maskot.webp" alt="" width="538" height="900"></div>
+        <canvas class="trail" id="trail-front"></canvas>
+        <div class="wordmark" id="wordmark"><img src="aset/03-tulisan.webp" alt="" width="1210" height="371"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="uses">
+  <div class="wrap">
+    <span class="label" data-i18n="uses.label">Dipakai untuk menguji</span>
+    <ul>
+      <li data-i18n="uses.a">Email verifikasi pendaftaran</li>
+      <li data-i18n="uses.b">Tautan reset kata sandi</li>
+      <li data-i18n="uses.c">Notifikasi berlampiran</li>
+    </ul>
+  </div>
+</div>
+
+<main>
+  <section class="wrap" id="cara">
+    <div class="sec-head">
+      <span class="label" data-i18n="how.label">Cara kerja</span>
+      <h2 data-i18n="how.title">Empat langkah, dari alamat baru sampai bersih lagi</h2>
+    </div>
+    <ol class="steps">
+      <li><h3 data-i18n="how.1t">Buat alamat</h3><p data-i18n-html="how.1p">Panggil <code>POST /api/addresses</code>. Awalan dan domain boleh Anda tentukan, boleh juga dikosongkan.</p></li>
+      <li><h3 data-i18n="how.2t">Kirim email uji</h3><p data-i18n="how.2p">Jalankan alur di aplikasi Anda dan arahkan emailnya ke alamat tadi.</p></li>
+      <li><h3 data-i18n="how.3t">Baca hasilnya</h3><p data-i18n-html="how.3p"><code>GET /api/mailbox</code> menampilkan isi kotak. <code>GET /api/messages/:id</code> memberi teks dan HTML satu email.</p></li>
+      <li><h3 data-i18n="how.4t">Hapus alamat</h3><p data-i18n-html="how.4p"><code>DELETE /api/addresses/me</code> menghapus alamat beserta semua isinya.</p></li>
+    </ol>
+  </section>
+
+  <section class="wrap" id="api">
+    <div class="sec-head">
+      <span class="label">API</span>
+      <h2 data-i18n="first.title">Buat alamat, lalu baca kotak masuknya</h2>
+      <p data-i18n-html="first.sub">Field <code>prefix</code> dan <code>domain</code> sama-sama opsional. Token dari jawaban pertama dipakai di semua panggilan berikutnya.</p>
+    </div>
+    <div class="first">
+      <div class="envs">
+      <div class="envelope">
+        <div class="env-top">
+          <span class="label" data-i18n="first.req">Buat alamat</span>
+          <button type="button" class="copy" id="copy-curl" data-i18n="copy.idle">Salin</button>
+        </div>
+<pre id="curl" tabindex="0"><span class="k">curl</span> -X POST https://venbeemail.com/api/addresses \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"prefix": "qa-signup", "domain": "kotak.venbeemail.com"}'</span></pre>
+      </div>
+      <p class="note" data-i18n-html="first.rule">Awalan berisi 3 sampai 20 karakter dari huruf, angka, titik, garis bawah, dan tanda hubung. Karakter pertama dan terakhir harus huruf atau angka, dan dua tanda tidak boleh berdampingan. Server menambahkan akhiran acak, sehingga <code>qa-signup</code> menjadi alamat seperti <code class="long">qa-signup.62yt8v@kotak.venbeemail.com</code>.</p>
+      <div class="envelope">
+        <div class="env-top">
+          <span class="label" data-i18n="first.req2">Baca kotak masuk</span>
+          <button type="button" class="copy" id="copy-curl2" data-i18n="copy.idle">Salin</button>
+        </div>
+<pre id="curl2" tabindex="0"><span class="k">curl</span> https://venbeemail.com/api/mailbox \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span></pre>
+      </div>
+      <p class="note" data-i18n-html="first.note">Isi <code>$TOKEN</code> dengan nilai <code>token</code> dari jawaban pertama.</p>
+      </div>
+      <div>
+        <p class="label fields-title" data-i18n="first.res">Jawaban berisi</p>
+        <dl class="fields">
+          <div><dt>address</dt><dd data-i18n="f.address">Alamat email lengkap</dd></div>
+          <div><dt>local</dt><dd data-i18n="f.local">Bagian sebelum tanda @</dd></div>
+          <div><dt>domain</dt><dd data-i18n="f.domain">Domain yang dipakai</dd></div>
+          <div><dt>expiresAt</dt><dd data-i18n="f.expires">Kapan alamat kedaluwarsa, dalam milidetik epoch</dd></div>
+          <div><dt>token</dt><dd data-i18n="f.token">Token untuk panggilan berikutnya</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="endpoint">
+    <div class="sec-head">
+      <span class="label" data-i18n="man.label">Daftar lengkap</span>
+      <h2 data-i18n="man.title">Semua endpoint</h2>
+      <p data-i18n-html="man.sub">Selain <code>POST /api/addresses</code> dan <code>GET /api/health</code>, setiap panggilan wajib membawa header <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+    </div>
+    <ul class="manifest">
+      <li><span class="m m-post">POST</span><span class="path">/api/addresses</span><p data-i18n-html="man.1">Buat alamat baru. Mengembalikan alamat, masa berlaku, dan token.</p></li>
+      <li><span class="m m-get">GET</span><span class="path">/api/mailbox</span><p data-i18n-html="man.2">Daftar email di <code>inbox</code>, <code>spam</code>, dan <code>sent</code>, serta masa berlaku alamat.</p></li>
+      <li><span class="m m-get">GET</span><span class="path">/api/messages/<i>:id</i></span><p data-i18n="man.3">Satu email lengkap: metadata, teks, dan HTML.</p></li>
+      <li><span class="m m-patch">PATCH</span><span class="path">/api/messages/<i>:id</i></span><p data-i18n-html="man.4">Pindahkan email antara inbox dan spam lewat field <code>folder</code>.</p></li>
+      <li><span class="m m-get">GET</span><span class="path">/api/messages/<i>:id</i>/attachments/<i>:n</i></span><p data-i18n="man.5">Unduh satu lampiran dari sebuah email.</p></li>
+      <li><span class="m m-delete">DELETE</span><span class="path">/api/addresses/me</span><p data-i18n="man.6">Hapus alamat beserta semua isinya.</p></li>
+      <li><span class="m m-get">GET</span><span class="path">/api/health</span><p data-i18n="man.7">Periksa apakah layanan sedang berjalan.</p></li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="domain">
+    <div class="sec-head">
+      <span class="label" data-i18n="dom.label">Domain</span>
+      <h2 data-i18n="dom.title">Empat domain, satu API</h2>
+      <p data-i18n-html="dom.sub">Tulis nama domainnya di field <code>domain</code> saat membuat alamat.</p>
+    </div>
+    <ul class="domains">
+      <li class="dtag"><code>venbeemail.com</code><small data-i18n="dom.g0">utama</small></li>
+      <li class="dtag"><code>kotak.venbeemail.com</code><small data-i18n="dom.g1">kotak</small></li>
+      <li class="dtag"><code>surat.venbeemail.com</code><small data-i18n="dom.g2">surat</small></li>
+      <li class="dtag"><code>pos.venbeemail.com</code><small data-i18n="dom.g3">pos</small></li>
+    </ul>
+  </section>
+
+  <section class="wrap">
+    <div class="close">
+      <div>
+        <h2 data-i18n="end.title">Mulai dari satu alamat.</h2>
+        <p data-i18n="end.p">BanaMail sudah berjalan di venbeemail.com. Ada pertanyaan soal API? Tulis ke alamat di samping.</p>
+      </div>
+      <div class="contact">
+        <div class="mail">
+          <code id="mail">admin@venbeemail.com</code>
+          <button type="button" class="copy" id="copy-mail" data-i18n="copy.idle">Salin</button>
+        </div>
+        <a class="btn btn-main" href="/" data-i18n="hero.cta2">Buka BanaMail</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>BanaMail Pro</span>
+    <a href="/">venbeemail.com</a>
+  </div>
+</footer>
+
+<script>
+/* ================= dua bahasa ================= */
+(function(){
+  var T={
+    id:{
+      'nav.aria':'Bagian halaman','lang.aria':'Bahasa',
+      'nav.how':'Cara kerja','nav.api':'API','nav.domains':'Domain',
+      'hero.eyebrow':'Kotak masuk uji untuk developer',
+      'hero.h1':'Uji email aplikasi Anda tanpa <em>kotak masuk sungguhan</em>.',
+      'hero.lede':'Buat alamat sekali pakai lewat API, kirim email dari aplikasi Anda ke sana, lalu ambil teks, HTML, dan lampirannya.',
+      'hero.cta1':'Lihat API','hero.cta2':'Buka BanaMail',
+      'hero.facts':'<span><b>7</b> endpoint aktif</span><span><b>4</b> domain email</span><span>Tiap alamat punya <b>masa berlaku</b></span>',
+      'stage.aria':'Maskot pisang BanaMail mengangkat kotak surat di atas panggung, dikelilingi amplop, pesawat kertas, dan empat kera berskateboard yang mengorbit.',
+      'uses.label':'Dipakai untuk menguji','uses.a':'Email verifikasi pendaftaran','uses.b':'Tautan reset kata sandi','uses.c':'Notifikasi berlampiran',
+      'how.label':'Cara kerja','how.title':'Empat langkah, dari alamat baru sampai bersih lagi',
+      'how.1t':'Buat alamat','how.1p':'Panggil <code>POST /api/addresses</code>. Awalan dan domain boleh Anda tentukan, boleh juga dikosongkan.',
+      'how.2t':'Kirim email uji','how.2p':'Jalankan alur di aplikasi Anda dan arahkan emailnya ke alamat tadi.',
+      'how.3t':'Baca hasilnya','how.3p':'<code>GET /api/mailbox</code> menampilkan isi kotak. <code>GET /api/messages/:id</code> memberi teks dan HTML satu email.',
+      'how.4t':'Hapus alamat','how.4p':'<code>DELETE /api/addresses/me</code> menghapus alamat beserta semua isinya.',
+      'first.title':'Buat alamat, lalu baca kotak masuknya','first.sub':'Field <code>prefix</code> dan <code>domain</code> sama-sama opsional. Token dari jawaban pertama dipakai di semua panggilan berikutnya.',
+      'first.req':'Buat alamat','first.rule':'Awalan berisi 3 sampai 20 karakter dari huruf, angka, titik, garis bawah, dan tanda hubung. Karakter pertama dan terakhir harus huruf atau angka, dan dua tanda tidak boleh berdampingan. Server menambahkan akhiran acak, sehingga <code>qa-signup</code> menjadi alamat seperti <code class="long">qa-signup.62yt8v@kotak.venbeemail.com</code>.','first.req2':'Baca kotak masuk','first.note':'Isi <code>$TOKEN</code> dengan nilai <code>token</code> dari jawaban pertama.','first.res':'Jawaban berisi',
+      'f.address':'Alamat email lengkap','f.local':'Bagian sebelum tanda @','f.domain':'Domain yang dipakai','f.expires':'Kapan alamat kedaluwarsa, dalam milidetik epoch','f.token':'Token untuk panggilan berikutnya',
+      'man.label':'Daftar lengkap','man.title':'Semua endpoint','man.sub':'Selain <code>POST /api/addresses</code> dan <code>GET /api/health</code>, setiap panggilan wajib membawa header <code>Authorization: Bearer &lt;token&gt;</code>.',
+      'man.1':'Buat alamat baru. Mengembalikan alamat, masa berlaku, dan token.',
+      'man.2':'Daftar email di <code>inbox</code>, <code>spam</code>, dan <code>sent</code>, serta masa berlaku alamat.',
+      'man.3':'Satu email lengkap: metadata, teks, dan HTML.',
+      'man.4':'Pindahkan email antara inbox dan spam lewat field <code>folder</code>.',
+      'man.5':'Unduh satu lampiran dari sebuah email.',
+      'man.6':'Hapus alamat beserta semua isinya.',
+      'man.7':'Periksa apakah layanan sedang berjalan.',
+      'dom.label':'Domain','dom.title':'Empat domain, satu API','dom.sub':'Tulis nama domainnya di field <code>domain</code> saat membuat alamat.',
+      'dom.g0':'utama','dom.g1':'kotak','dom.g2':'surat','dom.g3':'pos',
+      'end.title':'Mulai dari satu alamat.','end.p':'BanaMail sudah berjalan di venbeemail.com. Ada pertanyaan soal API? Tulis ke alamat di samping.',
+      'copy.idle':'Salin','copy.done':'Tersalin','copy.fail':'Tekan Ctrl+C'
+    },
+    en:{
+      'nav.aria':'Page sections','lang.aria':'Language',
+      'nav.how':'How it works','nav.api':'API','nav.domains':'Domains',
+      'hero.eyebrow':'A test inbox for developers',
+      'hero.h1':'Test your app’s email without <em>a real inbox</em>.',
+      'hero.lede':'Create a disposable address through the API, send your app’s email to it, then fetch the text, HTML, and attachments.',
+      'hero.cta1':'See the API','hero.cta2':'Open BanaMail',
+      'hero.facts':'<span><b>7</b> live endpoints</span><span><b>4</b> email domains</span><span>Every address has an <b>expiry</b></span>',
+      'stage.aria':'The BanaMail banana mascot lifts a mailbox on a stage while envelopes, paper planes, and four skateboarding monkeys orbit around it.',
+      'uses.label':'Used to test','uses.a':'Sign-up verification emails','uses.b':'Password reset links','uses.c':'Notifications with attachments',
+      'how.label':'How it works','how.title':'Four steps, from a fresh address to a clean slate',
+      'how.1t':'Create an address','how.1p':'Call <code>POST /api/addresses</code>. Set a prefix and a domain, or leave both out.',
+      'how.2t':'Send a test email','how.2p':'Run the flow in your app and point its email at that address.',
+      'how.3t':'Read the result','how.3p':'<code>GET /api/mailbox</code> lists what arrived. <code>GET /api/messages/:id</code> returns one email’s text and HTML.',
+      'how.4t':'Delete the address','how.4p':'<code>DELETE /api/addresses/me</code> removes the address and everything in it.',
+      'first.title':'Create an address, then read its mailbox','first.sub':'The <code>prefix</code> and <code>domain</code> fields are both optional. The token from the first response goes on every later call.',
+      'first.req':'Create an address','first.rule':'A prefix is 3 to 20 characters of letters, digits, dots, underscores, and hyphens. It must start and end with a letter or digit, and two symbols cannot sit side by side. The server adds a random suffix, so <code>qa-signup</code> becomes an address like <code class="long">qa-signup.62yt8v@kotak.venbeemail.com</code>.','first.req2':'Read the mailbox','first.note':'Replace <code>$TOKEN</code> with the <code>token</code> value from the first response.','first.res':'The response contains',
+      'f.address':'The full email address','f.local':'The part before the @ sign','f.domain':'The domain in use','f.expires':'When the address expires, in epoch milliseconds','f.token':'The token for later calls',
+      'man.label':'Full list','man.title':'Every endpoint','man.sub':'Apart from <code>POST /api/addresses</code> and <code>GET /api/health</code>, every call must carry the header <code>Authorization: Bearer &lt;token&gt;</code>.',
+      'man.1':'Create a new address. Returns the address, its expiry, and a token.',
+      'man.2':'Lists the emails in <code>inbox</code>, <code>spam</code>, and <code>sent</code>, plus the address expiry.',
+      'man.3':'One full email: metadata, text, and HTML.',
+      'man.4':'Move an email between inbox and spam with the <code>folder</code> field.',
+      'man.5':'Download one attachment from an email.',
+      'man.6':'Delete the address and everything in it.',
+      'man.7':'Check whether the service is running.',
+      'dom.label':'Domains','dom.title':'Four domains, one API','dom.sub':'Pass the domain name in the <code>domain</code> field when you create an address.',
+      'dom.g0':'main','dom.g1':'kotak = box','dom.g2':'surat = letter','dom.g3':'pos = post',
+      'end.title':'Start with one address.','end.p':'BanaMail is live at venbeemail.com. Questions about the API? Write to the address shown here.',
+      'copy.idle':'Copy','copy.done':'Copied','copy.fail':'Press Ctrl+C'
+    }
+  };
+  var lang='id';
+  function t(k){return (T[lang]&&T[lang][k])||T.id[k]||''}
+  function apply(next){
+    lang=T[next]?next:'id';
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=t(el.getAttribute('data-i18n'))});
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el){el.innerHTML=t(el.getAttribute('data-i18n-html'))});
+    document.querySelectorAll('[data-i18n-aria]').forEach(function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')))});
+    document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===lang))});
+    try{localStorage.setItem('bm-lang',lang)}catch(e){}
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.lang)})});
+  var saved=null;try{saved=localStorage.getItem('bm-lang')}catch(e){}
+  if(saved&&saved!=='id')apply(saved);
+
+  function wireCopy(btnId,srcId){
+    var btn=document.getElementById(btnId),src=document.getElementById(srcId);
+    btn.addEventListener('click',function(){
+      var text=src.textContent;
+      function done(key){btn.textContent=t(key);clearTimeout(btn._t);btn._t=setTimeout(function(){btn.textContent=t('copy.idle')},1800)}
+      function fallback(){var r=document.createRange();r.selectNodeContents(src);var s=getSelection();s.removeAllRanges();s.addRange(r);done('copy.fail')}
+      try{navigator.clipboard.writeText(text).then(function(){done('copy.done')},fallback)}catch(e){fallback()}
+    });
+  }
+  wireCopy('copy-curl','curl');wireCopy('copy-curl2','curl2');wireCopy('copy-mail','mail');
+})();
+
+/* ================= adegan Orbit Surat ================= */
+(function(){
+  var stage=document.getElementById('stage'),scene=document.getElementById('scene'),wordmark=document.getElementById('wordmark');
+  var cvB=document.getElementById('trail-back'),cvF=document.getElementById('trail-front');
+  var cB=cvB.getContext('2d'),cF=cvF.getContext('2d');
+  var LW=1376,LH=768,CX=676.5,TAU=Math.PI*2;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  var clamp=function(v,a,b){return v<a?a:v>b?b:v};
+
+  /* dua cincin: luar membawa kera, dalam berputar berlawanan arah */
+  var R={
+    luar:{cy:548,period:34,dir:-1,tilt:0,rx:340,ry:92,zBack:2,zFront:8},
+    dalam:{cy:452,period:21,dir:1,tilt:-9*Math.PI/180,rx:205,ry:56,zBack:3,zFront:7}
+  };
+  var SPRITE={
+    flanel:{src:'04-kera-flanel.webp',h:134,ar:426/440,kind:'kera'},
+    kepang:{src:'05-kera-kepang.webp',h:138,ar:351/440,kind:'kera'},
+    rompi:{src:'06-kera-rompi.webp',h:134,ar:407/440,kind:'kera'},
+    kupluk:{src:'07-kera-kupluk.webp',h:138,ar:403/440,kind:'kera'},
+    amplop:{src:'08-amplop.webp',h:50,ar:276/200,kind:'amplop'},
+    pesawat:{src:'09-pesawat.webp',h:48,ar:224/150,kind:'pesawat'}
+  };
+  var cast=[
+    ['luar',['flanel','amplop','kepang','pesawat','rompi','amplop','kupluk','pesawat'],1,.35],
+    ['dalam',['amplop','pesawat','amplop','pesawat','amplop','pesawat'],.84,.1]
+  ];
+  var orbs=[];
+  cast.forEach(function(c){
+    c[1].forEach(function(name,i){
+      var sp=SPRITE[name],el=document.createElement('div'),img=document.createElement('img');
+      el.className='orb';img.alt='';img.src='aset/'+sp.src;
+      img.height=Math.round(sp.h*c[2]);img.width=Math.round(sp.h*c[2]*sp.ar);
+      img.style.height=img.height+'px';img.style.width=img.width+'px';
+      el.appendChild(img);scene.appendChild(el);
+      orbs.push({el:el,ring:R[c[0]],kind:sp.kind,phase:c[3]+i*TAU/c[1].length,seed:i*1.7+(c[0]==='luar'?0:3.1),z:null,b:null});
+    });
+  });
+
+  /* ujung lelehan pada 03-tulisan (koordinat gambar 1210 x 371) */
+  var TIPS=[[111,358],[274,300],[307,341],[334,296],[414,296],[500,292],[637,330],[729,314],[794,225],[864,324],[963,315],[1003,352],[1087,288],[1169,338]];
+  var drops=TIPS.map(function(p,i){
+    var d=document.createElement('span'),r=document.createElement('span');
+    d.className='drop';r.className='ring';
+    d.style.left=r.style.left=(p[0]/1210*100)+'%';
+    d.style.top=(p[1]/371*100)+'%';
+    wordmark.appendChild(r);wordmark.appendChild(d);
+    return {x:p[0],y:p[1],d:d,r:r,hang:2.4+((i*37)%29)/29*3.4,off:((i*53)%31)/31,anims:[]};
+  });
+
+  var s=.7,visW=820,dpr=1,ww=560;
+  function point(ring,th,k,px,py){
+    var ex=ring.rx*k*Math.cos(th),ey=ring.ry*k*Math.sin(th),ct=Math.cos(ring.tilt),st=Math.sin(ring.tilt);
+    return [CX+px+ex*ct-ey*st,ring.cy+py+ex*st+ey*ct];
+  }
+
+  function rain(){
+    drops.forEach(function(o){o.anims.forEach(function(a){a.cancel()});o.anims=[]});
+    if(reduce.matches||!document.body.animate)return;
+    var f=ww/1210;
+    drops.forEach(function(o,i){
+      var tx=CX-ww/2+o.x*f,ty=16+o.y*f,dx=tx-CX,land;
+      if(Math.abs(dx)<98)land=258-dx/98*14;                 /* jatuh ke kotak surat */
+      else if(Math.abs(dx)<214)land=618+((i*7)%5)*4;        /* jatuh ke panggung */
+      else land=676+((i*11)%5)*5;                           /* jatuh ke lantai */
+      var fall=Math.max(24,land-ty),tf=.05*Math.sqrt(fall),rest=.9+o.off*1.6,cyc=o.hang+tf+rest;
+      var a=o.hang*.3/cyc,b=o.hang/cyc,c=(o.hang+tf)/cyc,e=Math.min(.999,c+.55/cyc),opt={duration:cyc*1000,iterations:Infinity,delay:-o.off*cyc*1000};
+      o.anims.push(o.d.animate([
+        {offset:0,opacity:0,transform:'translateY(0) scale(.3)'},
+        {offset:a,opacity:1,transform:'translateY(0) scale(.72)'},
+        {offset:b,opacity:1,transform:'translateY(3px) scale(1,1.15)',easing:'cubic-bezier(.55,0,1,.6)'},
+        {offset:c,opacity:1,transform:'translateY('+fall+'px) scale(.8,1.4)'},
+        {offset:Math.min(.9995,c+.004),opacity:0,transform:'translateY('+fall+'px) scale(.8,1.4)'},
+        {offset:1,opacity:0,transform:'translateY('+fall+'px) scale(.8,1.4)'}
+      ],opt));
+      o.r.style.top='calc('+(o.y/371*100)+'% + '+(fall+10)+'px)';
+      var big=Math.abs(dx)<98?.7:1.25;
+      o.anims.push(o.r.animate([
+        {offset:0,opacity:0,transform:'scale(.15)'},
+        {offset:c,opacity:0,transform:'scale(.15)'},
+        {offset:Math.min(.9992,c+.003),opacity:.9,transform:'scale(.2)',easing:'ease-out'},
+        {offset:e,opacity:0,transform:'scale('+big+')'},
+        {offset:1,opacity:0,transform:'scale('+big+')'}
+      ],opt));
+    });
+  }
+
+  function layout(){
+    var r=stage.getBoundingClientRect();
+    if(!r.height)return;
+    s=r.height/LH;visW=r.width/s;dpr=Math.min(window.devicePixelRatio||1,2);
+    scene.style.setProperty('--s',s.toFixed(4));
+    [cvB,cvF].forEach(function(c){c.width=Math.round(LW*s*dpr);c.height=Math.round(LH*s*dpr)});
+    var rx=clamp(visW/2-78,200,500);
+    R.luar.rx=rx;R.luar.ry=clamp(rx*.27,72,112);
+    R.dalam.rx=Math.max(rx*.6,Math.min(190,rx-62));R.dalam.ry=R.luar.ry*.6;
+    ww=Math.round(clamp(visW-52,320,590));wordmark.style.width=ww+'px';
+    rain();draw(last);
+  }
+
+  var px=0,py=0,tx=0,ty=0,last=performance.now(),t0=null;
+  function draw(ts){
+    last=ts;if(t0===null)t0=ts;
+    var t=(ts-t0)/1000,still=reduce.matches;
+    if(still)t=0;
+    var k=still?1:1-.24*Math.pow(1-Math.min(1,t/1.9),3);
+    px+=(tx-px)*.06;py+=(ty-py)*.06;
+    var m=s*dpr;
+    [cB,cF].forEach(function(c){c.setTransform(m,0,0,m,0,0);c.clearRect(0,0,LW,LH);c.lineCap='round'});
+
+    /* lintasan: garis jahit tipis, separuh belakang di balik maskot */
+    [R.luar,R.dalam].forEach(function(g,i){
+      var f=i?1.6:1;
+      [[cB,Math.PI,TAU],[cF,0,Math.PI]].forEach(function(h){
+        var c=h[0];c.beginPath();c.setLineDash([4,9]);c.lineWidth=1.3;
+        c.strokeStyle='rgba(233,240,247,'+(c===cB?.13:.2)+')';
+        c.ellipse(CX+px*f,g.cy+py*f,g.rx*k,g.ry*k,g.tilt,h[1],h[2]);c.stroke();c.setLineDash([]);
+      });
+    });
+
+    for(var i=0;i<orbs.length;i++){
+      var o=orbs[i],g=o.ring,f=g===R.dalam?1.6:1;
+      var th=o.phase+g.dir*t/g.period*TAU,sn=Math.sin(th),cs=Math.cos(th);
+      var p=point(g,th,k,px*f,py*f);
+      var vx=-g.dir*sn*g.rx,vy=g.dir*cs*g.ry;
+      var flip=clamp(vx/g.rx*5,-1,1);if(Math.abs(flip)<.1)flip=flip<0?-.1:.1;
+      var sgn=flip<0?-1:1,head=clamp(Math.atan2(vy,Math.abs(vx)),-.5,.5),rot,bob;
+      if(o.kind==='kera'){rot=sgn*head*.3+Math.sin(t*1.7+o.seed)*.035;bob=Math.sin(t*2.1+o.seed)*5}
+      else if(o.kind==='pesawat'){rot=sgn*head+Math.sin(t*1.3+o.seed)*.05;bob=Math.sin(t*1.5+o.seed)*6}
+      else{flip=1;rot=Math.sin(t*.9+o.seed)*.22;bob=Math.sin(t*1.4+o.seed)*5}
+      var sc=1+.2*sn;
+      o.el.style.transform='translate3d('+p[0].toFixed(1)+'px,'+(p[1]+bob).toFixed(1)+'px,0) translate(-50%,-50%) rotate('+rot.toFixed(3)+'rad) scale('+(sc*flip).toFixed(3)+','+sc.toFixed(3)+')';
+      var z=sn>=0?g.zFront:g.zBack;if(z!==o.z){o.z=z;o.el.style.zIndex=z}
+      var b=Math.round((.68+.32*(sn+1)/2)*25)/25;if(b!==o.b){o.b=b;o.el.style.filter='brightness('+b+')'}
+
+      /* jejak tipis di belakang tiap benda */
+      var len=o.kind==='kera'?.55:.4,N=12,col=o.kind==='kera'?'254,154,52':'233,240,247',a0=(o.kind==='kera'?.5:.42)*(still?1:Math.min(1,t/1.2));
+      var prev=point(g,th-g.dir*.07,k,px*f,py*f);
+      for(var j=1;j<=N;j++){
+        var a=th-g.dir*(.07+len*j/N),q=point(g,a,k,px*f,py*f),c=Math.sin(a)>=0?cF:cB,u=1-j/N;
+        c.beginPath();c.moveTo(prev[0],prev[1]);c.lineTo(q[0],q[1]);
+        c.strokeStyle='rgba('+col+','+(a0*u*u).toFixed(3)+')';c.lineWidth=.6+2.4*u;c.stroke();prev=q;
+      }
+    }
+  }
+
+  var running=false,onScreen=true,raf=0;
+  function loop(ts){draw(ts);raf=requestAnimationFrame(loop)}
+  function sync(){
+    var want=onScreen&&!document.hidden&&!reduce.matches;
+    if(want&&!running){running=true;raf=requestAnimationFrame(loop)}
+    else if(!want&&running){running=false;cancelAnimationFrame(raf)}
+  }
+  if('ResizeObserver' in window)new ResizeObserver(layout).observe(stage);else window.addEventListener('resize',layout);
+  if('IntersectionObserver' in window)new IntersectionObserver(function(e){onScreen=e[0].isIntersecting;sync()}).observe(stage);
+  document.addEventListener('visibilitychange',sync);
+  var onReduce=function(){rain();draw(last);sync()};
+  if(reduce.addEventListener)reduce.addEventListener('change',onReduce);
+  if(window.matchMedia('(pointer:fine)').matches){
+    window.addEventListener('pointermove',function(e){
+      var r=stage.getBoundingClientRect();
+      tx=clamp((e.clientX-(r.left+r.width/2))/r.width,-1,1)*12;
+      ty=clamp((e.clientY-(r.top+r.height/2))/r.height,-1,1)*7;
+    },{passive:true});
+  }
+  layout();sync();
+})();
+</script>
+</body>
+</html>
