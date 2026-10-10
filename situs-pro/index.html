@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VenbeeMail Pro</title>
+<meta name="description" content="VenbeeMail Pro: kotak masuk uji lewat API, dari pembuat BanaMail.">
+<link rel="stylesheet" href="pratinjau.css">
+<!-- vbpro-kepala:mulai -->
+<link rel="stylesheet" href="aset/vbpro/hero.css">
+<link rel="preload" as="image" href="aset/vbpro/gambar/latar.webp" imagesrcset="aset/vbpro/gambar/latar-1032.webp 1032w, aset/vbpro/gambar/latar.webp 1376w" imagesizes="(max-width: 720px) 180vw, 100vw">
+<!-- vbpro-kepala:selesai -->
+</head>
+<body>
+<!-- vbpro-hero:mulai -->
+<div class="vbp" id="vbp" data-bahasa="id">
+  <header class="vbp-menu" id="vbp-menu">
+    <div class="vbp-pil">
+      <div class="vbp-logo" id="vbp-logo">
+        <span class="vbp-sr">VenbeeMail Pro</span>
+        <span class="vbp-logo-teks" aria-hidden="true">VenbeeMail</span>
+        <span class="vbp-logo-huruf" id="vbp-logo-huruf"></span>
+        <span class="vbp-pro" aria-hidden="true"><span class="vbp-pro-muka">PRO</span></span>
+      </div>
+      <nav class="vbp-nav" id="vbp-nav" aria-label="Bagian halaman" data-label-id="Bagian halaman" data-label-en="Page sections">
+        <a href="#cara-kerja" data-cari="cara kerja|how it works"><span lang="id">Cara kerja</span><span lang="en">How it works</span></a>
+        <a href="#api" data-cari="api">API</a>
+        <a href="#domain" data-cari="domain|domains"><span lang="id">Domain</span><span lang="en">Domains</span></a>
+        <a href="#tentang" data-cari="tentang|about" hidden><span lang="id">Tentang</span><span lang="en">About</span></a>
+        <a class="vbp-tombol vbp-coba vbp-coba-hp" href="#api" data-cari="api"><span lang="id">Coba API</span><span lang="en">Try the API</span></a>
+      </nav>
+      <div class="vbp-aksi">
+        <div class="vbp-bahasa" role="group" aria-label="Bahasa / Language">
+          <button type="button" data-pilih="id" aria-pressed="true">ID</button>
+          <button type="button" data-pilih="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="vbp-tombol vbp-coba" href="#api" data-cari="api"><span lang="id">Coba API</span><span lang="en">Try the API</span></a>
+        <button type="button" class="vbp-buka-menu" id="vbp-buka-menu" aria-expanded="false" aria-controls="vbp-nav"><span lang="id">Menu</span><span lang="en">Menu</span></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="vbp-hero" id="vbp-hero" aria-labelledby="vbp-judul">
+    <div class="vbp-adegan" id="vbp-adegan">
+      <div class="vbp-latar" aria-hidden="true">
+        <img class="vbp-latar-gambar" src="aset/vbpro/gambar/latar.webp" srcset="aset/vbpro/gambar/latar-1032.webp 1032w, aset/vbpro/gambar/latar.webp 1376w" sizes="(max-width: 720px) 180vw, 100vw" alt="" width="1376" height="768" decoding="async" fetchpriority="high">
+      </div>
+      <div class="vbp-sorot" aria-hidden="true"></div>
+      <canvas class="vbp-serpih" id="vbp-serpih" aria-hidden="true"></canvas>
+
+      <div class="vbp-cincin" id="vbp-cincin" aria-hidden="true"></div>
+
+      <h1 class="vbp-tulisan" id="vbp-judul">
+        <span class="vbp-sr">VenbeeMail Pro</span>
+        <span class="vbp-tulisan-teks" aria-hidden="true">VENBEEMAIL</span>
+        <span class="vbp-tulisan-huruf" id="vbp-tulisan-huruf" aria-hidden="true"></span>
+      </h1>
+
+      <svg class="vbp-jejak" id="vbp-jejak" aria-hidden="true" focusable="false">
+        <defs>
+          <mask id="vbp-jejak-topeng" maskUnits="userSpaceOnUse"><path id="vbp-jejak-buka" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/></mask>
+        </defs>
+        <path id="vbp-jalur" class="vbp-jalur" fill="none"/>
+        <path id="vbp-jejak-garis" class="vbp-jejak-garis" fill="none" mask="url(#vbp-jejak-topeng)"/>
+      </svg>
+      <img class="vbp-pesawat" id="vbp-pesawat" src="aset/vbpro/gambar/pesawat.webp" alt="" width="240" height="160" aria-hidden="true" decoding="async">
+
+      <div class="vbp-monyet vbp-monyet-merah" data-watak="merah" aria-hidden="true">
+        <span class="vbp-monyet-badan">
+          <svg class="vbp-kecepatan" viewBox="0 0 120 60" focusable="false"><path d="M118 14H34M112 28H10M116 42H40"/></svg>
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-merah-512.webp" alt="">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-merah-512.webp" alt="">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-merah-512.webp" alt="">
+          <img class="vbp-monyet-gambar" src="aset/vbpro/gambar/monyet-merah-512.webp" srcset="aset/vbpro/gambar/monyet-merah-512.webp 512w, aset/vbpro/gambar/monyet-merah.webp 742w" sizes="(max-width: 720px) 40vw, 22vw" alt="" width="512" height="529" decoding="async">
+        </span>
+      </div>
+      <div class="vbp-monyet vbp-monyet-biru" data-watak="biru" aria-hidden="true">
+        <span class="vbp-monyet-badan">
+          <svg class="vbp-kecepatan" viewBox="0 0 120 60" focusable="false"><path d="M118 14H34M112 28H10M116 42H40"/></svg>
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-biru-512.webp" alt="">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-biru-512.webp" alt="">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-biru-512.webp" alt="">
+          <img class="vbp-monyet-gambar" src="aset/vbpro/gambar/monyet-biru-512.webp" srcset="aset/vbpro/gambar/monyet-biru-512.webp 512w, aset/vbpro/gambar/monyet-biru.webp 647w" sizes="(max-width: 720px) 40vw, 22vw" alt="" width="512" height="641" decoding="async">
+        </span>
+      </div>
+      <div class="vbp-monyet vbp-monyet-cokelat" data-watak="cokelat" aria-hidden="true">
+        <span class="vbp-monyet-badan">
+          <svg class="vbp-kecepatan" viewBox="0 0 120 60" focusable="false"><path d="M2 14H86M8 28H110M4 42H80"/></svg>
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-cokelat-512.webp" alt="" loading="lazy">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-cokelat-512.webp" alt="" loading="lazy">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-cokelat-512.webp" alt="" loading="lazy">
+          <img class="vbp-monyet-gambar" src="aset/vbpro/gambar/monyet-cokelat-512.webp" srcset="aset/vbpro/gambar/monyet-cokelat-512.webp 512w, aset/vbpro/gambar/monyet-cokelat.webp 718w" sizes="22vw" alt="" width="512" height="553" decoding="async" loading="lazy">
+        </span>
+      </div>
+      <div class="vbp-monyet vbp-monyet-pirang" data-watak="pirang" aria-hidden="true">
+        <span class="vbp-monyet-badan">
+          <svg class="vbp-kecepatan" viewBox="0 0 120 60" focusable="false"><path d="M2 14H86M8 28H110M4 42H80"/></svg>
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-pirang-512.webp" alt="" loading="lazy">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-pirang-512.webp" alt="" loading="lazy">
+          <img class="vbp-bayang-gerak" src="aset/vbpro/gambar/monyet-pirang-512.webp" alt="" loading="lazy">
+          <img class="vbp-monyet-gambar" src="aset/vbpro/gambar/monyet-pirang-512.webp" srcset="aset/vbpro/gambar/monyet-pirang-512.webp 512w, aset/vbpro/gambar/monyet-pirang.webp 765w" sizes="22vw" alt="" width="512" height="557" decoding="async" loading="lazy">
+        </span>
+      </div>
+
+      <div class="vbp-maskot" id="vbp-maskot">
+        <span class="vbp-maskot-bayang" aria-hidden="true"></span>
+        <span class="vbp-maskot-pantul" aria-hidden="true"><img src="aset/vbpro/gambar/maskot-512.webp" alt="" width="512" height="849" decoding="async"></span>
+        <button type="button" class="vbp-maskot-tombol" id="vbp-maskot-tombol" aria-label="Maskot pisang: tekan untuk menyapa" data-label-id="Maskot pisang: tekan untuk menyapa" data-label-en="Banana mascot: press to say hi">
+          <span class="vbp-maskot-miring">
+            <span class="vbp-maskot-napas">
+              <img class="vbp-maskot-badan" src="aset/vbpro/gambar/maskot-badan-512.webp" srcset="aset/vbpro/gambar/maskot-badan-512.webp 512w, aset/vbpro/gambar/maskot-badan.webp 576w" sizes="(max-width: 720px) 60vw, 36vh" alt="" width="576" height="955" decoding="async" fetchpriority="high">
+              <img class="vbp-maskot-tepi" src="aset/vbpro/gambar/maskot-tepi-badan.webp" alt="" width="288" height="478" decoding="async">
+              <svg class="vbp-maskot-mata" viewBox="0 0 576 955" focusable="false" aria-hidden="true">
+                <ellipse class="vbp-kelopak" cx="256" cy="320" rx="35" ry="41"/>
+                <ellipse class="vbp-kelopak" cx="339.5" cy="331.5" rx="28" ry="32"/>
+              </svg>
+              <span class="vbp-maskot-kotak">
+                <img class="vbp-amplop-loncat" src="aset/vbpro/gambar/amplop.webp" alt="" width="320" height="230" decoding="async">
+                <img class="vbp-maskot-kotak-gambar" src="aset/vbpro/gambar/maskot-kotak-512.webp" srcset="aset/vbpro/gambar/maskot-kotak-512.webp 512w, aset/vbpro/gambar/maskot-kotak.webp 576w" sizes="(max-width: 720px) 60vw, 36vh" alt="" width="576" height="278" decoding="async">
+                <img class="vbp-maskot-tepi" src="aset/vbpro/gambar/maskot-tepi-kotak.webp" alt="" width="288" height="139" decoding="async">
+              </span>
+              <span class="vbp-maskot-sapuan"></span>
+            </span>
+          </span>
+        </button>
+      </div>
+
+      <div class="vbp-amplop-utama" id="vbp-amplop-utama" aria-hidden="true">
+        <span class="vbp-au vbp-au-dalam"></span>
+        <span class="vbp-au vbp-au-depan"><img src="aset/vbpro/gambar/amplop.webp" alt="" width="320" height="230" decoding="async"></span>
+        <span class="vbp-au vbp-au-tutup"><span class="vbp-au-lipat"><img src="aset/vbpro/gambar/amplop.webp" alt="" width="320" height="230" decoding="async"><span class="vbp-au-tutup-balik"></span></span></span>
+      </div>
+      <figure class="vbp-kartu" id="vbp-kartu" aria-hidden="true">
+        <span class="vbp-kartu-kepala"><span class="vbp-kartu-titik"></span><span class="vbp-kartu-titik"></span><span class="vbp-kartu-titik"></span><span class="vbp-kartu-label"><span lang="id">contoh</span><span lang="en">example</span></span></span>
+        <pre class="vbp-kartu-isi"><code id="vbp-kartu-kode">POST /api/addresses</code></pre>
+      </figure>
+
+      <p class="vbp-tagline vbp-tagline-kiri"><span lang="id">Kotak masuk uji lewat API</span><span lang="en">Test inboxes over an API</span></p>
+      <p class="vbp-tagline vbp-tagline-kanan"><span lang="id">Dari pembuat BanaMail</span><span lang="en">From the makers of BanaMail</span></p>
+
+      <span class="vbp-warna" aria-hidden="true"></span>
+      <span class="vbp-butir" aria-hidden="true"></span>
+      <span class="vbp-gelap" aria-hidden="true"></span>
+    </div>
+  </section>
+</div>
+<!-- vbpro-hero:selesai -->
+
+<main class="pratinjau-lama" id="cara-kerja" data-pratinjau>
+  <div class="pratinjau-isi">
+    <p class="pratinjau-label">Pratinjau Fase 1</p>
+    <h2>Di sini nanti tampil isi halaman /pro yang lama</h2>
+    <p>Saat dipasang, hero di atas disisipkan ke halaman /pro yang sudah ada di server. Cara kerja, API, tujuh endpoint, empat domain, dua contoh curl, dan kontak tetap memakai teks lama, tidak disalin ulang dan tidak diubah.</p>
+    <p>Kartu contoh di hero mengambil contoh curl pertama dari halaman lama itu. Di pratinjau ini kartu hanya menampilkan endpoint POST /api/addresses karena isi lama belum tersedia.</p>
+    <p id="api">Tautan menu (Cara kerja, API, Domain) akan diarahkan ke bagian yang cocok di halaman lama.</p>
+    <p id="domain">Gulir ke atas untuk memutar ulang hero.</p>
+  </div>
+</main>
+
+<!-- vbpro-skrip:mulai -->
+<script src="aset/vbpro/hero.js" defer></script>
+<!-- vbpro-skrip:selesai -->
+</body>
+</html>

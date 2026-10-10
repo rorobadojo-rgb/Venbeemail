@@ -1,0 +1,72 @@
+{
+  "besar": {
+    "amplop": [
+      418,
+      301
+    ],
+    "pesawat": [
+      350,
+      233
+    ],
+    "maskot": [
+      576,
+      955
+    ]
+  },
+  "maskot_kotak_panjang": {
+    "tinggi": 304,
+    "ekor": 40,
+    "potong_y": 262
+  },
+  "maskot_bayang": {
+    "pad": 40,
+    "ukuran": [
+      656,
+      1035
+    ]
+  },
+  "podium_bibir": {
+    "kotak": [
+      420,
+      645,
+      935,
+      700
+    ],
+    "persen": {
+      "kiri": 30.52,
+      "lebar": 37.43,
+      "atas": 83.98,
+      "tinggi": 7.16
+    }
+  },
+  "kaki_bawah": 943,
+  "celah": [
+    250.5,
+    63.3
+  ],
+  "celah_kotak": [
+    169,
+    51,
+    332,
+    80
+  ],
+  "mata": [
+    [
+      256,
+      320,
+      35,
+      41
+    ],
+    [
+      339.5,
+      331.5,
+      28,
+      32
+    ]
+  ],
+  "maskot": [
+    576,
+    955
+  ],
+  "kotak_tinggi": 278
+}
