@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="id" data-bahasa="id" data-akar="" class="vbk-tanpa-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VenbeeMail Pro · Kotak masuk uji lewat API</title>
+<meta name="description" content="VenbeeMail Pro: kotak masuk uji lewat API dari pembuat BanaMail. Buat alamat email sementara, baca surat, ambil lampiran, lalu hapus dari kode tesmu.">
+<link rel="canonical" href="https://venbeemail.com/pro/">
+<meta name="theme-color" content="#01232d">
+<meta name="author" content="NongBana">
+<meta name="vbkong-halaman" content="surat-sampai-v1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VenbeeMail">
+<meta property="og:url" content="https://venbeemail.com/pro/">
+<meta property="og:title" content="VenbeeMail Pro">
+<meta property="og:description" content="Kotak masuk uji lewat API. Buat alamat, baca surat, ambil lampiran, hapus. Dari pembuat BanaMail.">
+<meta property="og:image" content="https://venbeemail.com/pro/aset/vbkong/gambar/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Maskot pisang VenbeeMail mengangkat kotak surat di atas panggung teal, dengan amplop melayang">
+<meta property="og:locale" content="id_ID">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VenbeeMail Pro">
+<meta name="twitter:description" content="Kotak masuk uji lewat API. Buat alamat, baca surat, ambil lampiran, hapus. Dari pembuat BanaMail.">
+<meta name="twitter:image" content="https://venbeemail.com/pro/aset/vbkong/gambar/og.jpg">
+<meta name="twitter:image:alt" content="Maskot pisang VenbeeMail mengangkat kotak surat di atas panggung teal, dengan amplop melayang">
+<!-- twitter:creator ditulis rakit.py kalau akun X sudah diisi LO -->
+<link rel="icon" type="image/png" href="/pro/aset/ikon.png">
+<link rel="preload" href="aset/vbkong/font/archivo-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="aset/vbkong/gaya.css">
+<script src="aset/vbkong/halaman.js" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","name":"VenbeeMail Pro","url":"https://venbeemail.com/pro/","inLanguage":["id","en"],"description":"Kotak masuk uji lewat API dari pembuat BanaMail.","author":{"@type":"Person","name":"NongBana"},"publisher":{"@type":"Organization","name":"VenbeeMail","url":"https://venbeemail.com/","email":"admin@venbeemail.com"}}
+</script>
+</head>
+<body>
+<span id="top"></span>
+<a class="vbk-lompat" href="#bab-2"><span lang="id">Langsung ke isi</span><span lang="en">Skip to content</span></a>
+<div class="vbk-umum vbk-sr" role="status" aria-live="polite" id="vbk-umum"></div>
+
+<!-- ============ MENU (MN1) ============ -->
+<header class="vbk-menu" id="vbk-menu">
+  <div class="vbk-menu-kiri">
+    <a class="vbk-logo" href="#atas" data-label-id="VenbeeMail Pro, kembali ke atas" data-label-en="VenbeeMail Pro, back to top" aria-label="VenbeeMail Pro, kembali ke atas">
+      <span class="vbk-logo-teks" data-gunting-logo>VenbeeMail</span><span class="vbk-lencana">PRO</span>
+    </a>
+  </div>
+  <nav class="vbk-pil" data-label-id="Bagian halaman" data-label-en="Page sections" aria-label="Bagian halaman">
+    <a class="vbk-pil-atas" href="#atas" data-label-id="Kembali ke atas" data-label-en="Back to top" aria-label="Kembali ke atas">
+      <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false"><circle class="vbk-cincin-dasar" cx="22" cy="22" r="19"/><circle class="vbk-cincin" cx="22" cy="22" r="19" pathLength="100"/><path class="vbk-amplop-mini" d="M13 16h18v13H13zM13 16l9 7 9-7"/></svg>
+    </a>
+    <ul class="vbk-pil-tautan">
+      <li><a href="#cara-kerja"><span lang="id">Cara kerja</span><span lang="en">How it works</span></a></li>
+      <li><a href="#api">API</a></li>
+      <li><a href="#endpoint"><span lang="id">Endpoint</span><span lang="en">Endpoints</span></a></li>
+      <li><a href="#domain"><span lang="id">Domain</span><span lang="en">Domains</span></a></li>
+      <li><a href="#tentang"><span lang="id">Tentang</span><span lang="en">About</span></a></li>
+    </ul>
+    <button type="button" class="vbk-pil-bahasa" data-ganti-bahasa data-label-id="Ganti bahasa ke English" data-label-en="Switch language to Bahasa Indonesia" aria-label="Ganti bahasa ke English"><span lang="id">EN</span><span lang="en">ID</span></button>
+  </nav>
+  <div class="vbk-menu-kanan">
+    <a class="vbk-tombol vbk-tombol-utama vbk-menu-coba" href="#api"><span lang="id">Coba API</span><span lang="en">Try the API</span></a>
+    <button type="button" class="vbk-tombol vbk-tombol-garis vbk-menu-buka" aria-expanded="false" aria-controls="vbk-lembar"><span lang="id">Menu</span><span lang="en">Menu</span></button>
+  </div>
+</header>
+
+<div class="vbk-lembar-latar" id="vbk-lembar-latar" hidden></div>
+<div class="vbk-lembar" id="vbk-lembar" role="dialog" aria-modal="true" aria-labelledby="vbk-lembar-judul" hidden>
+  <h2 class="vbk-sr" id="vbk-lembar-judul"><span lang="id">Bagian halaman</span><span lang="en">Page sections</span></h2>
+  <ul class="vbk-lembar-tautan">
+    <li><a href="#cara-kerja"><span lang="id">Cara kerja</span><span lang="en">How it works</span></a></li>
+    <li><a href="#api">API</a></li>
+    <li><a href="#endpoint"><span lang="id">Endpoint</span><span lang="en">Endpoints</span></a></li>
+    <li><a href="#domain"><span lang="id">Domain</span><span lang="en">Domains</span></a></li>
+    <li><a href="#tentang"><span lang="id">Tentang</span><span lang="en">About</span></a></li>
+  </ul>
+  <div class="vbk-lembar-tombol">
+    <button type="button" class="vbk-tombol vbk-tombol-garis" data-ganti-bahasa data-label-id="Ganti bahasa ke English" data-label-en="Switch language to Bahasa Indonesia" aria-label="Ganti bahasa ke English"><span lang="id">English</span><span lang="en">Bahasa Indonesia</span></button>
+    <button type="button" class="vbk-tombol vbk-tombol-garis" data-kurangi-gerak aria-pressed="false"><span class="vbk-gerak-mati"><span lang="id">Kurangi gerakan</span><span lang="en">Reduce motion</span></span><span class="vbk-gerak-nyala"><span lang="id">Gerakan dikurangi</span><span lang="en">Motion reduced</span></span></button>
+    <a class="vbk-tombol vbk-tombol-utama vbk-tombol-penuh" href="#api"><span lang="id">Coba API</span><span lang="en">Try the API</span></a>
+    <button type="button" class="vbk-tombol vbk-tombol-garis vbk-tombol-penuh vbk-lembar-tutup"><span lang="id">Tutup</span><span lang="en">Close</span></button>
+  </div>
+</div>
+
+<main id="isi">
+
+<!-- ============ HERO (HR1) ============ -->
+<section class="vbk-hero" id="atas" aria-labelledby="vbk-h1">
+  <div class="vbk-hero-latar" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 720px)" srcset="aset/vbkong/video/hero-poster-540.webp">
+      <img class="vbk-hero-poster" src="aset/vbkong/video/hero-poster-1280.webp" alt="" width="1280" height="720" fetchpriority="high">
+    </picture>
+  </div>
+  <div class="vbk-hero-gradien" aria-hidden="true"></div>
+  <h1 class="vbk-hero-judul" id="vbk-h1">VenbeeMail Pro</h1>
+  <div class="vbk-wordmark" data-gunting-wordmark aria-hidden="true"></div>
+  <div class="vbk-hero-isi">
+    <p class="vbk-label"><span lang="id">Untuk developer</span><span lang="en">For developers</span></p>
+    <p class="vbk-hero-k1"><span lang="id">Kotak masuk uji lewat API.</span><span lang="en">A test inbox over an API.</span></p>
+    <p class="vbk-hero-k2"><span lang="id">Buat alamat sekali pakai lewat API, kirim email dari aplikasi Anda ke sana, lalu ambil teks, HTML, dan lampirannya.</span><span lang="en">Create a disposable address through the API, send your app’s email to it, then fetch the text, HTML, and attachments.</span></p>
+    <div class="vbk-hero-tombol">
+      <a class="vbk-tombol vbk-tombol-utama" href="#api"><span lang="id">Lihat API</span><span lang="en">See the API</span></a>
+      <a class="vbk-tombol vbk-tombol-garis" href="#cara-kerja"><span lang="id">Cara kerja</span><span lang="en">How it works</span></a>
+    </div>
+    <p class="vbk-fakta"><span lang="id"><span><b>7</b> endpoint aktif</span><span><b>4</b> domain email</span><span>Tiap alamat punya <b>masa berlaku</b></span></span><span lang="en"><span><b>7</b> live endpoints</span><span><b>4</b> email domains</span><span>Every address has an <b>expiry</b></span></span></p>
+  </div>
+  <p class="vbk-pembuat"><span lang="id">Dari pembuat BanaMail · oleh NongBana</span><span lang="en">From the maker of BanaMail · by NongBana</span></p>
+  <div class="vbk-hero-gulir" aria-hidden="true">
+    <span class="vbk-rute-mini"><span class="vbk-rute-mini-amplop"></span></span>
+    <span class="vbk-hero-gulir-teks"><span lang="id">Gulir untuk mengikuti surat</span><span lang="en">Scroll to follow the letter</span></span>
+  </div>
+</section>
+
+<!-- ============ BAB 1: FILM (mode komik di Fase 2) ============ -->
+<section class="vbk-film" id="film" aria-labelledby="judul-film">
+  <p class="vbk-film-label vbk-mono"><span lang="id">BAB 1 · PERJALANAN SURAT #001</span><span lang="en">CHAPTER 1 · THE JOURNEY OF LETTER #001</span></p>
+  <h2 class="vbk-sr" id="judul-film"><span lang="id">Surat Sampai: perjalanan surat uji #001</span><span lang="en">Delivered: the journey of test letter #001</span></h2>
+  <ol class="vbk-komik">
+    <li><figure><picture><source media="(max-width: 720px)" srcset="aset/vbkong/film/diam/h/1.webp"><img src="aset/vbkong/film/diam/d/1.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"></picture><figcaption><span class="vbk-komik-no" aria-hidden="true">1</span><span lang="id">Panggung menyala. Surat Uji #001 menunggu di podium.</span><span lang="en">The stage lights up. Test Letter #001 waits on the podium.</span></figcaption></figure></li>
+    <li><figure><picture><source media="(max-width: 720px)" srcset="aset/vbkong/film/diam/h/2.webp"><img src="aset/vbkong/film/diam/d/2.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"></picture><figcaption><span class="vbk-komik-no" aria-hidden="true">2</span><span lang="id">Pesawat kertas menyambar suratnya dan membawanya terbang.</span><span lang="en">A paper plane swoops in and carries the letter off.</span></figcaption></figure></li>
+    <li><figure><picture><source media="(max-width: 720px)" srcset="aset/vbkong/film/diam/h/3.webp"><img src="aset/vbkong/film/diam/d/3.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"></picture><figcaption><span class="vbk-komik-no" aria-hidden="true">3</span><span lang="id">Empat monyet mengoper surat. Yang cokelat nyaris menjatuhkannya.</span><span lang="en">Four monkeys pass the letter along. The brown one almost drops it.</span></figcaption></figure></li>
+    <li><figure><picture><source media="(max-width: 720px)" srcset="aset/vbkong/film/diam/h/4.webp"><img src="aset/vbkong/film/diam/d/4.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"></picture><figcaption><span class="vbk-komik-no" aria-hidden="true">4</span><span lang="id">Surat berguling di langit teal.</span><span lang="en">The letter rolls across the teal sky.</span></figcaption></figure></li>
+    <li><figure><picture><source media="(max-width: 720px)" srcset="aset/vbkong/film/diam/h/5.webp"><img src="aset/vbkong/film/diam/d/5.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"></picture><figcaption><span class="vbk-komik-no" aria-hidden="true">5</span><span lang="id">Menukik ke kotak surat yang diangkat maskot pisang.</span><span lang="en">It dives toward the mailbox the banana mascot holds up.</span></figcaption></figure></li>
+    <li><figure><picture><source media="(max-width: 720px)" srcset="aset/vbkong/film/diam/h/6.webp"><img src="aset/vbkong/film/diam/d/6.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"></picture><figcaption><span class="vbk-komik-no" aria-hidden="true">6</span><span lang="id">Masuk lewat celah. Sampai.</span><span lang="en">In through the slot. Delivered.</span></figcaption></figure></li>
+  </ol>
+</section>
+
+<!-- ============ KARTU PENUTUP BAB (TR5) ============ -->
+<section class="vbk-bab" id="bab-2" aria-labelledby="judul-bab-2" tabindex="-1">
+  <svg class="vbk-cap" viewBox="0 0 200 200" role="img" data-label-id="Cap pos: Surat uji nomor 001 diterima di venbeemail.com/pro" data-label-en="Postmark: test letter number 001 received at venbeemail.com/pro" aria-label="Cap pos: Surat uji nomor 001 diterima di venbeemail.com/pro">
+    <defs>
+      <path id="vbk-cap-lingkar" d="M100 100m-75 0a75 75 0 1 1 150 0a75 75 0 1 1-150 0"/>
+      <filter id="vbk-cap-tinta" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.55" result="lubang"/>
+        <feComposite in="SourceGraphic" in2="lubang" operator="in"/>
+      </filter>
+    </defs>
+    <g filter="url(#vbk-cap-tinta)" fill="#e7663c">
+      <circle cx="100" cy="100" r="95" fill="none" stroke="#e7663c" stroke-width="5"/>
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#e7663c" stroke-width="1.6"/>
+      <circle cx="100" cy="100" r="57" fill="none" stroke="#e7663c" stroke-width="3"/>
+      <text class="vbk-cap-lingkar"><textPath href="#vbk-cap-lingkar" startOffset="2%">VENBEEMAIL.COM/PRO ✦ VENBEEMAIL.COM/PRO ✦</textPath></text>
+      <text class="vbk-cap-tengah" x="100" y="117" text-anchor="middle">#001</text>
+    </g>
+  </svg>
+  <p class="vbk-bab-mono vbk-mono"><span lang="id">SURAT UJI #001 · DITERIMA</span><span lang="en">TEST LETTER #001 · RECEIVED</span></p>
+  <h2 class="vbk-bab-label vbk-mono" id="judul-bab-2"><span lang="id">BAB 2 · CARA PAKAINYA</span><span lang="en">CHAPTER 2 · HOW TO USE IT</span></h2>
+</section>
+
+<!-- ============ CARA KERJA (CK1) ============ -->
+<section class="vbk-bagian vbk-cara" id="cara-kerja" aria-labelledby="judul-cara">
+  <span id="cara" class="vbk-jangkar"></span>
+  <div class="vbk-lebar">
+    <p class="vbk-label"><span lang="id">Cara kerja</span><span lang="en">How it works</span></p>
+    <h2 class="vbk-judul vbk-judul-kiri" id="judul-cara" data-gunting data-tekstur="kardus"><span lang="id">Cara kerja</span><span lang="en">How it works</span></h2>
+    <p class="vbk-pengantar"><span lang="id">Empat langkah, dari alamat baru sampai bersih lagi</span><span lang="en">Four steps, from a fresh address to a clean slate</span></p>
+    <div class="vbk-kegunaan">
+      <span class="vbk-label"><span lang="id">Dipakai untuk menguji</span><span lang="en">Used to test</span></span>
+      <ul>
+        <li><span lang="id">Email verifikasi pendaftaran</span><span lang="en">Sign-up verification emails</span></li>
+        <li><span lang="id">Tautan reset kata sandi</span><span lang="en">Password reset links</span></li>
+        <li><span lang="id">Notifikasi berlampiran</span><span lang="en">Notifications with attachments</span></li>
+      </ul>
+    </div>
+    <ol class="vbk-kartu-daftar">
+      <li class="vbk-kartu" style="--miring:-2deg">
+        <img class="vbk-kartu-monyet" src="aset/vbkong/gambar/monyet-merah-512.webp" alt="" width="512" height="529" loading="lazy" decoding="async">
+        <span class="vbk-kartu-no" data-gunting-angka="01" aria-hidden="true">01</span>
+        <h3><span lang="id">Buat alamat</span><span lang="en">Create an address</span></h3>
+        <p><span lang="id">Panggil <code>POST /api/addresses</code>. Awalan dan domain boleh Anda tentukan, boleh juga dikosongkan.</span><span lang="en">Call <code>POST /api/addresses</code>. Set a prefix and a domain, or leave both out.</span></p>
+        <p class="vbk-chip-baris"><a class="vbk-chip" href="#ep-post-addresses"><b class="vbk-m-post">POST</b> /api/addresses</a></p>
+      </li>
+      <li class="vbk-kartu" style="--miring:1.5deg">
+        <img class="vbk-kartu-monyet" src="aset/vbkong/gambar/monyet-biru-512.webp" alt="" width="512" height="641" loading="lazy" decoding="async">
+        <span class="vbk-kartu-no" data-gunting-angka="02" aria-hidden="true">02</span>
+        <h3><span lang="id">Kirim email uji</span><span lang="en">Send a test email</span></h3>
+        <p><span lang="id">Jalankan alur di aplikasi Anda dan arahkan emailnya ke alamat tadi.</span><span lang="en">Run the flow in your app and point its email at that address.</span></p>
+      </li>
+      <li class="vbk-kartu" style="--miring:-1deg">
+        <img class="vbk-kartu-monyet" src="aset/vbkong/gambar/monyet-cokelat-512.webp" alt="" width="512" height="553" loading="lazy" decoding="async">
+        <span class="vbk-kartu-no" data-gunting-angka="03" aria-hidden="true">03</span>
+        <h3><span lang="id">Baca hasilnya</span><span lang="en">Read the result</span></h3>
+        <p><span lang="id"><code>GET /api/mailbox</code> menampilkan isi kotak. <code>GET /api/messages/:id</code> memberi teks dan HTML satu email.</span><span lang="en"><code>GET /api/mailbox</code> lists what arrived. <code>GET /api/messages/:id</code> returns one email’s text and HTML.</span></p>
+        <p class="vbk-chip-baris"><a class="vbk-chip" href="#ep-get-mailbox"><b class="vbk-m-get">GET</b> /api/mailbox</a><a class="vbk-chip" href="#ep-get-messages-id"><b class="vbk-m-get">GET</b> /api/messages/:id</a></p>
+      </li>
+      <li class="vbk-kartu" style="--miring:2deg">
+        <img class="vbk-kartu-monyet" src="aset/vbkong/gambar/monyet-pirang-512.webp" alt="" width="512" height="558" loading="lazy" decoding="async">
+        <span class="vbk-kartu-no" data-gunting-angka="04" aria-hidden="true">04</span>
+        <h3><span lang="id">Hapus alamat</span><span lang="en">Delete the address</span></h3>
+        <p><span lang="id"><code>DELETE /api/addresses/me</code> menghapus alamat beserta semua isinya.</span><span lang="en"><code>DELETE /api/addresses/me</code> removes the address and everything in it.</span></p>
+        <p class="vbk-chip-baris"><a class="vbk-chip" href="#ep-delete-addresses-me"><b class="vbk-m-delete">DELETE</b> /api/addresses/me</a></p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ API (API1 + AW1 + AW3) ============ -->
+<section class="vbk-bagian vbk-api vbk-berlatar" id="api" aria-labelledby="judul-api">
+  <div class="vbk-lebar vbk-api-grid">
+    <div class="vbk-api-kiri">
+      <p class="vbk-label">API</p>
+      <h2 class="vbk-judul vbk-judul-kanan" id="judul-api" data-gunting data-tekstur="flanel">API</h2>
+      <p class="vbk-subjudul"><span lang="id">Buat alamat, lalu baca kotak masuknya</span><span lang="en">Create an address, then read its mailbox</span></p>
+      <p class="vbk-catatan"><span lang="id">Field <code>prefix</code> dan <code>domain</code> sama-sama opsional. Token dari jawaban pertama dipakai di semua panggilan berikutnya.</span><span lang="en">The <code>prefix</code> and <code>domain</code> fields are both optional. The token from the first response goes on every later call.</span></p>
+
+      <div class="vbk-awalan" id="vbk-awalan">
+        <label class="vbk-awalan-label" for="vbk-awalan-isi"><span lang="id">Coba awalan</span><span lang="en">Try a prefix</span></label>
+        <input class="vbk-awalan-isi" id="vbk-awalan-isi" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="40" inputmode="text" aria-describedby="vbk-awalan-status vbk-aturan">
+        <div class="vbk-kotak20" aria-hidden="true" data-kotak20></div>
+        <p class="vbk-awalan-status" id="vbk-awalan-status" aria-live="polite" data-awalan-status>
+          <span lang="id">Ketik 3 sampai 20 karakter.</span><span lang="en">Type 3 to 20 characters.</span>
+        </p>
+        <div class="vbk-pratinjau">
+          <label class="vbk-label" for="vbk-domain-pilih"><span lang="id">Domain</span><span lang="en">Domain</span></label>
+          <select id="vbk-domain-pilih" class="vbk-domain-pilih" data-domain-pilih>
+            <option value="venbeemail.com">venbeemail.com</option>
+            <option value="kotak.venbeemail.com" selected>kotak.venbeemail.com</option>
+            <option value="surat.venbeemail.com">surat.venbeemail.com</option>
+            <option value="pos.venbeemail.com">pos.venbeemail.com</option>
+          </select>
+          <p class="vbk-pratinjau-alamat vbk-mono" data-pratinjau-alamat><span data-isi-awalan>qa-signup</span>.<span class="vbk-acak">&lt;acak&gt;</span>@<span data-isi-domain>kotak.venbeemail.com</span></p>
+          <p class="vbk-pratinjau-catatan"><span lang="id">Pratinjau, belum membuat alamat.</span><span lang="en">Preview only. No address is created.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="vbk-api-kanan">
+      <div class="vbk-tiket">
+        <div class="vbk-tiket-sobek" aria-hidden="true"><span lang="id">TIKET API · No. 001</span><span lang="en">API TICKET · No. 001</span></div>
+        <div class="vbk-tab-daftar" role="tablist" data-label-id="Contoh curl" data-label-en="Curl examples" aria-label="Contoh curl">
+          <button type="button" role="tab" id="vbk-tab-1" aria-controls="vbk-panel-1" aria-selected="true"><span lang="id">Contoh 1</span><span lang="en">Example 1</span> <small><span lang="id">Buat alamat</span><span lang="en">Create an address</span></small></button>
+          <button type="button" role="tab" id="vbk-tab-2" aria-controls="vbk-panel-2" aria-selected="false" tabindex="-1"><span lang="id">Contoh 2</span><span lang="en">Example 2</span> <small><span lang="id">Baca kotak masuk</span><span lang="en">Read the mailbox</span></small></button>
+        </div>
+        <div class="vbk-tab-panel" role="tabpanel" id="vbk-panel-1" aria-labelledby="vbk-tab-1">
+          <div class="vbk-kode">
+            <pre tabindex="0" data-label-id="Contoh curl 1" data-label-en="Curl example 1" aria-label="Contoh curl 1"><code id="vbk-curl-1">curl -X POST https://venbeemail.com/api/addresses \
+  -H "Content-Type: application/json" \
+  -d '{"prefix": "qa-signup", "domain": "kotak.venbeemail.com"}'</code></pre>
+            <button type="button" class="vbk-salin" data-salin="#vbk-curl-1" data-label-id="Salin contoh 1" data-label-en="Copy example 1" aria-label="Salin contoh 1"><span class="vbk-salin-teks"><span lang="id">Salin</span><span lang="en">Copy</span></span><span class="vbk-salin-sudah"><span lang="id">Tersalin</span><span lang="en">Copied</span></span></button>
+          </div>
+        </div>
+        <div class="vbk-tab-panel" role="tabpanel" id="vbk-panel-2" aria-labelledby="vbk-tab-2">
+          <div class="vbk-kode">
+            <pre tabindex="0" data-label-id="Contoh curl 2" data-label-en="Curl example 2" aria-label="Contoh curl 2"><code id="vbk-curl-2">curl https://venbeemail.com/api/mailbox \
+  -H "Authorization: Bearer $TOKEN"</code></pre>
+            <button type="button" class="vbk-salin" data-salin="#vbk-curl-2" data-label-id="Salin contoh 2" data-label-en="Copy example 2" aria-label="Salin contoh 2"><span class="vbk-salin-teks"><span lang="id">Salin</span><span lang="en">Copy</span></span><span class="vbk-salin-sudah"><span lang="id">Tersalin</span><span lang="en">Copied</span></span></button>
+          </div>
+          <p class="vbk-tiket-catatan"><span lang="id">Isi <code>$TOKEN</code> dengan nilai <code>token</code> dari jawaban pertama.</span><span lang="en">Replace <code>$TOKEN</code> with the <code>token</code> value from the first response.</span></p>
+        </div>
+      </div>
+      <p class="vbk-aturan" id="vbk-aturan"><span lang="id">Awalan berisi 3 sampai 20 karakter dari huruf, angka, titik, garis bawah, dan tanda hubung. Karakter pertama dan terakhir harus huruf atau angka, dan dua tanda tidak boleh berdampingan. Server menambahkan akhiran acak, sehingga <code>qa-signup</code> menjadi alamat seperti <code class="vbk-panjang">qa-signup.62yt8v@kotak.venbeemail.com</code>.</span><span lang="en">A prefix is 3 to 20 characters of letters, digits, dots, underscores, and hyphens. It must start and end with a letter or digit, and two symbols cannot sit side by side. The server adds a random suffix, so <code>qa-signup</code> becomes an address like <code class="vbk-panjang">qa-signup.62yt8v@kotak.venbeemail.com</code>.</span></p>
+
+      <div class="vbk-resi">
+        <div class="vbk-resi-kepala">
+          <h3><span lang="id">Resi jawaban</span><span lang="en">Response receipt</span></h3>
+          <span class="vbk-lencana-contoh"><span lang="id">contoh</span><span lang="en">example</span></span>
+        </div>
+        <p class="vbk-resi-sub vbk-label"><span lang="id">Jawaban berisi</span><span lang="en">The response contains</span></p>
+        <table class="vbk-resi-tabel">
+          <thead><tr><th scope="col">Field</th><th scope="col"><span lang="id">Nilai</span><span lang="en">Value</span></th><th scope="col"><span lang="id">Keterangan</span><span lang="en">Description</span></th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>address</code></th><td><code data-resi="address">qa-signup.62yt8v@kotak.venbeemail.com</code></td><td><span lang="id">Alamat email lengkap</span><span lang="en">The full email address</span></td></tr>
+            <tr><th scope="row"><code>local</code></th><td><code data-resi="local">qa-signup.62yt8v</code></td><td><span lang="id">Bagian sebelum tanda @</span><span lang="en">The part before the @ sign</span></td></tr>
+            <tr><th scope="row"><code>domain</code></th><td><code data-resi="domain">kotak.venbeemail.com</code></td><td><span lang="id">Domain yang dipakai</span><span lang="en">The domain in use</span></td></tr>
+            <tr><th scope="row"><code>expiresAt</code></th><td><code><span lang="id">&lt;milidetik epoch&gt;</span><span lang="en">&lt;epoch milliseconds&gt;</span></code></td><td><span lang="id">Kapan alamat kedaluwarsa, dalam milidetik epoch</span><span lang="en">When the address expires, in epoch milliseconds</span></td></tr>
+            <tr><th scope="row"><code>token</code></th><td><code>&lt;token&gt;</code></td><td><span lang="id">Token untuk panggilan berikutnya</span><span lang="en">The token for later calls</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEMUA ENDPOINT (EP1) ============ -->
+<section class="vbk-bagian vbk-endpoint vbk-berlatar" id="endpoint" aria-labelledby="judul-endpoint">
+  <div class="vbk-lebar">
+    <p class="vbk-label"><span lang="id">Daftar lengkap</span><span lang="en">Full list</span></p>
+    <h2 class="vbk-judul vbk-judul-kiri" id="judul-endpoint" data-gunting data-tekstur="kertas"><span lang="id">Semua endpoint</span><span lang="en">Every endpoint</span></h2>
+    <p class="vbk-catatan"><span lang="id">Selain <code>POST /api/addresses</code> dan <code>GET /api/health</code>, setiap panggilan wajib membawa header <code>Authorization: Bearer &lt;token&gt;</code>.</span><span lang="en">Apart from <code>POST /api/addresses</code> and <code>GET /api/health</code>, every call must carry the header <code>Authorization: Bearer &lt;token&gt;</code>.</span></p>
+    <div class="vbk-papan-bingkai">
+      <p class="vbk-papan-judul vbk-mono" aria-hidden="true"><span lang="id">Keberangkatan · /api</span><span lang="en">Departures · /api</span></p>
+      <div class="vbk-papan-kolom vbk-mono" aria-hidden="true"><span><span lang="id">Metode</span><span lang="en">Method</span></span><span><span lang="id">Jalur</span><span lang="en">Path</span></span><span><span lang="id">Guna</span><span lang="en">Purpose</span></span></div>
+      <ol class="vbk-papan">
+        <li id="ep-post-addresses"><span class="vbk-keping vbk-metode vbk-m-post">POST</span><code class="vbk-keping vbk-jalur">/api/addresses</code><p class="vbk-keping vbk-guna"><span lang="id">Buat alamat baru. Mengembalikan alamat, masa berlaku, dan token.</span><span lang="en">Create a new address. Returns the address, its expiry, and a token.</span></p></li>
+        <li id="ep-get-mailbox"><span class="vbk-keping vbk-metode vbk-m-get">GET</span><code class="vbk-keping vbk-jalur">/api/mailbox</code><p class="vbk-keping vbk-guna"><span lang="id">Daftar email di <code>inbox</code>, <code>spam</code>, dan <code>sent</code>, serta masa berlaku alamat.</span><span lang="en">Lists the emails in <code>inbox</code>, <code>spam</code>, and <code>sent</code>, plus the address expiry.</span></p></li>
+        <li id="ep-get-messages-id"><span class="vbk-keping vbk-metode vbk-m-get">GET</span><code class="vbk-keping vbk-jalur">/api/messages/<i>:id</i></code><p class="vbk-keping vbk-guna"><span lang="id">Satu email lengkap: metadata, teks, dan HTML.</span><span lang="en">One full email: metadata, text, and HTML.</span></p></li>
+        <li id="ep-patch-messages-id"><span class="vbk-keping vbk-metode vbk-m-patch">PATCH</span><code class="vbk-keping vbk-jalur">/api/messages/<i>:id</i></code><p class="vbk-keping vbk-guna"><span lang="id">Pindahkan email antara inbox dan spam lewat field <code>folder</code>.</span><span lang="en">Move an email between inbox and spam with the <code>folder</code> field.</span></p></li>
+        <li id="ep-get-attachments"><span class="vbk-keping vbk-metode vbk-m-get">GET</span><code class="vbk-keping vbk-jalur">/api/messages/<i>:id</i>/attachments/<i>:n</i></code><p class="vbk-keping vbk-guna"><span lang="id">Unduh satu lampiran dari sebuah email.</span><span lang="en">Download one attachment from an email.</span></p></li>
+        <li id="ep-delete-addresses-me"><span class="vbk-keping vbk-metode vbk-m-delete">DELETE</span><code class="vbk-keping vbk-jalur">/api/addresses/me</code><p class="vbk-keping vbk-guna"><span lang="id">Hapus alamat beserta semua isinya.</span><span lang="en">Delete the address and everything in it.</span></p></li>
+        <li id="ep-get-health"><span class="vbk-keping vbk-metode vbk-m-get">GET</span><code class="vbk-keping vbk-jalur">/api/health</code><p class="vbk-keping vbk-guna"><span lang="id">Periksa apakah layanan sedang berjalan.</span><span lang="en">Check whether the service is running.</span></p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOMAIN (DM1) ============ -->
+<section class="vbk-bagian vbk-domain vbk-berlatar" id="domain" aria-labelledby="judul-domain">
+  <div class="vbk-lebar">
+    <p class="vbk-label"><span lang="id">Domain</span><span lang="en">Domains</span></p>
+    <h2 class="vbk-judul vbk-judul-kanan" id="judul-domain" data-gunting data-tekstur="bunga"><span lang="id">Domain</span><span lang="en">Domains</span></h2>
+    <p class="vbk-subjudul"><span lang="id">Empat domain, satu API</span><span lang="en">Four domains, one API</span></p>
+    <p class="vbk-catatan"><span lang="id">Tulis nama domainnya di field <code>domain</code> saat membuat alamat.</span><span lang="en">Pass the domain name in the <code>domain</code> field when you create an address.</span></p>
+    <div class="vbk-domain-panggung">
+      <div class="vbk-domain-maskot" aria-hidden="true">
+        <img src="aset/vbkong/gambar/maskot-512.webp" alt="" width="512" height="849" loading="lazy" decoding="async">
+        <span class="vbk-domain-podium"></span>
+      </div>
+      <ul class="vbk-perangko-daftar">
+        <li><button type="button" class="vbk-perangko" data-domain="venbeemail.com" aria-pressed="false" data-label-id="Salin domain venbeemail.com" data-label-en="Copy domain venbeemail.com" aria-label="Salin domain venbeemail.com" style="--miring:-3deg"><img src="aset/vbkong/gambar/perangko-monyet-merah.webp" alt="" width="160" height="160" loading="lazy"><code>venbeemail.<wbr>com</code><small><span lang="id">utama</span><span lang="en">main</span></small><span class="vbk-perangko-no" aria-hidden="true">1</span><span class="vbk-perangko-pakai"><span lang="id">Dipakai di pratinjau</span><span lang="en">Used in the preview</span></span></button></li>
+        <li><button type="button" class="vbk-perangko" data-domain="kotak.venbeemail.com" aria-pressed="true" data-label-id="Salin domain kotak.venbeemail.com" data-label-en="Copy domain kotak.venbeemail.com" aria-label="Salin domain kotak.venbeemail.com" style="--miring:4deg"><img src="aset/vbkong/gambar/perangko-monyet-biru.webp" alt="" width="160" height="160" loading="lazy"><code>kotak.<wbr>venbeemail.<wbr>com</code><small><span lang="id">kotak</span><span lang="en">kotak = box</span></small><span class="vbk-perangko-no" aria-hidden="true">2</span><span class="vbk-perangko-pakai"><span lang="id">Dipakai di pratinjau</span><span lang="en">Used in the preview</span></span></button></li>
+        <li><button type="button" class="vbk-perangko" data-domain="surat.venbeemail.com" aria-pressed="false" data-label-id="Salin domain surat.venbeemail.com" data-label-en="Copy domain surat.venbeemail.com" aria-label="Salin domain surat.venbeemail.com" style="--miring:-4deg"><img src="aset/vbkong/gambar/perangko-monyet-cokelat.webp" alt="" width="160" height="160" loading="lazy"><code>surat.<wbr>venbeemail.<wbr>com</code><small><span lang="id">surat</span><span lang="en">surat = letter</span></small><span class="vbk-perangko-no" aria-hidden="true">3</span><span class="vbk-perangko-pakai"><span lang="id">Dipakai di pratinjau</span><span lang="en">Used in the preview</span></span></button></li>
+        <li><button type="button" class="vbk-perangko" data-domain="pos.venbeemail.com" aria-pressed="false" data-label-id="Salin domain pos.venbeemail.com" data-label-en="Copy domain pos.venbeemail.com" aria-label="Salin domain pos.venbeemail.com" style="--miring:3deg"><img src="aset/vbkong/gambar/perangko-monyet-pirang.webp" alt="" width="160" height="160" loading="lazy"><code>pos.<wbr>venbeemail.<wbr>com</code><small><span lang="id">pos</span><span lang="en">pos = post</span></small><span class="vbk-perangko-no" aria-hidden="true">4</span><span class="vbk-perangko-pakai"><span lang="id">Dipakai di pratinjau</span><span lang="en">Used in the preview</span></span></button></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TENTANG (TT1) ============ -->
+<section class="vbk-bagian vbk-tentang" id="tentang" aria-labelledby="judul-tentang">
+  <div class="vbk-lebar vbk-tentang-grid">
+    <div class="vbk-tentang-kiri">
+      <figure class="vbk-polaroid">
+        <img src="aset/vbkong/gambar/maskot-512.webp" width="512" height="849" loading="lazy" decoding="async" alt="Maskot pisang zombie VenbeeMail mengangkat kotak surat" data-alt-id="Maskot pisang zombie VenbeeMail mengangkat kotak surat" data-alt-en="The VenbeeMail zombie banana mascot holding up a mailbox">
+        <figcaption><span lang="id">Penjaga kotak surat: si pisang zombie.</span><span lang="en">Keeper of the mailbox: the zombie banana.</span></figcaption>
+      </figure>
+      <a class="vbk-kartu-banamail" href="/"><span lang="id">Butuh email sementara saja? Pakai BanaMail.</span><span lang="en">Just need a temporary email? Use BanaMail.</span></a>
+    </div>
+    <div class="vbk-tentang-kanan">
+      <p class="vbk-label"><span lang="id">Tentang</span><span lang="en">About</span></p>
+      <h2 class="vbk-judul vbk-judul-kiri" id="judul-tentang" data-gunting data-tekstur="kertas"><span lang="id">Di balik panggung</span><span lang="en">Behind the stage</span></h2>
+      <div class="vbk-catatan-kertas">
+        <p><span lang="id">VenbeeMail Pro dibuat oleh NongBana, pembuat BanaMail.</span><span lang="en">VenbeeMail Pro is made by NongBana, the maker of BanaMail.</span></p>
+        <p><span lang="id">BanaMail adalah layanan email sementara dari VenbeeMail. VenbeeMail Pro adalah versi untuk developer.</span><span lang="en">BanaMail is VenbeeMail's temporary email service. VenbeeMail Pro is the version for developers.</span></p>
+        <p><span lang="id">Dibuat untuk developer dan penguji yang butuh alamat email sungguhan di dalam tes: pendaftaran akun, kode OTP, tautan verifikasi, dan lampiran.</span><span lang="en">Made for developers and testers who need a real email address inside their tests: sign-ups, OTP codes, verification links and attachments.</span></p>
+        <p class="vbk-cerita" data-isian="cerita"><span lang="id">[ISI CERITA ID]</span><span lang="en">[ISI CERITA EN]</span></p>
+        <dl class="vbk-fakta-daftar">
+          <div><dt><span lang="id">Pembuat</span><span lang="en">Maker</span></dt><dd>NongBana</dd></div>
+          <div data-isian="tahun"><dt><span lang="id">Mulai dibuat</span><span lang="en">Started</span></dt><dd>[ISI TAHUN]</dd></div>
+          <div data-isian="kota"><dt><span lang="id">Dari</span><span lang="en">Based in</span></dt><dd>[ISI KOTA], Indonesia</dd></div>
+          <div><dt><span lang="id">Kontak</span><span lang="en">Contact</span></dt><dd><a href="mailto:admin@venbeemail.com">admin@venbeemail.com</a></dd></div>
+          <div><dt><span lang="id">Layanan lain</span><span lang="en">Also by the maker</span></dt><dd><span lang="id">BanaMail, email sementara</span><span lang="en">BanaMail, temporary email</span></dd></div>
+        </dl>
+        <div class="vbk-fitur-claude" data-isian="fitur-claude">
+          <span class="vbk-lencana-bangun"><span lang="id">Sedang dibangun</span><span lang="en">In progress</span></span>
+          <p><span lang="id">[ISI FITUR CLAUDE ID]</span><span lang="en">[ISI FITUR CLAUDE EN]</span></p>
+        </div>
+        <p class="vbk-kejujuran"><span lang="id">Semua contoh di halaman ini ditandai "contoh". Halaman ini tidak memuat testimoni atau angka pengguna.</span><span lang="en">Every sample on this page is marked "example". This page has no testimonials or user numbers.</span></p>
+        <p><span lang="id">Ada pertanyaan, laporan masalah, atau ide? Tulis ke admin@venbeemail.com.</span><span lang="en">Questions, bug reports or ideas? Write to admin@venbeemail.com.</span></p>
+        <div class="vbk-tentang-tombol">
+          <a class="vbk-tombol vbk-tombol-utama" href="mailto:admin@venbeemail.com"><span lang="id">Kirim email</span><span lang="en">Send an email</span></a>
+          <button type="button" class="vbk-tombol vbk-tombol-garis vbk-salin-tombol" data-salin-teks="admin@venbeemail.com"><span class="vbk-salin-teks"><span lang="id">Salin alamat email</span><span lang="en">Copy email address</span></span><span class="vbk-salin-sudah"><span lang="id">Tersalin</span><span lang="en">Copied</span></span></button>
+          <a class="vbk-tombol vbk-tombol-garis" href="/"><span lang="id">Buka BanaMail</span><span lang="en">Open BanaMail</span></a>
+        </div>
+        <p class="vbk-ttd">NongBana</p>
+        <p class="vbk-ttd-kecil vbk-mono" data-isian="kota-atau-tahun"><span data-isian="kota">[ISI KOTA]</span><span data-isian="kota-dan-tahun"> · </span><span data-isian="tahun">[ISI TAHUN]</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PENUTUP (PN1 + PN2) ============ -->
+<section class="vbk-penutup" id="penutup" aria-labelledby="judul-penutup">
+  <div class="vbk-penutup-latar" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 720px)" srcset="aset/vbkong/video/sorot-poster-540.webp">
+      <img src="aset/vbkong/video/sorot-poster-1280.webp" alt="" width="1280" height="720" loading="lazy" decoding="async">
+    </picture>
+    <span class="vbk-penutup-cincin"></span>
+  </div>
+  <h2 class="vbk-sr" id="judul-penutup"><span lang="id">Kirim, tangkap, baca, buang</span><span lang="en">Send, catch, read, toss</span></h2>
+  <ol class="vbk-manifesto vbk-lebar">
+    <li class="vbk-manifesto-baris vbk-judul-kiri"><span class="vbk-manifesto-kata" data-gunting-kata data-tekstur="flanel" aria-hidden="true"><span lang="id">KIRIM.</span><span lang="en">SEND.</span></span><span class="vbk-chip vbk-chip-diam"><span lang="id">dari aplikasimu</span><span lang="en">from your app</span></span></li>
+    <li class="vbk-manifesto-baris vbk-judul-kanan"><span class="vbk-manifesto-kata" data-gunting-kata data-tekstur="kardus" aria-hidden="true"><span lang="id">TANGKAP.</span><span lang="en">CATCH.</span></span><code class="vbk-chip vbk-chip-diam">GET /api/mailbox</code></li>
+    <li class="vbk-manifesto-baris vbk-judul-kiri"><span class="vbk-manifesto-kata" data-gunting-kata data-tekstur="kertas" aria-hidden="true"><span lang="id">BACA.</span><span lang="en">READ.</span></span><code class="vbk-chip vbk-chip-diam">GET /api/messages/:id</code></li>
+    <li class="vbk-manifesto-baris vbk-judul-kanan"><span class="vbk-manifesto-kata" data-gunting-kata data-tekstur="bunga" aria-hidden="true"><span lang="id">BUANG.</span><span lang="en">TOSS.</span></span><code class="vbk-chip vbk-chip-diam">DELETE /api/addresses/me</code></li>
+  </ol>
+  <div class="vbk-penutup-aksi vbk-lebar">
+    <p class="vbk-penutup-kalimat"><span lang="id">Mulai dari satu alamat.</span><span lang="en">Start with one address.</span></p>
+    <div class="vbk-penutup-tombol">
+      <a class="vbk-tombol vbk-tombol-utama" href="#api"><span lang="id">Coba API</span><span lang="en">Try the API</span></a>
+      <a class="vbk-tombol vbk-tombol-garis" href="#endpoint"><span lang="id">Lihat endpoint</span><span lang="en">See endpoints</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="vbk-kaki-semua">
+<!-- ============ FOOTER MASKOT (FT1), komposisi akhir ============ -->
+<section class="vbk-ka" id="kaki" aria-labelledby="judul-kaki">
+  <h2 class="vbk-sr" id="judul-kaki"><span lang="id">Kotak masuk untuk kodemu</span><span lang="en">An inbox for your code</span></h2>
+  <div class="vbk-ka-panggung">
+    <div class="vbk-ka-set vbk-ka-set-belakang" aria-hidden="true">
+      <picture>
+        <source media="(max-width: 720px)" srcset="aset/vbkong/video/sorot-poster-540.webp">
+        <img class="vbk-ka-poster" src="aset/vbkong/video/sorot-poster-1280.webp" alt="" width="1280" height="720" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <div class="vbk-ka-padam" aria-hidden="true"></div>
+    <div class="vbk-ka-sorot" aria-hidden="true"></div>
+    <p class="vbk-ka-satu"><span lang="id">Satu surat lagi.</span><span lang="en">One more letter.</span></p>
+    <div class="vbk-ka-tulisan" data-gunting-slogan aria-hidden="true">
+      <span class="vbk-ka-tulisan-cadangan"><span lang="id">KOTAK MASUK UNTUK KODEMU</span><span lang="en">AN INBOX FOR YOUR CODE</span></span>
+    </div>
+    <div class="vbk-ka-set vbk-ka-set-depan">
+      <img class="vbk-ka-lubang" src="aset/vbkong/gambar/podium-lubang.svg" alt="" aria-hidden="true">
+      <span class="vbk-ka-sinar" aria-hidden="true"></span>
+      <span class="vbk-ka-kontak" aria-hidden="true"></span>
+      <div class="vbk-ka-lift" aria-hidden="true">
+        <div class="vbk-maskot">
+          <img class="vbk-maskot-bayang" src="aset/vbkong/gambar/maskot-bayang-512.webp" srcset="aset/vbkong/gambar/maskot-bayang-512.webp 583w, aset/vbkong/gambar/maskot-bayang.webp 656w" sizes="(max-width: 720px) 40vw, 30vw" alt="" loading="lazy" decoding="async">
+          <img class="vbk-maskot-badan" src="aset/vbkong/gambar/maskot-badan-512.webp" srcset="aset/vbkong/gambar/maskot-badan-512.webp 512w, aset/vbkong/gambar/maskot-badan.webp 576w" sizes="(max-width: 720px) 40vw, 30vw" alt="" width="576" height="955" loading="lazy" decoding="async">
+          <div class="vbk-maskot-kotak">
+            <div class="vbk-ka-amplop-wadah"><div class="vbk-ka-amplop"><img src="aset/vbkong/gambar/amplop.webp" alt="" width="320" height="230" loading="lazy" decoding="async"><span class="vbk-ka-label" data-label-amplop hidden><span lang="id">untuk: <b data-isi-alamat></b> (contoh)</span><span lang="en">to: <b data-isi-alamat></b> (example)</span></span></div></div>
+            <img src="aset/vbkong/gambar/maskot-kotak-panjang-512.webp" srcset="aset/vbkong/gambar/maskot-kotak-panjang-512.webp 512w, aset/vbkong/gambar/maskot-kotak-panjang.webp 576w" sizes="(max-width: 720px) 40vw, 30vw" alt="" width="576" height="304" loading="lazy" decoding="async">
+          </div>
+          <svg class="vbk-maskot-mata" viewBox="0 0 576 955" focusable="false" aria-hidden="true"><ellipse class="vbk-kelopak" cx="256" cy="320" rx="35" ry="41"/><ellipse class="vbk-kelopak" cx="339.5" cy="331.5" rx="28" ry="32"/></svg>
+        </div>
+      </div>
+      <img class="vbk-ka-bibir" src="aset/vbkong/gambar/podium-bibir-1032.webp" srcset="aset/vbkong/gambar/podium-bibir-1032.webp 386w, aset/vbkong/gambar/podium-bibir.webp 515w" sizes="(max-width: 720px) 75vw, 37vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <button type="button" class="vbk-ka-ketuk" data-label-id="Ketuk kotak surat" data-label-en="Tap the mailbox" aria-label="Ketuk kotak surat"></button>
+    </div>
+    <p class="vbk-ka-balas" data-ka-balas aria-live="polite" hidden><span lang="id">Surat sudah sampai.</span><span lang="en">The letter has arrived.</span></p>
+    <div class="vbk-rute vbk-rute-penuh" role="img" data-label-id="Kemajuan perjalanan surat: sampai" data-label-en="Letter's journey progress: delivered" aria-label="Kemajuan perjalanan surat: sampai">
+      <ol aria-hidden="true">
+        <li class="vbk-rute-lewat"><span lang="id">Dikirim</span><span lang="en">Sent</span></li>
+        <li class="vbk-rute-lewat"><span lang="id">Dioper</span><span lang="en">Passed</span></li>
+        <li class="vbk-rute-lewat"><span lang="id">Di udara</span><span lang="en">In the air</span></li>
+        <li class="vbk-rute-lewat"><span lang="id">Sampai</span><span lang="en">Delivered</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KAKI HALAMAN (KT3) ============ -->
+<div class="vbk-kaki-panel">
+  <nav class="vbk-lebar vbk-kaki-grid" data-label-id="Tautan kaki halaman" data-label-en="Footer links" aria-label="Tautan kaki halaman">
+    <div class="vbk-kaki-merek">
+      <p class="vbk-kaki-logo"><span data-gunting-logo>VenbeeMail</span> <span class="vbk-lencana">PRO</span></p>
+      <p><span lang="id">VenbeeMail Pro · Kotak masuk uji lewat API</span><span lang="en">VenbeeMail Pro · A test inbox over an API</span></p>
+      <p><span lang="id">Dibuat oleh NongBana</span><span lang="en">Made by NongBana</span></p>
+      <p class="vbk-kaki-slogan"><span lang="id">Kotak masuk untuk kodemu.</span><span lang="en">An inbox for your code.</span></p>
+    </div>
+    <div>
+      <h2 class="vbk-kaki-judul"><span lang="id">Halaman ini</span><span lang="en">On this page</span></h2>
+      <ul>
+        <li><a href="#cara-kerja"><span lang="id">Cara kerja</span><span lang="en">How it works</span></a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="#endpoint"><span lang="id">Semua endpoint</span><span lang="en">All endpoints</span></a></li>
+        <li><a href="#domain"><span lang="id">Domain</span><span lang="en">Domains</span></a></li>
+        <li><a href="#tentang"><span lang="id">Tentang</span><span lang="en">About</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="vbk-kaki-judul">VenbeeMail</h2>
+      <ul>
+        <li><a href="/"><span lang="id">BanaMail · email sementara</span><span lang="en">BanaMail · temporary email</span></a></li>
+        <li><a href="/pro/">VenbeeMail Pro</a></li>
+        <li><a href="/pro/#tentang"><span lang="id">Tentang</span><span lang="en">About</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="vbk-kaki-judul"><span lang="id">Kontak</span><span lang="en">Contact</span></h2>
+      <p class="vbk-kaki-surel"><a href="mailto:admin@venbeemail.com">admin@venbeemail.com</a>
+        <button type="button" class="vbk-salin vbk-salin-kecil" data-salin-teks="admin@venbeemail.com" data-label-id="Salin admin@venbeemail.com" data-label-en="Copy admin@venbeemail.com" aria-label="Salin admin@venbeemail.com"><span class="vbk-salin-teks"><span lang="id">Salin</span><span lang="en">Copy</span></span><span class="vbk-salin-sudah"><span lang="id">Tersalin</span><span lang="en">Copied</span></span></button></p>
+      <p class="vbk-status-api" data-status-api hidden><span class="vbk-titik" aria-hidden="true"></span><span lang="id">API menjawab · diperiksa saat halaman dibuka</span><span lang="en">API responding · checked when this page opened</span></p>
+    </div>
+  </nav>
+  <div class="vbk-lebar vbk-kaki-bawah">
+    <div class="vbk-sosial" data-isian="sosial">
+      <h2 class="vbk-sr"><span lang="id">Akun sosial media</span><span lang="en">Social media accounts</span></h2>
+      <ul>
+        <li data-isian="sosial-x"><a class="vbk-stiker" href="[ISI SOSIAL X]" rel="me noopener" target="_blank" data-label-id="X: [ISI AKUN X] (buka tab baru)" data-label-en="X: [ISI AKUN X] (opens in a new tab)" aria-label="X: [ISI AKUN X] (buka tab baru)" style="--miring:-7deg"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a></li>
+        <li data-isian="sosial-threads"><a class="vbk-stiker" href="[ISI SOSIAL THREADS]" rel="me noopener" target="_blank" data-label-id="Threads: [ISI AKUN THREADS] (buka tab baru)" data-label-en="Threads: [ISI AKUN THREADS] (opens in a new tab)" aria-label="Threads: [ISI AKUN THREADS] (buka tab baru)" style="--miring:5deg"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.263 11.097c-.03-3.486-1.92-5.586-5.111-5.586-2.13 0-3.922.963-4.863 2.499l2.062 1.438c.535-.843 1.272-1.543 2.628-1.543 1.528 0 2.318.85 2.544 2.431a15 15 0 0 0-2.236-.173c-4.125 0-6.068 1.867-6.068 4.336s1.943 3.99 4.804 3.99c3.139 0 5.013-2.115 5.781-4.735.798.361 1.348 1.204 1.348 2.47 0 3.387-3.907 5.232-7.22 5.232-4.885 0-8.077-3.207-8.077-8.424 0-6.392 4.223-10.487 9.9-10.487 3.808 0 5.69 1.671 6.97 3.914l2.108-1.475C21.44 2.078 18.331 0 13.663 0 6.227 0 1.168 5.277 1.168 12.934c0 7 4.953 11.066 10.856 11.066 4.878 0 9.809-2.846 9.809-7.716 0-2.545-1.46-4.231-3.569-5.187m-6.33 4.855c-1.077 0-2.026-.512-2.026-1.453 0-1.483 1.822-1.934 3.606-1.934.678 0 1.34.045 1.927.173-.422 1.927-1.671 3.215-3.508 3.214Z"/></svg></a></li>
+        <li data-isian="sosial-github"><a class="vbk-stiker" href="[ISI SOSIAL GITHUB]" rel="me noopener" target="_blank" data-label-id="GitHub: [ISI AKUN GITHUB] (buka tab baru)" data-label-en="GitHub: [ISI AKUN GITHUB] (opens in a new tab)" aria-label="GitHub: [ISI AKUN GITHUB] (buka tab baru)" style="--miring:-4deg"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+        <li data-isian="sosial-linkedin"><a class="vbk-stiker" href="[ISI SOSIAL LINKEDIN]" rel="me noopener" target="_blank" data-label-id="LinkedIn: [ISI AKUN LINKEDIN] (buka tab baru)" data-label-en="LinkedIn: [ISI AKUN LINKEDIN] (opens in a new tab)" aria-label="LinkedIn: [ISI AKUN LINKEDIN] (buka tab baru)" style="--miring:8deg"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+      </ul>
+    </div>
+    <div class="vbk-kaki-tombol">
+      <button type="button" class="vbk-tombol vbk-tombol-garis vbk-tombol-kecil" data-ganti-bahasa data-label-id="Ganti bahasa ke English" data-label-en="Switch language to Bahasa Indonesia" aria-label="Ganti bahasa ke English"><span lang="id">English</span><span lang="en">Bahasa Indonesia</span></button>
+      <button type="button" class="vbk-tombol vbk-tombol-garis vbk-tombol-kecil" data-kurangi-gerak aria-pressed="false"><span class="vbk-gerak-mati"><span lang="id">Kurangi gerakan</span><span lang="en">Reduce motion</span></span><span class="vbk-gerak-nyala"><span lang="id">Gerakan dikurangi</span><span lang="en">Motion reduced</span></span></button>
+      <a class="vbk-tombol vbk-tombol-garis vbk-tombol-kecil" href="#atas"><span lang="id">Kembali ke atas</span><span lang="en">Back to top</span></a>
+    </div>
+    <p class="vbk-hak-cipta">© <span data-tahun-berjalan>2026</span> VenbeeMail · <span lang="id">dibuat oleh NongBana</span><span lang="en">made by NongBana</span></p>
+  </div>
+</div>
+</footer>
+</body>
+</html>

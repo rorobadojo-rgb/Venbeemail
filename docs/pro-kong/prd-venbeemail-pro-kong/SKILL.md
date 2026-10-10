@@ -1707,6 +1707,7 @@ Setiap fase diakhiri commit dan push ke cabang kerja, dengan ringkasan singkat k
 - 10 Oktober 2026: cek server (R1) sebagian besar terjawab: /pro ada di `/www/wwwroot/banamail-pro/`, dilayani nginx statis, tanpa CSP, health 200. Blok bagian 18 disesuaikan (`PRO=`). Masih dicek: konfigurasi nginx untuk /pro, apakah Fase 1 terpasang, letak halaman depan.
 - 10 Oktober 2026: isi /pro lama diterima dari LO (R2) dan inventarisnya dibuat. Temuan di bagian 3.
 - 10 Oktober 2026: Fase 1 selesai: `huruf_gunting.py`, `olah_aset_kong.py`, `bingkai_kunci.py`, og.jpg, bingkai kunci, `seedance/PAKET-SEEDANCE.md`. Catatan: K5 memakai garis kaki y 605 (sama dengan footer) dan bibir podium di depan kaki, bukan y 630; tepi K0 diisi warna panggung gelap itu sendiri.
+- 10 Oktober 2026: Fase 2 selesai: halaman utuh dalam tampilan diam, dua bahasa, isi teknis lama persis (`alat/cek_teks_lama.mjs`), 38/38 uji fungsi (`alat/uji_halaman.mjs`), muatan awal HP 0,29 MB tanpa gzip. Penyesuaian dari PRD: hero HP menaruh panggung di atas dan teks di bawah (amplop video terlalu besar di belakang teks); pemeriksa awalan memeriksa semua aturan lama; nilai contoh alamat memakai akhiran acak.
 
 ---
 

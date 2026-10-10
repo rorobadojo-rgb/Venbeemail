@@ -8,7 +8,8 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 |---|---|
 | 0. Persiapan | Selesai: folder, gambar, GSAP, Lenis, font, `isian.json`, cek server, isi /pro lama + inventaris |
 | 1. Aset dan bingkai kunci | Selesai: turunan gambar, huruf gunting, font, og.jpg, 11 bingkai kunci + 6 referensi, paket Seedance |
-| 2 sampai 9 | Belum |
+| 2. Kerangka dan Bab 2 | Selesai: `sumber.html` utuh (semua bagian, tampilan diam, ID dan EN), `gaya.css`, `halaman.js`, `rakit.py`, gambar diam dari bingkai kunci. Isi teknis lama persis (`cek_teks_lama.mjs` lolos), 38/38 uji fungsi lolos, muatan awal HP 0,29 MB |
+| 3 sampai 9 | Belum |
 
 ## Isi folder
 
@@ -52,6 +53,29 @@ python3 situs-pro-kong/alat/bingkai_kunci.py      # seedance/bingkai/*.png + lem
 | `seedance/sumber/*-besar.png` | Maskot, amplop, pesawat, empat monyet resolusi asli tanpa kompresi |
 | `seedance/bingkai/` | KH, K0, K1, K2, K3a, K3b, K4, K4b, K5, K6, KF (1280x720), ref-1 sampai ref-6, `lembar-bingkai.jpg` |
 | `seedance/PAKET-SEEDANCE.md` | Prompt, setelan, urutan, tautan bingkai |
+
+## Fase 2: kerangka halaman dan Bab 2
+
+Halaman sudah lengkap dalam **tampilan diam**: ini juga tampilan saat kurangi gerakan, saat Save-Data, dan tanpa JavaScript. Gerak (GSAP) menyusul di Fase 3 dan 4 di atas kerangka yang sama.
+
+| Berkas | Isi |
+|---|---|
+| `sumber.html` | Semua bagian PRD 8.2: menu, hero, film (mode komik 6 panel), kartu penutup bab, Cara kerja, API, Semua endpoint, Domain, Tentang, Penutup, footer maskot (komposisi akhir), kaki halaman. Semua teks `<span lang="id">` + `<span lang="en">` |
+| `aset/vbkong/gaya.css` | Semua gaya, kelas `vbk-`. Tanpa huruf atau skrip dari CDN |
+| `aset/vbkong/halaman.js` | Bahasa (juga membaca kunci lama `bm-lang`), huruf gunting (memuat `gunting.svg` lalu merakit judul per kata), menu dan lembar HP, salin + cap tersalin, tab, pemeriksa awalan dengan aturan lama, perangko domain, label amplop AW4, cek `/api/health`, kurangi gerakan, tahun berjalan |
+| `alat/rakit.py` | `sumber.html` + `isian.json` → `index.html`. Isian kosong dihapus dari HTML. `--pratinjau` menulis `pratinjau.html` (tidak di-commit) dengan tempat isian bertanda kuning |
+| `alat/cek_teks_lama.mjs` | Membandingkan 44 teks lama (ID dan EN), 2 curl, 7 endpoint, 4 domain, 5 field dengan `lama/inventaris.json`, huruf demi huruf. 16 kunci lama yang tidak dipakai punya alasan tercatat |
+| `alat/uji_halaman.mjs` | 38 uji fungsi di Chromium |
+| `alat/ukur_muatan.mjs` | Muatan awal (PRD 16.1) |
+| `alat/diam_dari_bingkai.py` | Komik 6 panel, poster hero dan sorotan, latar panel API/Endpoint/Domain dari bingkai kunci (sementara, sampai video ada) |
+
+Catatan isi:
+
+- Ikon sosial: X, Threads, GitHub dari Simple Icons 16.34.0 (CC0); LinkedIn dari Simple Icons 8.15.0 (rilis terakhir yang masih memuatnya, CC0). Semua ikon dihapus dari HTML sampai alamat akunnya diisi di `isian.json`.
+- Pemeriksa awalan memakai aturan halaman lama, dengan "huruf" dibaca sebagai huruf Latin A-Z (besar dan kecil). Kalau server menolak huruf besar atau menerima huruf lain, sesuaikan `periksa()` di `halaman.js`.
+- Nilai contoh `expiresAt` ditulis `<milidetik epoch>` (halaman lama menyebut satuannya, bukan contoh angkanya). Contoh alamat `qa-signup.62yt8v@kotak.venbeemail.com` diambil dari halaman lama; saat pengunjung mengetik awalan sendiri, akhiran ditulis `<acak>`.
+- Favicon `/pro/aset/ikon.png` (absolut) supaya benar di `/pro/` dan `/pro/kong/`.
+- Muatan awal (server lokal tanpa gzip, 10 Oktober 2026): HP 390x844 DPR 3: 0,29 MB / 19 berkas; desktop 1440x900 DPR 2: 0,64 MB / 25 berkas.
 
 ## Hasil cek server (PRD 18.1)
 
