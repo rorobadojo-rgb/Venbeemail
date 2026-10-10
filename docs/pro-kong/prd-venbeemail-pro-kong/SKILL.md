@@ -91,7 +91,7 @@ Bukan tujuan:
 4. **Maskot tidak diubah.** Tubuh, wajah, dan warna maskot pisang tidak berubah. Gerak hanya berupa transformasi, cahaya, bayangan, dan potongan yang sudah ada. Di video, maskot tidak boleh berubah wajah atau warna (cara cek di bagian 7.6).
 5. **Tanpa klaim palsu.** Tidak ada testimoni, jumlah pengguna, logo klien, penghargaan, "dipercaya oleh", atau angka lain yang tidak nyata. Semua nilai contoh diberi tanda "contoh" atau "pratinjau". Token tidak pernah tampil utuh: selalu `<token>`.
 6. **Teks penting bukan di gambar.** Judul huruf gunting adalah SVG hiasan, teks aslinya tetap ada di HTML. Video tidak berisi teks.
-7. **Tanpa merek pihak lain.** Tidak memakai teks, huruf, gambar, warna khas, atau nama Kong Rolls dan MDX. Ikon sosial media hanya dipakai sebagai tautan ke akun milik NongBana (bagian 15.4), satu warna, tanpa kesan kerja sama.
+7. **Tanpa merek pihak lain.** Tidak memakai teks, huruf, gambar, warna khas, atau nama Kong Rolls dan MDX. Ikon sosial media hanya dipakai sebagai tautan ke akun yang alamatnya diberikan LO (bagian 15.4), satu warna, tanpa kesan kerja sama.
 8. **Muatan awal HP di bawah 2,5 MB.** Target 1,3 MB (bagian 16).
 9. **Mode kurangi gerakan wajib** dan lengkap: semua isi tetap tampil dan bisa disalin (bagian 16.4).
 10. **Uji di Safari iPhone** sebelum pasang utama.
@@ -569,7 +569,7 @@ Skrip lalu menulis `aset/vbkong/film/daftar.json` berisi jumlah bingkai per adeg
 ```bash
 D=6.0   # durasi setelah dipotong
 # Silang 0,5 detik antara akhir dan awal (hasil D-0.5 detik, menyambung mulus)
-ffmpeg -y -i kerja/hero.mp4 -filter_complex "[0]split[a][b];[a]trim=0.5,setpts=PTS-STARTPTS[isi];[b]trim=0:0.5,setpts=PTS-STARTPTS[kepala];[isi][kepala]xfade=transition=fade:duration=0.5:offset=$(echo "$D-1.0" | bc)" -an kerja/hero-mulus.mp4
+ffmpeg -y -i kerja/hero.mp4 -filter_complex "[0]split[a][b];[a]trim=0.5,setpts=PTS-STARTPTS[isi];[b]trim=0:0.5,setpts=PTS-STARTPTS[kepala];[isi][kepala]xfade=transition=fade:duration=0.5:offset=$(awk "BEGIN{print $D-1.0}")" -an kerja/hero-mulus.mp4
 # Desktop
 ffmpeg -y -i kerja/hero-mulus.mp4 -an -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 26 -preset slow -movflags +faststart aset/vbkong/video/hero-1280.mp4
 ffmpeg -y -i kerja/hero-mulus.mp4 -an -c:v libvpx-vp9 -b:v 0 -crf 36 -row-mt 1 -pix_fmt yuv420p aset/vbkong/video/hero-1280.webm
@@ -1353,3 +1353,885 @@ EN: I started building BanaMail in [year] in [city] because [reason]. [What happ
 - **Kurangi gerakan:** diam, tanpa napas dan kedip.
 
 ---
+
+## 14. Footer maskot (FT1 lift panggung + surat jatuh)
+
+Ini puncak halaman, padanan Kong mengangkat Bumi. Maskot pisang naik dari dalam podium lewat pintu lift sambil mengangkat kotak surat, menutupi huruf tengah slogan raksasa, lalu amplop dari film jatuh ke celah kotaknya.
+
+### 14.1 Panggung dan ukuran
+
+Semua posisi tokoh dihitung di dalam satu kotak "set" yang memuat video V6 (16:9), supaya maskot berdiri tepat di podium yang ada di video.
+
+| Ukuran | Desktop (lebar di atas 1024 dan tinggi 760 ke atas) | HP dan layar pendek |
+|---|---|---|
+| Tinggi panggung | 100svh, di-pin | 100svh, di-pin |
+| Lebar set (W) | `min(100vw, 150svh)`, di tengah | `200vw`, pusat podium di tengah layar (`left: calc(50vw - 0.491 * W)`) |
+| Tinggi set (H) | `0.5625 * W` | `0.5625 * W` |
+| Letak set | Bawah podium (89,8 persen H) berada di 66svh | Bawah podium berada di 70svh |
+| Tinggi maskot (dengan kotak) | `0.56 * H` | `min(0.8 * H, 46svh)` |
+| Lebar maskot | `0.603 * tinggi` (rasio 576:955) | sama |
+| Garis kaki | 84,0 persen H dari atas set, x pusat 49,1 persen W | sama |
+| Sisi kiri-kanan di luar set | Gradien `#001d25` ke `#0b212e`; video di dalam set memudar 8 persen di tepi kiri dan kanan (`mask-image`) supaya sambungannya tidak terlihat | sama |
+
+Contoh di layar 1440x900: W 1350, H 759, garis kaki di y 550, maskot tinggi 425 dan lebar 256, puncak kotak di y 125.
+
+`olah_aset_kong.py` mengukur baris piksel terbawah yang tidak transparan di `maskot-badan.webp` dan menulisnya ke `aset/vbkong/gambar/ukuran-kong.json` (`"kaki_bawah": n`), supaya telapak kaki (bukan tepi gambar) yang diletakkan tepat di garis kaki. Titik celah surat di gambar kotak (sekitar x 252 dari 576, y 62 dari 955 di bingkai maskot) juga diukur dan disimpan di sana (`"celah": [x, y]`).
+
+### 14.2 Lapisan
+
+Dari belakang ke depan:
+
+| z | Kelas | Isi | Catatan |
+|---|---|---|---|
+| 0 | `.vbk-ka-video` | Video V6 (dibagi dengan Penutup) atau poster `sorot-poster` | Di dalam set |
+| 1 | `.vbk-ka-padam` | Lapisan `#00141a` selebar panggung | Opacity dianimasikan (lampu padam) |
+| 2 | `.vbk-ka-sorot` | Kerucut sorotan dari tengah atas ke podium (gradien, `mix-blend-mode: screen`) | |
+| 3 | `.vbk-ka-tulisan` | Slogan raksasa huruf gunting (SVG) selebar panggung | Tidak boleh menimpa podium: tepi bawah tulisan paling rendah 2svh di atas tepi belakang permukaan podium |
+| 4 | `.vbk-ka-lubang`, `.vbk-ka-sinar`, `.vbk-ka-kontak` | Pintu lift (elips `podium-lubang.svg` di pusat permukaan podium, x 49,1 persen, y 82,1 persen H, lebar sampai 22 persen W, tinggi 4,2 persen H), sinar hangat yang naik dari lubang, bayangan kontak di bawah kaki | Di dalam set |
+| 5 | `.vbk-ka-lift` | Wadah lift: `position: absolute; left: 0; width: 100%; top: -60%; bottom: 16%` dari set (tepi bawahnya tepat di garis kaki 84,0 persen), `overflow: hidden`. Berisi `.vbk-maskot` (bawahnya menempel ke tepi bawah wadah), yang berisi berurutan: `maskot-bayang` (geser 2 persen ke kanan, 1,5 persen ke bawah, opacity 0,45), `maskot-badan`, `maskot-kotak-panjang`, kelopak mata SVG | Bagian maskot yang masih di bawah permukaan podium otomatis tersembunyi karena berada di bawah tepi wadah. Inilah "clip-path" lift-nya. Dipakai `overflow: hidden` (bukan `clip-path` dengan nilai negatif) supaya pasti jalan di Safari |
+| 6 | `.vbk-ka-bibir` | `podium-bibir.webp` di koordinat set: kiri 30,52 persen, lebar 37,43 persen, atas 83,98 persen, tinggi 7,16 persen | Menutup ujung bawah sinar lift dan bayangan kontak, sehingga pinggiran depan podium tetap di depan. Kaki maskot berdiri di permukaan, di belakang pinggiran |
+| 7 | `.vbk-ka-amplop` | Amplop (`amplop.webp`), di lapisan selebar panggung dengan `clip-path: inset(0 0 calc(100% - var(--y-celah)) 0)` | Bagian amplop di bawah garis celah tidak terlihat, jadi amplop tampak masuk ke celah |
+| 8 | `.vbk-ka-pesawat` | Pesawat kertas (`pesawat.webp`) | Tidak dipotong |
+| 9 | `.vbk-ka-depan` | Kalimat "Satu surat lagi.", garis rute (GL1), tombol tak terlihat di atas kotak surat | |
+| 10 | `.vbk-kaki-panel` | Panel kaki halaman (bagian 15), hanya desktop dengan tinggi 760 ke atas; di layar lain panel berada di bawah panggung | Gradien dari transparan di 62svh ke `#00141a` di 75svh |
+
+### 14.3 Slogan raksasa
+
+| Versi | Baris |
+|---|---|
+| Desktop ID | KOTAK MASUK / UNTUK KODEMU |
+| Desktop EN | AN INBOX / FOR YOUR CODE |
+| HP ID | KOTAK / MASUK UNTUK / KODEMU |
+| HP EN | AN INBOX / FOR YOUR / CODE |
+
+- Tiap baris diskalakan supaya lebarnya 92vw (lebar `viewBox` = jumlah lebar huruf), dengan batas tinggi huruf 26svh di desktop dan 13svh di HP.
+- Desktop: baris 1 mulai di 18svh, baris 2 tepat di bawahnya (jarak 4 persen tinggi huruf). HP: baris 1 mulai di 14svh.
+- Isian `kertas` putih hangat, bayangan potongan oranye 6 piksel ke kanan bawah, sudut akhir tiap huruf acak plus minus 2 derajat (seed tetap per huruf, jadi selalu sama).
+- Maskot di tengah menutupi huruf tengah tiap baris (desktop ID kira-kira "K M" di baris 1 dan "K K" di baris 2), dan kotak suratnya menembus tepi atas baris 1, seperti Kong menutupi "THE W".
+- Teks utuh tetap ada: `<h2 class="vbk-sr">Kotak masuk untuk kodemu</h2>` (EN "An inbox for your code"), dan slogan kecil yang terbaca penuh di panel kaki halaman (bagian 15).
+- **AW4:** kalau pengunjung tadi mengetik awalan yang valid di bagian API, amplop membawa label kertas kecil "untuk: {awalan}@{domain}" dengan tanda "(contoh)". Kalau tidak, amplop tanpa label.
+
+| Kunci | ID | EN |
+|---|---|---|
+| Kalimat lampu padam | Satu surat lagi. | One more letter. |
+| Label amplop | untuk: {awalan}@{domain} (contoh) | to: {awalan}@{domain} (example) |
+| Judul tersembunyi | Kotak masuk untuk kodemu | An inbox for your code |
+| Tombol kotak (label) | Ketuk kotak surat | Tap the mailbox |
+
+("Satu surat lagi." sengaja bukan "One more thing", supaya tidak meniru acara pihak lain.)
+
+### 14.4 Urutan gerak (scrub mengikuti gulir)
+
+Pin desktop `end: "+=160%"`, HP `end: "+=130%"`, `scrub: 0.6`, `invalidateOnRefresh: true`. Angka di bawah adalah kemajuan pin (0 sampai 1). Satu timeline GSAP untuk semua ukuran layar; hanya ukuran dan lintasan yang berbeda.
+
+| Kemajuan | Langkah | Rincian |
+|---|---|---|
+| 0,00 sampai 0,12 | 1. Lampu padam | `.vbk-ka-padam` opacity 0 ke 0,82. Kalimat "Satu surat lagi." muncul di tengah layar (Archivo 700, 24 piksel desktop, 20 piksel HP) di 0,03 sampai 0,10, lalu memudar di 0,12 sampai 0,15 |
+| 0,12 sampai 0,34 | 2. Tulisan ditempel | Huruf demi huruf (baris 1 dulu, lalu baris 2): dari `y: 60%` tinggi huruf, putaran awal acak plus minus 5 derajat, skala 1,1, opacity 0, ke posisi akhir (putaran plus minus 2 derajat, skala 1, opacity 1). Tiap huruf diakhiri hentakan turun 2 piksel lalu kembali, dan bayangan oranyenya muncul. Jeda dibagi rata di rentang ini |
+| 0,30 sampai 0,40 | 3. Sorotan jatuh dan pintu lift membuka | Kerucut sorotan opacity 0 ke 0,85 sambil menyempit dari 60 ke 26 persen W, tepat ke podium. Di 0,32 sampai 0,38 lubang lift membuka (`scaleX` 0 ke 1). Di 0,34 sampai 0,40 sinar hangat naik dari lubang (opacity 0 ke 1, `scaleY` 0,4 ke 1 dari bawah) |
+| 0,38 sampai 0,74 | 4. Maskot naik | `.vbk-maskot` `yPercent: 100` ke 0 (`power2.out` di dalam rentang). Kotak muncul pertama (karena paling atas), lalu tangan, kupluk, mata, jaket, dan terakhir kaki. Bayangan maskot di dinding ikut naik |
+| 0,40 sampai 0,78 | 5. Kotak terasa diangkat | Kotak bergerak terhadap badan lewat variabel `--geser-kotak` (persen tinggi maskot): +4 (tertinggal, sedikit lebih rendah) di 0,40, ke 0 di 0,70, ke -3 (terdorong lebih tinggi) di 0,74, lalu kembali 0 dengan pantulan (`back.out(2)`) di 0,78. Batas aman: tidak lebih tinggi dari -3 (ekor lengan 40 piksel pada `maskot-kotak-panjang`) dan tidak lebih rendah dari +4. Kotak menembus tepi atas baris 1 slogan sekitar 0,62 |
+| 0,70 sampai 0,80 | 6. Mendarat | Sinar lift memudar (0,70 sampai 0,80). Lubang menutup di bawah kaki (`scaleX` 1 ke 0, 0,74 sampai 0,80). Bayangan kontak muncul (0,76 sampai 0,80). Badan memipih 1,5 persen lalu tegak (pegas) saat kaki menyentuh permukaan di 0,74 |
+| 0,40 sampai 1,00 | Garis rute | Garis rute tipis muncul di bawah (desktop: di atas panel; HP: tegak di kanan) dengan amplop mini di titik "Di udara", lalu bergerak ke "Sampai" di 0,95 |
+| 0,80 sampai 0,92 | 7. Pesawat datang | Pesawat membawa amplop (amplop menggantung di bawah pesawat, label AW4 kalau ada) terbang lewat MotionPath dari luar kiri atas (-10vw, 8svh) melengkung lewat (30vw, 4svh) ke titik tepat di atas celah surat (dihitung dari `getBoundingClientRect` kotak + `ukuran-kong.json` setiap refresh). Lebar pesawat 9vw desktop, 18vw HP; amplop 6vw dan 12vw |
+| 0,90 sampai 1,00 | 8. Pesawat pergi | Di 0,90 amplop lepas. Pesawat naik ke kanan atas sambil miring dan keluar layar |
+| 0,90 sampai 0,95 | 9. Amplop masuk celah | Amplop berputar ke tegak lurus celah dan turun; bagian di bawah garis celah terpotong `clip-path`, jadi amplop tampak masuk |
+| 0,95 sampai 1,00 | 10. Kotak menerima | Kotak memipih (`scaleY` 0,93, `scaleX` 1,04, poros bawah tengah) lalu memantul (`elastic.out(1, .4)`), badan ikut memantul kecil 1 persen, mata berkedip dua kali cepat. Titik "Sampai" di garis rute menyala oranye |
+
+Lidah maskot tidak dipotong dan tidak digerakkan terpisah, karena itu bagian wajah. Pantulan badan dan kedip sudah cukup. Kalau LO kelak meminta lidah bergoyang, itu keputusan baru (potongan lidah sebagai Tingkat 2b, dengan izin LO).
+
+Kerangka timeline:
+
+```js
+const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
+  trigger: "#kaki", start: "top top", end: hp ? "+=130%" : "+=160%", pin: true, scrub: 0.6, invalidateOnRefresh: true,
+  onUpdate: (st) => diam(st.progress > 0.99) } });
+tl.to(".vbk-ka-padam", { opacity: 0.82, duration: 0.12 }, 0)
+  .fromTo(".vbk-ka-satu", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.07 }, 0.03)
+  .to(".vbk-ka-satu", { opacity: 0, duration: 0.03 }, 0.12)
+  .fromTo(".vbk-ka-huruf", { yPercent: 60, rotation: (i) => acak(i, 5), scale: 1.1, opacity: 0 },
+          { yPercent: 0, rotation: (i) => acak(i + 99, 2), scale: 1, opacity: 1, duration: 0.05, stagger: { amount: 0.17 } }, 0.12)
+  .fromTo(".vbk-ka-sorot", { opacity: 0, scaleX: 2.3 }, { opacity: 0.85, scaleX: 1, duration: 0.10 }, 0.30)
+  .fromTo(".vbk-ka-lubang", { scaleX: 0 }, { scaleX: 1, duration: 0.06 }, 0.32)
+  .fromTo(".vbk-ka-sinar", { opacity: 0, scaleY: 0.4 }, { opacity: 1, scaleY: 1, duration: 0.06 }, 0.34)
+  .fromTo(".vbk-maskot", { yPercent: 100 }, { yPercent: 0, ease: "power2.out", duration: 0.36 }, 0.38)
+  .fromTo(".vbk-maskot", { "--geser-kotak": 4 }, { "--geser-kotak": 0, duration: 0.30 }, 0.40)
+  .to(".vbk-maskot", { "--geser-kotak": -3, duration: 0.04 }, 0.70)
+  .to(".vbk-maskot", { "--geser-kotak": 0, ease: "back.out(2)", duration: 0.04 }, 0.74)
+  .to(".vbk-ka-sinar", { opacity: 0, duration: 0.10 }, 0.70)
+  .to(".vbk-ka-lubang", { scaleX: 0, duration: 0.06 }, 0.74)
+  .fromTo(".vbk-ka-kontak", { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0.76)
+  .to(".vbk-ka-pesawat-grup", { motionPath: () => jalurPesawat(), duration: 0.12 }, 0.80)
+  // ... pesawat pergi, amplop masuk celah, kotak memipih, titik Sampai (lihat tabel)
+```
+
+`--geser-kotak` dipakai di CSS: `.vbk-kotak { transform: translateY(calc(var(--geser-kotak) * 1% * var(--rasio-kotak))); }`, dengan `--rasio-kotak` = tinggi maskot dibagi tinggi gambar kotak (supaya persen dihitung dari tinggi maskot).
+
+### 14.5 Setelah sampai: diam yang hidup dan interaksi
+
+Berjalan hanya selama kemajuan pin di atas 0,99 dan footer terlihat. Berhenti saat digulir mundur.
+
+- Bernapas: `.vbk-maskot` `scaleY` 1 ke 1,015 dari kaki, 3 detik, bolak-balik `sine.inOut`.
+- Kotak naik-turun 4 piksel berirama 2,6 detik, terpisah dari napas (Tingkat 2 PRD pertama).
+- Kedip: kelopak SVG berwarna kulit maskot menutup kedua mata pink 120 ms, tiap 3 sampai 6 detik acak. Posisi mata diukur sekali di `maskot-badan.webp` (sama dengan cara Fase 1 di `situs-pro/aset/vbpro/hero.js`) dan disimpan di `ukuran-kong.json`.
+- Desktop: maskot miring maksimal 3 derajat mengikuti kursor, bayangan kontak bergeser berlawanan.
+- Gulir cepat (kecepatan ScrollTrigger di atas 2500): maskot terhuyung 2 derajat lalu tegak dengan pegas.
+- Ketuk kotak (tombol tak terlihat seukuran kotak, bisa ditekan Enter atau Spasi): amplop meloncat keluar dari celah (naik 40 persen tinggi kotak, miring 10 derajat), lalu masuk lagi (0,6 detik total), kotak memipih kecil. Diberi jeda 0,8 detik supaya tidak bisa ditekan beruntun.
+- FT6 (kalau dinyalakan, bagian 10.6): ketuk dua kali, semburan amplop.
+
+### 14.6 HP
+
+- Aset versi 512: `maskot-badan-512`, `maskot-kotak-panjang-512`, `maskot-bayang-512`, `podium-bibir-1032`.
+- Slogan tiga baris (14.3).
+- Pin 130 persen. Urutan dan persentase sama.
+- Lintasan pesawat lebih pendek: dari (-20vw, 10svh) lewat (20vw, 6svh) ke celah.
+- Garis rute tegak di kanan.
+- Panel kaki halaman berada di bawah panggung (bukan menimpa). Di dalam panggung hanya ada baris kecil di bawah: logo mini dan baris hak cipta.
+- Tanpa miring mengikuti kursor. Ketuk kotak tetap ada.
+
+### 14.7 Kurangi gerakan, Save-Data, dan tanpa JavaScript
+
+- Tanpa pin, tanpa scrub, tanpa gerak diam.
+- Footer langsung tampil dalam komposisi akhir: lampu sudah padam (0,82), kalimat "Satu surat lagi." tampil kecil di atas slogan, slogan utuh, sorotan menyala, maskot berdiri di podium, amplop sudah separuh masuk celah, pesawat tidak tampil, garis rute penuh di "Sampai".
+- Video diganti poster `sorot-poster`.
+- Ketuk kotak tidak menganimasikan apa pun (tombol tetap ada tetapi hanya memberi umpan balik teks kecil "Surat sudah sampai." / "The letter has arrived.").
+- Aturan umum halaman: keadaan awal animasi (tersembunyi, di bawah, transparan) hanya dipasang oleh JavaScript. Kalau JavaScript gagal atau mati, semua bagian tampil dalam posisi akhirnya.
+
+---
+
+## 15. Kaki halaman
+
+### 15.1 Tata letak
+
+- **Desktop dengan tinggi layar 760 piksel ke atas:** panel menimpa bagian bawah panggung footer (14.2 lapis 10), mulai sekitar 68svh, empat kolom dalam satu baris (lebar isi maksimal 1200 piksel), lalu satu baris bawah. Maskot tetap terlihat di atas panel di akhir halaman.
+- **Layar lain:** panel berada di bawah panggung sebagai blok biasa `#00141a`, kolom bertumpuk (dua kolom di tablet, satu kolom di HP), jarak tepi 16 piksel.
+
+### 15.2 Isi kolom
+
+| Kolom | Isi |
+|---|---|
+| 1. Merek | Logo VENBEEMAIL PRO kecil (huruf gunting), baris "VenbeeMail Pro · Kotak masuk uji lewat API", baris "Dibuat oleh NongBana", slogan kecil yang terbaca utuh |
+| 2. Halaman ini | Cara kerja, API, Semua endpoint, Domain, Tentang (tautan jangkar) |
+| 3. VenbeeMail | BanaMail · email sementara (`/`), VenbeeMail Pro (`/pro/`), Tentang (`/pro/#tentang`) |
+| 4. Kontak | `admin@venbeemail.com` (tautan `mailto:`) dengan tombol kecil Salin, lalu titik status API (hanya kalau cek di layar muat berhasil) |
+| Baris bawah | Stiker sosial (hanya yang terisi), tombol ID/EN, tombol "Kurangi gerakan", tautan "Kembali ke atas", hak cipta |
+
+### 15.3 Teks
+
+| Kunci | ID | EN |
+|---|---|---|
+| Baris merek | VenbeeMail Pro · Kotak masuk uji lewat API | VenbeeMail Pro · A test inbox over an API |
+| Pembuat | Dibuat oleh NongBana | Made by NongBana |
+| Slogan kecil | Kotak masuk untuk kodemu. | An inbox for your code. |
+| Judul kolom 2 | Halaman ini | On this page |
+| Tautan kolom 2 | Cara kerja · API · Semua endpoint · Domain · Tentang | How it works · API · All endpoints · Domains · About |
+| Judul kolom 3 | VenbeeMail | VenbeeMail |
+| Tautan kolom 3 | BanaMail · email sementara · VenbeeMail Pro · Tentang | BanaMail · temporary email · VenbeeMail Pro · About |
+| Judul kolom 4 | Kontak | Contact |
+| Tombol salin email | Salin | Copy |
+| Titik status | API menjawab · diperiksa saat halaman dibuka | API responding · checked when this page opened |
+| Judul sosial (tersembunyi visual) | Akun sosial media | Social media accounts |
+| Tombol bahasa | English | Bahasa Indonesia |
+| Tombol gerak (mati) | Kurangi gerakan | Reduce motion |
+| Tombol gerak (nyala) | Gerakan dikurangi | Motion reduced |
+| Ke atas | Kembali ke atas | Back to top |
+| Hak cipta | © {tahun berjalan} VenbeeMail · dibuat oleh NongBana | © {current year} VenbeeMail · made by NongBana |
+
+- `{tahun berjalan}` diisi `new Date().getFullYear()` oleh skrip; di HTML ditulis tahun saat dirakit (2026) sebagai cadangan tanpa JavaScript.
+- Titik status: lingkaran 8 piksel hijau-teal `#3fd0a0` dengan cincin, ditambah teks (tidak hanya warna). Tidak tampil kalau cek gagal, lambat, atau tidak dijalankan.
+- Tombol "Kurangi gerakan": tombol beralih (`aria-pressed`). Saat ditekan, pilihan disimpan di `localStorage`, lalu halaman dimuat ulang di bagian yang sama (`location.hash` bagian terdekat), dalam tampilan diam. Setelan sistem `prefers-reduced-motion: reduce` selalu dihormati walau tombol tidak ditekan.
+
+### 15.4 Ikon sosial media (KT3, D8)
+
+- Empat ikon, urutan: X, Threads, GitHub, LinkedIn. Masing-masing SVG di dalam HTML (bukan berkas gambar), 22 piksel, satu warna `#0d1b22`, di atas stiker kertas putih bulat 44 piksel yang miring plus minus 8 derajat dan menegak saat disentuh atau difokus.
+- Bentuk ikon diambil dari aset merek resmi masing-masing (halaman brand resources X, Meta untuk Threads, GitHub logos, LinkedIn brand guidelines). Untuk X, Threads, dan GitHub boleh memakai jalur SVG dari Simple Icons (lisensi CC0); LinkedIn tidak tersedia di Simple Icons, jadi diambil dari panduan merek LinkedIn. Bentuk tidak diubah, satu warna, ada ruang kosong di sekelilingnya.
+- Ikon hanya dirender kalau `isian.json` punya alamat akunnya. Yang kosong **dihapus dari HTML** oleh `rakit.py` (bukan `href="#"`, bukan disembunyikan). Kalau keempatnya kosong, seluruh kelompok sosial dan judulnya hilang.
+- Tautan: `<a href="{alamat}" rel="me noopener" target="_blank" aria-label="{Platform}: {nama akun} (buka tab baru)">`. Nama akun diambil dari alamat (misalnya bagian setelah `x.com/`). EN: "{Platform}: {account} (opens in a new tab)". Tidak menganggap akun itu milik siapa; label hanya menyebut platform dan nama akun.
+- Jangan pernah menebak atau mengisi nama akun sendiri.
+
+### 15.5 Aksesibilitas kaki halaman
+
+`<footer>` dengan `<nav aria-label="Tautan kaki halaman">`. Semua tautan dan tombol minimal 44x44 piksel area sentuh. Teks `#cfe0e6` di atas `#00141a` (kontras di atas 12:1).
+
+### 15.6 Halaman depan BanaMail: hanya footer yang ditambah
+
+- Fungsi kotak surat, tombol, dan tampilan lain di halaman depan **tidak disentuh**.
+- Yang ditambahkan satu baris kecil di footer halaman depan:
+
+| Kunci | ID | EN |
+|---|---|---|
+| Baris | BanaMail adalah layanan dari VenbeeMail · VenbeeMail Pro untuk developer · Tentang | BanaMail is a VenbeeMail service · VenbeeMail Pro for developers · About |
+| Tautan | "VenbeeMail Pro untuk developer" ke `/pro/`, "Tentang" ke `/pro/#tentang` | sama |
+
+- Bahasa mengikuti cara halaman depan berganti bahasa. Kalau halaman depan tidak punya tombol bahasa, baris ID ditampilkan dan baris EN ditaruh tepat di bawahnya dengan huruf lebih kecil (`lang="en"`).
+- Dipasang dengan blok bertanda `<!-- vbkong-kaki-depan:mulai -->` ... `<!-- vbkong-kaki-depan:selesai -->` oleh `pasang/sisip-kaki.js`: disisipkan tepat sebelum `</footer>` pertama kalau ada, kalau tidak sebelum `</body>`. Aman diulang (blok lama diganti). Isi lain berkas diperiksa tetap utuh sebelum ditulis. Cadangan dibuat dulu (bagian 18.6).
+- File halaman depan di server belum diketahui. Cek server (18.1) mencarinya. `public/banamail/index.html` di repo ini adalah halaman lain dan **tidak** dianggap sebagai halaman depan live sebelum dicek.
+
+---
+
+## 16. Kinerja, HP, aksesibilitas, dan kurangi gerakan
+
+### 16.1 Muatan awal di HP
+
+Diukur dengan Chromium headless (seperti Fase 1): layar 390x844, DPR 3, agen pengguna iPhone, tanpa menggulir, dari awal sampai event `load` ditambah 3 detik. Alat: `situs-pro-kong/alat/ukur_muatan.mjs`. Batas: **2,5 MB**. Target: **1,3 MB**.
+
+| Berkas | Perkiraan (setelah gzip bila teks) |
+|---|---|
+| `index.html` | 25 KB |
+| `gaya.css` | 18 KB |
+| `halaman.js` | 12 KB |
+| `gerak.js` | 20 KB |
+| GSAP + ScrollTrigger + MotionPath | 56 KB |
+| Font (Archivo 2 berat + JetBrains Mono 1 berat) | 90 KB |
+| `gunting.svg` | 20 KB |
+| Poster hero 540 | 40 KB |
+| 20 bingkai pertama adegan 1 (HP) | 360 KB |
+| Video hero 540 (dimuat setelah `load`) | 350 KB |
+| **Jumlah** | **sekitar 1,0 MB** |
+
+Yang tidak termasuk muatan awal (dimuat malas): sisa bingkai film (per adegan), gambar latar panel (saat bagian berjarak satu layar), potongan monyet (saat film terlihat), potongan maskot footer, video sorotan, dan `bibir` (saat Penutup berjarak 1,5 layar, `IntersectionObserver` dengan `rootMargin: "150% 0px"`).
+
+Desktop diukur juga (1440x900, DPR 2): target di bawah 3 MB sebelum menggulir.
+
+### 16.2 Aturan HP
+
+- Gambar versi 512 dan bingkai 405x720.
+- Pin lebih pendek: film 450, footer 130, tanpa pin di kartu penutup, Cara kerja, dan Penutup.
+- Paling banyak dua monyet terlihat bersamaan.
+- Tanpa Lenis, tanpa `backdrop-filter`, tanpa kursor amplop, tanpa partikel.
+- Halaman rapi di lebar 360 piksel tanpa gulir menyamping. Kode panjang hanya bergeser di dalam kotaknya.
+- Tombol penting selebar layar dengan tinggi 52 piksel, jarak tepi 16 piksel.
+- Area aman bawah (`env(safe-area-inset-bottom)`) dihormati oleh garis rute, tombol Lewati film, dan lembar menu.
+
+### 16.3 Aksesibilitas umum
+
+- Tautan lompat pertama di halaman: "Langsung ke isi" / "Skip to content" menuju `#bab-2`, terlihat saat difokus.
+- Struktur: `<header>` (menu), `<main>` (hero sampai Penutup), `<footer>` (footer maskot dan kaki halaman). Satu `<h1>` di hero, `<h2>` per bagian.
+- Semua judul huruf gunting punya teks asli di HTML. Semua SVG hiasan `aria-hidden="true" focusable="false"`.
+- Kontras teks minimal 4,5:1, kode minimal 7:1. Informasi tidak hanya lewat warna (status awalan, tersalin, titik API selalu disertai teks).
+- Cincin fokus oranye 3 piksel di semua elemen yang bisa difokus. Area sentuh minimal 44x44 piksel.
+- Satu wilayah `aria-live="polite"` untuk pesan salin, pesan awalan, dan pesan bahasa.
+- Atribut `lang` benar di `<html>` dan pada teks berbahasa lain.
+- Canvas film dan video `aria-hidden`, dengan keterangan tersembunyi (9.6).
+- Pin tidak mengunci fokus. Bisa digulir dengan tombol panah, Page Down, dan Spasi (Lenis mendukung).
+- Halaman tetap terbaca saat diperbesar 200 persen.
+- Gerak di atas 5 detik yang berulang (video latar, napas maskot) bisa dihentikan lewat tombol Jeda video dan tombol Kurangi gerakan.
+- Tidak ada yang berkedip lebih dari 3 kali per detik (getar kartu bab hanya 150 ms, sekali).
+
+### 16.4 Kurangi gerakan (wajib)
+
+Aktif kalau `prefers-reduced-motion: reduce` atau tombol "Kurangi gerakan" ditekan. Dalam mode ini GSAP, `gerak.js`, Lenis, dan video tidak dimuat sama sekali.
+
+| Bagian | Tampilan |
+|---|---|
+| Layar muat | Tidak tampil (cek API tetap jalan) |
+| Menu | Sama, tanpa transisi |
+| Hero | Poster diam, semua teks langsung tampil |
+| Film | Komik 6 panel berketerangan (9.6) |
+| Kartu penutup | Cap dalam posisi akhir |
+| Cara kerja | Daftar biasa |
+| API | Diam, semua fungsi (tab, salin, awalan) tetap jalan |
+| Semua endpoint | Papan langsung terisi |
+| Domain | Diam, salin dan pilih tetap jalan |
+| Tentang | Diam |
+| Penutup | Empat kata dan tombol langsung tampil, poster diam |
+| Footer | Komposisi akhir (14.7) |
+
+Semua teks, kode, dan tombol salin tetap ada dan bekerja.
+
+### 16.5 Safari iPhone
+
+Wajib diuji di iPhone asli (bukan hanya emulasi Chromium) sebelum pasang utama. Yang dicek:
+
+- Pin film, Cara kerja (desktop saja), Penutup, dan footer tidak melompat saat bilah alamat muncul atau hilang (`ignoreMobileResize`, satuan `svh`).
+- Video hero dan sorotan berputar otomatis (atribut `muted playsinline autoplay`), poster tampil sebelum siap.
+- Canvas film tidak kehabisan memori di akhir film (bingkai lama dilepas).
+- Balik keping papan endpoint tidak berkedip (`backface-visibility: hidden`, awalan `-webkit-`).
+- `position: sticky` kartu Cara kerja di HP bekerja.
+- Salin ke papan klip bekerja dari ketukan.
+- MotionPath pesawat footer tepat ke celah setelah layar diputar.
+- Lebar 360 dan 390 piksel tanpa gulir menyamping.
+- Kurangi gerakan (Pengaturan > Aksesibilitas > Gerakan > Kurangi Gerakan) menghasilkan tampilan diam.
+
+---
+
+## 17. Urutan kerja per fase
+
+Setiap fase diakhiri commit dan push ke cabang kerja, dengan ringkasan singkat ke LO (apa yang jadi, apa yang ditunggu). Tandai kemajuan di bagian "Kemajuan" di akhir bagian ini.
+
+| Fase | Isi | Syarat mulai | Hasil |
+|---|---|---|---|
+| 0. Persiapan | Minta LO menjalankan cek server (18.1). Buat folder `situs-pro-kong/` sesuai 8.3. Salin gambar dari `situs-pro/aset/vbpro/gambar/` dan GSAP dari `situs-pro/aset/vbpro/js/`. Tulis `isian.json` kosong dan README. Ambil isi /pro lama ke `situs-pro-kong/lama/` (18.2) dan buat inventarisnya | Tidak ada | Folder siap, hasil cek server dicatat di README, isi lama tersimpan (atau dicatat masih ditunggu) |
+| 1. Aset dan bingkai kunci | `olah_aset_kong.py` (6.3), `huruf_gunting.py` (6.4), font subset (6.5), `bingkai_kunci.py` (7.3). Kirim lembar pratinjau bingkai kunci dan prompt (7.4) ke LO, supaya LO bisa mulai membuat video sambil Claude lanjut | Fase 0 | Semua turunan gambar, huruf gunting, bingkai kunci di repo. LO menerima paket Seedance |
+| 2. Kerangka dan Bab 2 | `sumber.html` utuh dengan semua teks ID dan EN, `gaya.css`, `halaman.js` (bahasa, menu, salin, awalan, domain, cek API, kurangi gerakan). Bagian Cara kerja, API, Semua endpoint, Domain dengan isi teknis persis | Isi lama (R2) untuk isi teknis. Tanpa R2 boleh dirakit dengan tempat isian, tetapi tidak boleh dipasang | Halaman lengkap dalam tampilan diam, sudah dua bahasa, sudah lolos kurangi gerakan |
+| 3. Pembuka dan film | Layar muat, menu, hero (dengan poster atau bingkai kunci kalau V0 belum ada), film dalam mode tanpa video, estafet monyet, garis rute, Lewati film, kartu penutup. `gerak.js` dasar | Fase 2 | Bab 1 bisa digulir dari awal sampai kartu penutup |
+| 4. Akhir halaman | Penutup, footer FT1 lengkap, kaki halaman, Tentang, `rakit.py` dan aturan isian | Fase 3 | Halaman utuh dari atas sampai bawah, isian kosong tidak tampil |
+| 5. Video | Periksa (7.6) dan olah (7.7) tiap klip dari LO, isi `film/`, `video/`, `film/diam/`, latar panel | Hasil video LO (R11), boleh bertahap per klip | Film memakai urutan bingkai asli; mode tanpa video tetap jadi cadangan |
+| 6. Periksa | Muatan HP (16.1), lebar 360, kurangi gerakan, aksesibilitas (16.3), `siapkan.js --cek` lolos, Chromium desktop dan HP, pratinjau untuk LO, uji Safari iPhone (16.5) | Fase 4 (dan Fase 5 kalau video sudah ada) | Daftar syarat selesai (bagian 20) tercentang kecuali yang bergantung pada server |
+| 7. Pasang uji | `pasang-kong.sh` dengan `MODE=uji` ke `/pro/kong/` (18.4). LO membuka di HP dan memberi pendapat | Fase 6, hasil cek server | Versi uji hidup di `https://venbeemail.com/pro/kong/` (noindex) |
+| 8. Pasang utama | `pasang-kong.sh` dengan `MODE=utama`, lalu footer halaman depan (18.6) | Persetujuan LO (R14), uji iPhone (R13), tidak ada tempat isian teknis | `/pro/` adalah versi Kong, cadangan tersedia, cara mengembalikan sudah diberikan ke LO |
+| 9. Sesudah pasang | Isi data sosial, tahun, kota, cerita kalau LO mengirimnya (rakit ulang dan pasang ulang, aman diulang). Perbarui bagian 4, 5, dan "Kemajuan" di file ini. Pengajuan ulang Claude Startups mengikuti PRD pertama bagian 15 | Fase 8 | |
+
+**Pratinjau untuk LO** (sebelum pasang uji, dan setiap ada perubahan besar): terbitkan sebagai Artifact multi-berkas. Batas Artifact: paling banyak 255 berkas per sekali terbit dan 511 berkas per versi. Jadi pratinjau memakai mode tanpa video, atau urutan bingkai desktop setiap bingkai ketiga (sekitar 120 berkas) ditambah video hero dan sorotan. Pratinjau tidak boleh dipakai sebagai bukti uji Safari iPhone.
+
+**Kemajuan:**
+
+- 10 Oktober 2026: PRD ditulis. Belum ada pekerjaan di `situs-pro-kong/`.
+
+---
+
+## 18. Server: cek, ambil isi lama, rakit, pasang, kembalikan
+
+Semua blok di bawah ditempel LO ke terminal aaPanel. Tiap blok berjalan di dalam `( ... )` (subshell), jadi kalau berhenti di tengah, terminal tidak tertutup.
+
+### 18.1 Cek server (sekali, di Fase 0)
+
+```bash
+(
+cd /www/wwwroot/venbeemail && ls -la
+P=""
+for d in $(find /www/wwwroot/venbeemail -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
+  if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then P=$d; break; fi
+done
+echo "FOLDER_PRO=$P"
+ls -la "$P" "$P/aset"
+echo "--- Fase 1 Panggung Pos terpasang? (angka > 0 berarti ya)"
+grep -c 'vbpro-hero:mulai' "$P/index.html" || true
+echo "--- Versi Kong terpasang? (angka > 0 berarti ya)"
+grep -c 'vbkong-halaman' "$P/index.html" || true
+echo "--- Cadangan yang ada"
+ls -1d /www/backup/venbeemail-pro/pro-* /www/backup/venbeemail-pro-kong/* 2>/dev/null || echo "belum ada"
+echo "--- Cara server melayani /pro"
+grep -rn --include=*.js -e "/pro" -e "express.static" -e "sendFile" /www/wwwroot/venbeemail/server 2>/dev/null | grep -v node_modules | head -30
+echo "--- Kandidat file halaman depan"
+grep -rl --include=index.html -i "banamail" /www/wwwroot/venbeemail 2>/dev/null | grep -v node_modules | grep -v "/pro/" | head
+echo "--- Header"
+curl -sI https://venbeemail.com/pro/ | head -20
+curl -sI https://venbeemail.com/pro/aset/02-maskot.webp | head -3
+curl -s -o /dev/null -w 'health: %{http_code}\n' https://venbeemail.com/api/health
+echo "--- Node dan layanan"
+command -v node || ls -1 /www/server/nodejs/*/bin/node 2>/dev/null | tail -1
+systemctl status banamail --no-pager | head -5
+df -h /www | tail -1
+)
+```
+
+Dari hasilnya catat di `situs-pro-kong/README.md`: letak folder /pro, pemilik berkas, apakah Fase 1 atau versi Kong sudah terpasang, daftar cadangan, apakah server mengirim header `Content-Security-Policy` (kalau ya, catat isinya; semua berkas halaman ini lokal, tanpa CDN), cara Node melayani /pro (folder statis atau berkas tertentu), letak halaman depan, dan apakah `/api/health` menjawab.
+
+### 18.2 Ambil isi /pro lama (sebelum Fase 2)
+
+Halaman baru harus memakai isi teknis lama persis. Yang diambil adalah halaman **asli sebelum Fase 1** (tanpa blok `vbpro-*`). Pilih cara yang tersedia, urut dari yang terbaik:
+
+1. **Lingkungan Claude Code bisa membuka venbeemail.com.** Unduh `https://venbeemail.com/pro/` ke `situs-pro-kong/lama/index.live.html`. Kalau Fase 1 sudah terpasang, buang blok `vbpro-kepala`, `vbpro-hero`, `vbpro-skrip` dengan pola yang sama seperti `situs-pro/pasang/sisipkan.js` (`siapkan.js --bersihkan`), lalu simpan sebagai `situs-pro-kong/lama/index.html`. Kalau diblokir, minta LO menambahkan `venbeemail.com` di Allowed domains pengaturan jaringan environment.
+2. **Unduh dari File Manager aaPanel.** LO membuka berkas di bawah (hasil blok ini) lewat File Manager, mengunduh, lalu melampirkannya ke chat.
+3. **Salin dari terminal.** LO menjalankan blok ini dan menempel hasilnya (kalau panjang, per 200 baris dengan `sed -n '1,200p'`, `sed -n '201,400p'`, dan seterusnya).
+
+```bash
+(
+S=$(ls -1d /www/backup/venbeemail-pro/pro-* 2>/dev/null | head -1 || true)
+if [ -n "$S" ] && [ -f "$S/index.html" ]; then F="$S/index.html"; echo "Dari cadangan paling awal (sebelum Fase 1): $F"
+else
+  for d in $(find /www/wwwroot/venbeemail -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
+    if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then F="$d/index.html"; break; fi
+  done
+  echo "Dari halaman yang sedang dipakai: $F"
+fi
+wc -lc "$F"
+grep -c 'vbpro-hero:mulai' "$F" || true
+echo "=== MULAI ==="; cat "$F"; echo "=== SELESAI ==="
+)
+```
+
+**Inventaris isi lama** (Claude menulisnya ke `situs-pro-kong/lama/inventaris.json`, dan semua butir harus punya tempat di halaman baru atau dicatat alasan tidak dipakai, disetujui LO):
+
+- Semua teks ID dan EN, per bagian.
+- `id` bagian dan tautan jangkar.
+- Dua contoh curl (teks persis), langkah Cara kerja, kolom guna endpoint, keterangan field, arti PATCH, aturan awalan.
+- Semua tautan keluar dan masuk.
+- Semua skrip (termasuk skrip analitik kalau ada, yang disalin apa adanya), formulir, atau demo interaktif. Fungsi yang ada di halaman lama tidak boleh hilang tanpa persetujuan LO.
+- Meta, favicon, gambar.
+
+### 18.3 Rakit dan periksa sebelum pasang: `rakit.py` dan `siapkan.js`
+
+1. `python3 situs-pro-kong/alat/rakit.py` membuat `index.html` dari `sumber.html` + `isian.json` (13.1).
+2. `pasang/siapkan.js` dijalankan di server oleh skrip pasang (dan bisa dijalankan lokal). Ditulis untuk Node lama juga (tanpa sintaks baru), seperti `sisipkan.js`.
+
+```text
+node siapkan.js [--cek] --mode uji|utama --awalan /pro/kong/|/pro/ \
+  --sumber situs-pro-kong/index.html --referensi situs-pro-kong/lama/index.html \
+  --lama <index.html yang sedang dipakai di server> --keluar <berkas hasil>
+node siapkan.js --bersihkan <masuk> <keluar>     # buang blok vbpro-* dari halaman lama
+```
+
+Yang diperiksa (berhenti dengan pesan jelas kalau ada yang gagal, tanpa menulis apa pun):
+
+- Sumber punya penanda `<meta name="vbkong-halaman" content="...">` dan tidak mengandung `[ISI`, `[SALIN DARI HALAMAN LAMA`, atau `{{`.
+- Ketujuh endpoint, keempat domain, kelima nama field, `admin@venbeemail.com`, dan `NongBana` ada di sumber.
+- Setiap blok kode berisi `curl` di referensi (setelah blok `vbpro-*` dibuang dan entitas HTML diurai) ada persis sama di salah satu blok kode sumber. Hanya akhir baris (`\r\n` dan `\n`) yang disamakan.
+- Kalau halaman yang sedang dipakai di server bukan halaman Kong (tidak ada penanda `vbkong-halaman`), blok curl di sana dibandingkan dengan referensi. Kalau berbeda: berhenti dengan pesan "Halaman live berubah sejak diambil. Ambil ulang isi lama (18.2)."
+
+Yang dikerjakan setelah semua lolos:
+
+- Mengganti alamat `aset/vbkong/` menjadi `{awalan}aset/vbkong/` di `src`, `href`, `srcset`, `poster`, dan `url(...)` di dalam `<style>`, serta mengisi `<html data-akar="{awalan}">` (JavaScript menyusun alamat bingkai film dari `data-akar`).
+- `--mode uji`: menambahkan `<meta name="robots" content="noindex, nofollow">`. `--mode utama`: memastikan tidak ada.
+- Menulis hasil ke `--keluar` dan mencetak ringkasan (mode, awalan, jumlah endpoint, domain, dan blok curl yang cocok).
+
+### 18.4 Pasang: `pasang-kong.sh`
+
+Repo `rorobadojo-rgb/Venbeemail` publik, jadi server mengunduh langsung dari GitHub. Setelah `situs-pro-kong/` di-push ke cabang kerja, beri LO blok ini dengan `CABANG` diisi nama cabang. Versi uji dulu (`MODE=uji`), lalu versi utama (`MODE=utama`) setelah LO setuju.
+
+```bash
+# Pasang VenbeeMail Pro gaya Kong. Aman diulang.
+# MODE=uji  : ke /pro/kong/ (noindex), /pro/ tidak berubah.
+# MODE=utama: mengganti index.html /pro/. Berkas lama lain (aset/01-03, aset/vbpro) tidak dihapus.
+(
+set -eu
+MODE=${MODE:-uji}
+CABANG=${CABANG:-ISI_NAMA_CABANG}
+AKAR=${AKAR:-/www/wwwroot/venbeemail}
+SIMPAN=${SIMPAN:-/www/backup/venbeemail-pro-kong}
+SITUS=${SITUS:-https://venbeemail.com}
+SUMBER=https://codeload.github.com/rorobadojo-rgb/Venbeemail/tar.gz/refs/heads/$CABANG
+T=$(date +%Y%m%d-%H%M%S)
+KERJA=/tmp/vbkong-$T
+case "$MODE" in uji|utama) ;; *) echo "BERHENTI: MODE harus uji atau utama. Tidak ada yang diubah."; exit 1;; esac
+
+# 1. Folder /pro
+P=""
+for d in $(find "$AKAR" -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
+  if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then P=$d; break; fi
+done
+if [ -z "$P" ]; then echo "BERHENTI: folder /pro tidak ketemu. Tidak ada yang diubah."; exit 1; fi
+echo "Folder /pro : $P"
+
+# 2. Node
+N=$(command -v node || true)
+if [ -z "$N" ]; then N=$(ls -1 /www/server/nodejs/*/bin/node 2>/dev/null | tail -1 || true); fi
+if [ -z "$N" ]; then echo "BERHENTI: program node tidak ketemu. Tidak ada yang diubah."; exit 1; fi
+
+# 3. Unduh dan periksa tanpa menulis
+rm -rf "$KERJA"; mkdir -p "$KERJA"; cd "$KERJA"
+curl -fsSL "$SUMBER" | tar xz --strip-components=1
+for f in situs-pro-kong/index.html situs-pro-kong/lama/index.html situs-pro-kong/pasang/siapkan.js \
+         situs-pro-kong/aset/vbkong/gaya.css situs-pro-kong/aset/vbkong/halaman.js situs-pro-kong/aset/vbkong/gerak.js \
+         situs-pro-kong/aset/vbkong/js/gsap.min.js situs-pro-kong/aset/vbkong/gambar/maskot-badan-512.webp; do
+  if [ ! -s "$f" ]; then echo "BERHENTI: unduhan tidak lengkap ($f). Tidak ada yang diubah."; exit 1; fi
+done
+if [ "$MODE" = uji ]; then AWAL=/pro/kong/; else AWAL=/pro/; fi
+"$N" situs-pro-kong/pasang/siapkan.js --cek --mode "$MODE" --awalan "$AWAL" \
+  --sumber situs-pro-kong/index.html --referensi situs-pro-kong/lama/index.html --lama "$P/index.html" --keluar "$KERJA/hasil.html"
+"$N" situs-pro-kong/pasang/siapkan.js --mode "$MODE" --awalan "$AWAL" \
+  --sumber situs-pro-kong/index.html --referensi situs-pro-kong/lama/index.html --lama "$P/index.html" --keluar "$KERJA/hasil.html"
+
+# 4. Cadangan seluruh folder /pro
+mkdir -p "$SIMPAN"
+cp -a "$P" "$SIMPAN/pro-$T"
+if [ ! -f "$SIMPAN/pro-$T/index.html" ]; then echo "BERHENTI: cadangan gagal. Tidak ada yang diubah."; exit 1; fi
+echo "Cadangan    : $SIMPAN/pro-$T"
+
+# 5. Pasang
+if [ "$MODE" = uji ]; then
+  rm -rf "$P/kong"; mkdir -p "$P/kong/aset"
+  cp -r situs-pro-kong/aset/vbkong "$P/kong/aset/vbkong"
+  cp "$KERJA/hasil.html" "$P/kong/index.html"
+  chown -R --reference="$P/index.html" "$P/kong"
+  find "$P/kong" -type d -exec chmod 755 {} +; find "$P/kong" -type f -exec chmod 644 {} +
+  CEK=/pro/kong/
+else
+  rm -rf "$P/aset/vbkong"
+  cp -r situs-pro-kong/aset/vbkong "$P/aset/vbkong"
+  chown -R --reference="$P/index.html" "$P/aset/vbkong"
+  find "$P/aset/vbkong" -type d -exec chmod 755 {} +; find "$P/aset/vbkong" -type f -exec chmod 644 {} +
+  cp "$KERJA/hasil.html" "$P/index.html"     # menimpa isi, pemilik dan izin berkas lama tetap
+  rm -rf "$P/kong"                             # versi uji tidak diperlukan lagi (ada di cadangan)
+  CEK=/pro/
+fi
+
+# 6. Periksa dari luar. Gagal: kembalikan otomatis.
+kode() { curl -s -o /dev/null -w '%{http_code}' "$SITUS$1" || true; }
+ada() { curl -s "$SITUS$CEK?v=$T" | grep -c 'vbkong-halaman' || true; }
+HAL_ADA=$(ada)
+if [ "$HAL_ADA" = 0 ] && command -v systemctl >/dev/null 2>&1 && systemctl cat banamail >/dev/null 2>&1; then
+  echo "Halaman baru belum terbaca, memulai ulang banamail..."; systemctl restart banamail; sleep 3; HAL_ADA=$(ada)
+fi
+HAL=$(kode "$CEK"); CSS=$(kode "${CEK}aset/vbkong/gaya.css"); JS=$(kode "${CEK}aset/vbkong/halaman.js"); GB=$(kode "${CEK}aset/vbkong/gambar/maskot-badan-512.webp")
+echo "Periksa     : halaman $HAL, penanda $HAL_ADA, gaya.css $CSS, halaman.js $JS, gambar $GB"
+cd /; rm -rf "$KERJA"
+if [ "$HAL" = 000 ]; then
+  echo "SELESAI, tapi server tidak bisa membuka $SITUS sendiri. Buka $SITUS$CEK di HP untuk memastikan."
+elif [ "$HAL" = 200 ] && [ "$HAL_ADA" != 0 ] && [ "$CSS" = 200 ] && [ "$JS" = 200 ] && [ "$GB" = 200 ]; then
+  echo "BERHASIL. Buka $SITUS$CEK di HP."
+else
+  cp -a "$SIMPAN/pro-$T" "$P.kembali" && rm -rf "$P" && mv "$P.kembali" "$P"
+  if [ "$MODE" = uji ] && [ "$HAL" = 404 ]; then
+    echo "GAGAL: server tidak melayani folder /pro/kong/. Folder /pro sudah dikembalikan. Uji lewat pratinjau saja, lalu pasang utama dengan pemeriksaan ketat."
+  else
+    echo "GAGAL periksa. Folder /pro sudah dikembalikan dari $SIMPAN/pro-$T. Tempel hasil ini ke chat."
+  fi
+  exit 1
+fi
+echo "Untuk mengembalikan pemasangan ini saja: rm -rf '$P' && cp -a '$SIMPAN/pro-$T' '$P'"
+)
+```
+
+Cara memakai: Claude memberikan blok yang baris `MODE=` dan `CABANG=`-nya sudah terisi, jadi LO cukup menempel. Cara lain: ketik dulu `MODE=utama; CABANG=nama-cabang` di terminal, tekan Enter, lalu tempel blok apa adanya (subshell mewarisi nilai itu).
+
+Catatan:
+
+- Folder /pro dikenali dari `aset/02-maskot.webp`. Karena itu berkas aset lama tidak pernah dihapus.
+- Cadangan disimpan di `/www/backup/venbeemail-pro-kong/`, terpisah dari cadangan PRD pertama (`/www/backup/venbeemail-pro/`), supaya `situs-pro/pasang/kembalikan.sh` tetap mengembalikan ke keadaan sebelum Fase 1 dan tidak salah ambil cadangan Kong.
+- Kalau Fase 1 Panggung Pos sedang terpasang, `MODE=utama` menggantinya dengan versi Kong (berkas `aset/vbpro/` tetap ada, hanya tidak dipakai). Mengembalikan ke Panggung Pos cukup dengan `kembalikan-kong.sh` (18.5) memakai cadangan sebelum pasang utama.
+- Kalau Content-Security-Policy dari 18.1 melarang skrip sebaris (`'unsafe-inline'` tidak ada), semua JavaScript harus di berkas terpisah (memang begitu rancangannya), dan `<script type="application/ld+json">` boleh dihapus.
+
+### 18.5 Kembalikan: `kembalikan-kong.sh`
+
+```bash
+# Kembalikan folder /pro dari cadangan versi Kong.
+# Bawaan: cadangan TERAKHIR (keadaan tepat sebelum pemasangan Kong terakhir).
+# Pilih cadangan lain dengan PILIH=pro-YYYYMMDD-HHMMSS (lihat daftar di akhir).
+(
+set -eu
+AKAR=${AKAR:-/www/wwwroot/venbeemail}
+SIMPAN=${SIMPAN:-/www/backup/venbeemail-pro-kong}
+SITUS=${SITUS:-https://venbeemail.com}
+PILIH=${PILIH:-}
+if [ -n "$PILIH" ]; then C="$SIMPAN/$PILIH"; else C=$(ls -1d "$SIMPAN"/pro-* 2>/dev/null | tail -1 || true); fi
+if [ -z "$C" ] || [ ! -f "$C/index.html" ]; then echo "BERHENTI: cadangan tidak ada di $SIMPAN."; exit 1; fi
+P=""
+for d in $(find "$AKAR" -path '*/node_modules' -prune -o -type d -name pro -print 2>/dev/null); do
+  if [ -f "$d/index.html" ] && [ -f "$d/aset/02-maskot.webp" ]; then P=$d; break; fi
+done
+if [ -z "$P" ]; then echo "BERHENTI: folder /pro tidak ketemu."; exit 1; fi
+cp -a "$C" "$P.kembali" && rm -rf "$P" && mv "$P.kembali" "$P"
+echo "Dikembalikan: $P sekarang sama dengan $C"
+if command -v systemctl >/dev/null 2>&1 && systemctl cat banamail >/dev/null 2>&1; then systemctl restart banamail; sleep 3; fi
+echo "Halaman: $(curl -s -o /dev/null -w '%{http_code}' "$SITUS/pro/" || true)"
+echo "Semua cadangan Kong:"; ls -1d "$SIMPAN"/pro-*
+)
+```
+
+Untuk kembali ke keadaan sebelum versi Kong pernah dipasang: pakai cadangan Kong yang paling awal (`PILIH=` nama paling atas di daftar). Untuk kembali ke sebelum Fase 1 PRD pertama: `situs-pro/pasang/kembalikan.sh`.
+
+### 18.6 Footer halaman depan: `kaki-depan.sh`
+
+Dijalankan setelah pasang utama berhasil. `DEPAN` diisi letak berkas halaman depan dari hasil cek server (18.1).
+
+```bash
+(
+set -eu
+DEPAN=${DEPAN:-ISI_LETAK_INDEX_HTML_HALAMAN_DEPAN}
+CABANG=${CABANG:-ISI_NAMA_CABANG}
+SIMPAN=${SIMPAN:-/www/backup/venbeemail-pro-kong}
+SITUS=${SITUS:-https://venbeemail.com}
+T=$(date +%Y%m%d-%H%M%S); KERJA=/tmp/vbkong-depan-$T
+if [ ! -f "$DEPAN" ]; then echo "BERHENTI: $DEPAN tidak ada. Tidak ada yang diubah."; exit 1; fi
+N=$(command -v node || ls -1 /www/server/nodejs/*/bin/node 2>/dev/null | tail -1 || true)
+if [ -z "$N" ]; then echo "BERHENTI: node tidak ketemu."; exit 1; fi
+rm -rf "$KERJA"; mkdir -p "$KERJA"; cd "$KERJA"
+curl -fsSL "https://codeload.github.com/rorobadojo-rgb/Venbeemail/tar.gz/refs/heads/$CABANG" | tar xz --strip-components=1
+"$N" situs-pro-kong/pasang/sisip-kaki.js --cek "$DEPAN"
+mkdir -p "$SIMPAN"; cp -a "$DEPAN" "$SIMPAN/depan-$T.html"
+echo "Cadangan    : $SIMPAN/depan-$T.html"
+"$N" situs-pro-kong/pasang/sisip-kaki.js "$DEPAN"
+ADA=$(curl -s "$SITUS/?v=$T" | grep -c 'vbkong-kaki-depan:mulai' || true)
+if [ "$ADA" = 0 ] && command -v systemctl >/dev/null 2>&1 && systemctl cat banamail >/dev/null 2>&1; then systemctl restart banamail; sleep 3; ADA=$(curl -s "$SITUS/?v=$T" | grep -c 'vbkong-kaki-depan:mulai' || true); fi
+cd /; rm -rf "$KERJA"
+if [ "$ADA" != 0 ]; then echo "BERHASIL. Buka $SITUS di HP dan pastikan membuat alamat email sementara masih jalan.";
+else cp -a "$SIMPAN/depan-$T.html" "$DEPAN"; echo "GAGAL: baris footer tidak terbaca. Halaman depan sudah dikembalikan."; exit 1; fi
+echo "Untuk mengembalikan: cp -a '$SIMPAN/depan-$T.html' '$DEPAN'"
+)
+```
+
+`sisip-kaki.js` mengikuti pola `situs-pro/pasang/sisipkan.js`: satu blok bertanda, aman diulang, `--cek` hanya memeriksa, memastikan isi lain berkas utuh, dan menulis di berkas yang sama (pemilik dan izin tetap).
+
+### 18.7 Setelah pasang
+
+- Buka `/pro/` (atau `/pro/kong/`) di HP dalam dua bahasa, gulir dari atas sampai footer, uji tombol Salin, pemeriksa awalan, perangko domain, Lewati film, ketuk kotak surat di footer, dan tombol Kurangi gerakan.
+- Buka halaman depan: membuat alamat email sementara dan menerima surat masih jalan, baris footer baru tampil.
+- Centang bagian 20.
+- Beri LO ringkasan: alamat yang sudah hidup, letak cadangan, dan blok kembalikan.
+
+---
+
+## 19. Bank pilihan lengkap (cadangan)
+
+Semua modul dari `MENU-PILIHAN.md`. **DIPILIH** = paket yang dikunci LO (D3). Yang lain adalah cadangan: bisa ditukar per bagian tanpa membongkar halaman, karena isi dan `id` bagian tetap sama. Penukaran modul adalah keputusan baru LO (catat di bagian 4).
+
+### 19.1 Konsep lain (kalau LO kelak ingin berganti kerangka)
+
+| Kode | Konsep | Inti | Video | Kapan cocok |
+|---|---|---|---|---|
+| **K1** | **Surat Sampai (DIPILIH)** | Satu amplop menempuh film 30 detik sampai ke celah kotak surat; footer lift panggung | 42 dtk | Rasa film paling kuat yang masih realistis |
+| K2 | Kamu Suratnya | Film dari mata surat (POV), tempelan hantu bicara lewat subtitle, isi halaman di dalam kotak kardus | 26 dtk | Paling personal dan lucu, paling cocok HP tegak |
+| K3 | Sobek, Lipat, Kirim | Stop-motion kertas 12 fps, halaman satu lembar kertas panjang, maskot menembus robekan di footer | 31 dtk | Rasa buatan tangan, paling ringan |
+| K4 | Konsol Sutradara | Tiap gulir mengetik satu perintah di konsol lalu memutar satu "take" | 31 dtk | Developer yang ingin langsung melihat perintah; paling aman di Safari |
+| K5 | Film dengan Teks Terjemahan | Tiap adegan satu panggilan API, bilah subtitle mengetik request dan jawaban | 30 dtk | Paling mendidik |
+| K6 | Kamera Mundur | Hero hanya kotak surat dengan tangan misterius; footer mengungkap maskot | 21 dtk | Paling cepat jadi, paling murah (sekitar $15). Jalur cadangan resmi kalau waktu atau anggaran mepet: mulai dari K6 + FT1 + GL1, lalu naik ke K1 |
+| K7 | Buku Pop-Up | Halaman seperti buku pop-up, maskot berdiri dari lipatan | 27 dtk | Paling menyatu dengan papercraft, CSS 3D paling banyak |
+
+### 19.2 Modul per bagian
+
+**Layar muat**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| LM1 | Bilah kemajuan jujur | Bilah menghitung berkas adegan pertama, paling lama 1,2 detik | Sangat ringan | **DIPILIH** |
+| LM2 | Cek denyut API | `GET /api/health` dengan batas 1,5 detik, tanpa tulisan palsu kalau gagal | Ringan | **DIPILIH** |
+| LM3 | Sobek blok catatan | Kertas catatan berlogo dicabut dalam 4 bingkai stop-motion | Ringan | cadangan |
+| LM4 | Tirai panggung | Dua tirai kertas oranye membuka | Ringan | cadangan |
+| LM5 | Tanpa layar muat | Hero langsung dari gambar diam | Paling ringan | cadangan (dipakai otomatis saat kurangi gerakan) |
+
+**Pembuka/hero**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| HR1 | Amplop di podium | Loop amplop melayang di belakang wordmark, kalimat, dua tombol | Sedang | **DIPILIH** |
+| HR2 | Tangan misterius | Kotak surat diangkat tangan terpotong, footer mengungkap pemiliknya | Ringan | cadangan |
+| HR3 | Lubang sobekan | Kertas putih dengan sobekan bundar, panggung hidup di dalamnya | Ringan | cadangan |
+| HR4 | Panggung siaga + konsol | Maskot bernapas, konsol berkedip di samping judul | Sedang | cadangan |
+| HR5 | Daftar pemeran | Gaya poster film: "Kotak = alamat · Amplop = surat · Pesawat = lampiran · Monyet = kurir" | Sangat ringan | cadangan (bisa jadi hiasan kecil di hero) |
+
+**Menu**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| MN1 | Pil kaca tengah | Logo kiri, pil kaca berisi tautan, tombol di kanan; HP lembar bawah | Ringan | **DIPILIH** (bawaan rekomendasi) |
+| MN2 | Tab pembatas buku | Tab kertas di tepi kanan | Ringan | cadangan |
+| MN3 | Pil + chip status | Chip kecil berganti mengikuti cerita | Ringan | cadangan |
+| MN4 | Selotip kertas | Tombol Menu berupa selotip | Ringan | cadangan |
+
+**Cara menggulir dan penanda kemajuan**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| GL1 | Garis rute | Amplop mini melewati Dikirim, Dioper, Di udara, Sampai | Sangat ringan | **DIPILIH** |
+| GL2 | Perangko ketinggian | Angka ketinggian turun selama zoom | Sangat ringan | cadangan |
+| GL3 | Penanda babak | "Babak 2/4 · Surat datang" | Sangat ringan | cadangan |
+| GL4 | Tombol Lewati | Pil "Lewati film" | Sangat ringan | **DIPILIH** |
+| GL5 | Scrub urutan bingkai | WebP di canvas dengan campuran dua bingkai | Berat kalau panjang; aman per adegan | **DIPILIH** |
+| GL6 | Putar sekali per pemicu | Klip diputar biasa saat bagian mencapai titik tertentu | Ringan | cadangan (pengganti GL5 kalau scrub bermasalah di iPhone) |
+
+**Gaya judul**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| JD1 | Huruf gunting ADVANCED | SVG per huruf dengan tekstur bahan | Ringan | **DIPILIH** |
+| JD2 | Huruf lipat kobalt | Kertas terlipat sisi terang-gelap | Ringan | cadangan |
+| JD3 | Bunga menetes | Kobalt bermotif bunga dengan tetesan oranye | Ringan | cadangan (boleh dipakai sebagai isian `bunga` di JD1) |
+| JD4 | Sans 900 bergradasi | Gaya produk premium | Sangat ringan | cadangan |
+| JD5 | Cap pos | Judul kecil sebagai cap tinta | Sangat ringan | dipakai sebagian di kartu penutup |
+
+**Transisi**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| TR1 | Amplop menutup layar | Sambungan klip disembunyikan di balik amplop | Nol | **DIPILIH** |
+| TR2 | Sobek kertas | Bagian disobek dari bawah ke atas, maksimal 3 kali per halaman | Ringan | cadangan (versi diam dipakai sebagai tepi bagian) |
+| TR3 | Lembar bertumpuk | `position: sticky` dengan bayangan | Sangat ringan | dipakai di Cara kerja versi HP |
+| TR4 | Potong ke hitam | Hitam 0,2 detik antar momen | Nol | cadangan |
+| TR5 | Cap dihentakkan | Kartu penutup bab | Sangat ringan | **DIPILIH** |
+| TR6 | Balik halaman | Balik halaman 3D | Sedang | cadangan |
+
+**Cara kerja**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| CK1 | Kartu sobek bertumpuk | 4 kartu bertumpuk saat digulir, monyet dan angka gunting | Ringan | **DIPILIH** |
+| CK2 | Pemberhentian di film | Film berhenti, cap "LANGKAH n" | Ringan | cadangan |
+| CK3 | Storyboard ditempel | Lembar ditempel selotip di papan teal | Ringan | cadangan |
+| CK4 | Pita film | Kotak bingkai sproket berjalan mendatar | Ringan | cadangan |
+| CK5 | Roda kertas putar | Volvelle berputar per langkah | Ringan sampai sedang | cadangan |
+| CK6 | Kartu monyet menyembul | Kartu digeser menyamping, monyet ollie | Ringan | cadangan |
+
+**Tampilan kode API**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| API1 | Kartu tiket | Kertas berlubang, tab Contoh 1/2, tombol Salin | Sangat ringan | **DIPILIH** |
+| API2 | Pita struk | Curl tercetak dari celah kotak surat | Ringan | cadangan |
+| API3 | Konsol kaca | Terminal gelap, panel jawaban 5 field | Sangat ringan | cadangan |
+| API4 | Ruang proyeksi | Garis oranye dari field ke bendanya | Ringan | cadangan |
+| API5 | Kantong kartu indeks | Kartu naik dari kantong berjahit | Ringan | cadangan |
+| API6 | Tombol Jalankan | Memanggil API sungguhan; mati sampai server punya batas pemakaian | Ringan | cadangan, butuh keputusan LO dan kesiapan server |
+
+**Pemeriksa awalan 3 sampai 20**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| AW1 | Label 20 kotak huruf | Tiap huruf satu kotak, 3 kotak pertama "min" | Sangat ringan | **DIPILIH** |
+| AW2 | Penggaris kertas | 20 takik, gunting memotong kelebihan | Sangat ringan | cadangan |
+| AW3 | Pratinjau alamat | `awalan@domain` langsung, bertanda pratinjau | Sangat ringan | **DIPILIH** |
+| AW4 | Gema di akhir | Awalan muncul lagi di amplop footer | Sangat ringan | **DIPILIH** |
+
+**Tampilan endpoint**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| EP1 | Papan keberangkatan | Split-flap kertas, teks DOM asli | Ringan | **DIPILIH** |
+| EP2 | Tiket antrean | Tiket bergerigi per endpoint | Ringan | cadangan |
+| EP3 | Rak loker | Tujuh loker kardus | Ringan | cadangan |
+| EP4 | Lembar spesifikasi | Tabel tenang paling mudah dibaca | Paling ringan | **cadangan resmi** (kelas `vbk-papan--lembar`) |
+| EP5 | Adegan ulang | Tujuh panel layar penuh dari bingkai film | Sedang | cadangan |
+| EP6 | Kipas lipat | Leporello 7 panel | Sedang | cadangan |
+
+**Domain**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| DM1 | Perangko bergerigi | Ketuk untuk menyalin, tercap TERSALIN | Ringan | **DIPILIH** |
+| DM2 | Papan skate | Kartu papan skate, monyet ollie | Ringan | cadangan |
+| DM3 | Bendera monyet | Monyet membawa bendera domain | Ringan | cadangan |
+| DM4 | Cincin pelat | Cincin 3D CSS di desktop | Sedang | cadangan |
+| DM5 | Stiker alamat | Stiker miring di dinding kardus | Sangat ringan | cadangan |
+
+**Tentang**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| TT1 | Catatan selotip | Kertas catatan "DI BALIK PANGGUNG", isian tersembunyi sampai diisi | Sangat ringan | **DIPILIH** |
+| TT2 | Kredit penutup | Teks bergulir seperti akhir film | Sangat ringan | cadangan |
+| TT3 | Catatan orang pertama | "Saya NongBana. Sebelum ini saya membuat BanaMail." | Sangat ringan | cadangan (cocok kalau LO memberi cerita orang pertama) |
+| TT4 | Scrapbook BanaMail | Wordmark lama ditempel selotip | Ringan | cadangan |
+| TT5 | Amplop berbalik | Surat di balik amplop | Ringan | cadangan |
+
+**Penutup**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| PN1 | Manifesto bahan | Kata raksasa bertekstur berbeda | Ringan | **DIPILIH** |
+| PN2 | Podium kosong | Sorotan bernapas di podium kosong | Sangat ringan | **DIPILIH** |
+| PN3 | Surat balasan | Surat diketik untuk `{awalan}@{domain}` | Sangat ringan | cadangan |
+| PN4 | Konsol giliranmu | Konsol kosong, "Sekarang giliran kodemu." | Sangat ringan | cadangan |
+
+**Footer maskot**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| FT1 | Lift panggung + surat jatuh | Lampu padam, tulisan ditempel, maskot naik dari podium, kotak memantul, amplop jatuh ke celah | Ringan | **DIPILIH** |
+| FT2 | Naik klasik | Maskot naik dari tengah bawah, paling dekat Kong | Paling ringan | cadangan (dipakai otomatis kalau pintu lift bermasalah) |
+| FT3 | Menembus robekan | Kertas robek V terbalik | Ringan | cadangan |
+| FT4 | Pop-up V-fold | Berdiri dari lipatan buku | Ringan sampai sedang | cadangan |
+| FT5 | Kamera mundur | Grup badan + kotak mengecil dari dekat | Ringan | cadangan |
+| FT6 | Semburan amplop | Amplop menyembur dari kotak | Ringan | dibuat, mati secara bawaan (10.6) |
+
+**Kursor dan tombol**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| KT1 | Kursor amplop | Kursor amplop di desktop | Nol di HP | dibuat, mati secara bawaan (10.6) |
+| KT2 | Tombol pil kertas | Pil oranye dengan bayangan kertas | Sangat ringan | **DIPILIH** |
+| KT3 | Stiker sosial | Ikon miring yang menegak saat disentuh | Sangat ringan | **DIPILIH** |
+| KT4 | Cap tersalin | Cap TERSALIN + pesan `aria-live` | Sangat ringan | **DIPILIH** |
+
+**Suara**
+
+| Kode | Nama | Penjelasan | Beban HP | Status |
+|---|---|---|---|---|
+| SR1 | Tanpa suara | Hening | Nol | **DIPILIH** |
+| SR2 | Bunyi kertas kecil | Tombol suara, mati secara bawaan | Sangat ringan | cadangan |
+| SR3 | Suasana panggung | Dengung ruangan saat film | Ringan | cadangan |
+
+### 19.3 Slogan footer
+
+| Slogan | Status |
+|---|---|
+| **KOTAK MASUK UNTUK KODEMU / AN INBOX FOR YOUR CODE** | **DIPILIH (D5)** |
+| SURAT SAMPAI. / MAIL DELIVERED. | Dipakai sebagai nama film dan bab, bukan slogan footer |
+| ADA SURAT! / MAIL'S HERE! | cadangan |
+| BIKIN. BACA. BUANG. / MAKE. READ. TOSS. | cadangan |
+| KIRIM. TANGKAP. BACA. / SEND. CATCH. READ. | Dipakai (diperpanjang dengan BUANG.) sebagai manifesto Penutup |
+| BIAR DIA YANG ANGKAT. / LET HIM DO THE LIFTING. | cadangan |
+| SATU POST, SATU KOTAK. / ONE POST, ONE INBOX. | cadangan |
+| UJI TANPA SAMPAH / TEST WITHOUT THE CLUTTER | cadangan |
+| POS UNTUK KODEMU / A POST OFFICE FOR YOUR CODE | cadangan |
+| SURATNYA MASUK, TESNYA JALAN. / MAIL IN, TESTS ON. | cadangan |
+
+---
+
+## 20. Yang tidak boleh berubah dan syarat selesai
+
+### 20.1 Tidak boleh
+
+- Mengubah atau menulis ulang isi teknis di bagian 3. Menampilkan endpoint yang belum aktif.
+- Mengubah atau menghapus apa pun di folder `situs-pro/` (PRD pertama).
+- Menghapus berkas aset lama di folder /pro di server.
+- Menghilangkan versi ID atau EN dari teks apa pun.
+- Mengubah tubuh, wajah, atau warna maskot, termasuk lewat video yang wajahnya melenceng.
+- Menambah testimoni, angka pengguna, logo klien, penghargaan, atau klaim lain yang tidak nyata.
+- Mengarang tahun, kota, cerita, nama akun sosial media, atau fitur.
+- Menampilkan email selain admin@venbeemail.com.
+- Menaruh teks penting di dalam gambar atau video.
+- Memakai teks, huruf, gambar, atau nama Kong Rolls, MDX, atau merek lain, selain ikon sosial media sebagai tautan akun.
+- Memuat skrip atau huruf dari CDN saat halaman dibuka.
+- Memasang ke server tanpa cadangan dan tanpa cara mengembalikan.
+- Memasang versi utama sebelum LO melihat versi uji dan sebelum diuji di iPhone.
+
+### 20.2 Syarat selesai
+
+Isi dan kejujuran:
+
+- [ ] Judul tab, meta, Open Graph, Twitter card, dan logo menulis "VenbeeMail Pro" (8.4)
+- [ ] Tujuh endpoint, empat domain, dua contoh curl, aturan awalan, dan field jawaban sama persis dengan halaman lama (`siapkan.js --cek` lolos)
+- [ ] Langkah Cara kerja, kolom guna, dan keterangan field disalin persis dari halaman lama, ID dan EN
+- [ ] Semua nilai contoh bertanda "contoh" atau "pratinjau", token selalu `<token>`
+- [ ] Nama pembuat NongBana tampil di hero, Tentang, dan kaki halaman
+- [ ] Kontak yang tampil hanya admin@venbeemail.com
+- [ ] Bagian Tentang lengkap; isian yang kosong (tahun, kota, cerita, fitur Claude) tidak ada di HTML
+- [ ] Ikon sosial hanya tampil untuk akun yang diisi LO; tanpa `href="#"`
+- [ ] Hak cipta "© {tahun berjalan} VenbeeMail · dibuat oleh NongBana" (EN "made by NongBana")
+- [ ] Tidak ada testimoni, angka pengguna, atau klaim lain
+- [ ] Tidak ada teks, huruf, atau gambar Kong Rolls
+
+Tampilan dan gerak:
+
+- [ ] Layar muat jujur, paling lama 1,2 detik, sekali per sesi; titik status API hanya tampil kalau API menjawab
+- [ ] Hero: nama, kalimat inti, dan tombol "Lihat API" terbaca di detik pertama, video loop tanpa sambungan terlihat
+- [ ] Film 30 detik maju-mundur mengikuti gulir, estafet monyet, momen nyaris jatuh terasa lambat, sambungan antaradegan tidak terlihat
+- [ ] Garis rute bergerak sesuai film dan muncul lagi di footer sampai "Sampai"
+- [ ] Tombol "Lewati film" bekerja dengan jari dan keyboard
+- [ ] Kartu penutup dengan cap yang dihentakkan
+- [ ] Setiap bagian Bab 2 punya judul huruf gunting dan gerak masuk sendiri
+- [ ] Footer FT1: lampu padam, tulisan ditempel, maskot naik dari pintu lift tanpa terlihat di bawah permukaan podium, kaki tepat di podium, kotak menembus tepi atas tulisan tanpa celah di lengan, amplop jatuh ke celah, kotak memantul
+- [ ] Label AW4 di amplop footer tampil kalau pengunjung mengetik awalan yang valid
+- [ ] Maskot di footer bernapas, berkedip, dan bereaksi saat kotaknya diketuk
+- [ ] Wajah huruf B bereaksi tiap ditekan, dengan jari maupun keyboard
+- [ ] Semua tombol punya gerak saat disentuh dan ditekan; Salin memberi tanda berhasil yang terlihat dan diumumkan
+
+Video:
+
+- [ ] Ketujuh klip lolos cek 7.6 (atau mode tanpa video dipakai dan dicatat)
+- [ ] Wajah dan warna maskot di V5 sama dengan aset asli
+- [ ] Urutan bingkai HP 405x720 dan desktop 1280x720 dimuat per adegan
+- [ ] Video loop MP4 H.264 + WebM, tanpa suara, dengan poster, dan bisa dijeda
+
+HP, kinerja, aksesibilitas:
+
+- [ ] Muatan awal HP di bawah 2,5 MB (target 1,3 MB), diukur dengan `ukur_muatan.mjs`, angkanya dicatat di README
+- [ ] Rapi di lebar 360 dan 390 piksel, tanpa gulir menyamping
+- [ ] Mode kurangi gerakan (setelan sistem dan tombol): semua isi tampil, semua tombol bekerja, film jadi komik, footer dalam komposisi akhir
+- [ ] Tanpa JavaScript, semua bagian tampil dalam posisi akhir
+- [ ] Tautan "Langsung ke isi", satu `<h1>`, `<h2>` per bagian, fokus terlihat, area sentuh 44 piksel, kontras sesuai 16.3
+- [ ] Dua bahasa lengkap, atribut `lang` ikut berganti
+- [ ] Diuji di Safari iPhone asli (16.5)
+
+Server:
+
+- [ ] Versi uji hidup di `/pro/kong/` dengan `noindex`, sudah dilihat LO
+- [ ] Versi utama terpasang di `/pro/`, pemeriksaan otomatis lolos
+- [ ] Cadangan ada di `/www/backup/venbeemail-pro-kong/`, blok kembalikan sudah diberikan ke LO
+- [ ] Footer halaman depan punya tautan ke /pro dan Tentang; fungsi email sementara tetap jalan; cadangan halaman depan ada
+- [ ] Bagian 4, 5, dan "Kemajuan" di file ini diperbarui dan di-commit
+
+---
+
+## 21. Prompt siap salin untuk chat baru
+
+Tempel ini di chat Claude Code baru (di repo `rorobadojo-rgb/Venbeemail`):
+
+```text
+Bangun versi Kong halaman venbeemail.com/pro sesuai PRD di docs/pro-kong/prd-venbeemail-pro-kong/SKILL.md (skill prd-venbeemail-pro-kong). Baca file itu sampai habis dulu, termasuk bagian 4 (keputusan yang sudah dikunci, jangan ditanyakan lagi) dan bagian 5 (yang masih ditunggu dariku).
+
+Aturan penting: hasil di folder situs-pro-kong/, jangan ubah situs-pro/. Isi teknis lama disalin persis. Dua bahasa ID/EN. Maskot tidak diubah. Jangan mengarang tahun, kota, cerita, akun sosial media, atau angka; yang belum kuberikan jadi [ISI ...] dan tidak tampil. Kontak hanya admin@venbeemail.com, pembuat NongBana.
+
+Mulai dari Fase 0 di bagian 17: beri aku blok cek server (bagian 18.1) untuk kutempel di terminal aaPanel, lalu siapkan folder dan aset. Kerjakan per fase, commit dan push tiap fase, dan beri aku ringkasan singkat plus apa yang kamu tunggu dariku. Setelah Fase 1, kirim lembar bingkai kunci dan prompt Seedance supaya aku bisa mulai membuat video. Jangan pasang ke server sebelum aku melihat versi uji di /pro/kong/.
+```
