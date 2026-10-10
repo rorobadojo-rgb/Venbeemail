@@ -49,7 +49,7 @@ echo "Lembar kontak: $keluar/lembar.jpg"
 # 3. Bingkai awal, tengah, akhir
 ffmpeg -v error -y -i "$f" -frames:v 1 "$keluar/awal.png"
 ffmpeg -v error -y -ss "$(awk -v d="$dur" 'BEGIN{print d/2}')" -i "$f" -frames:v 1 "$keluar/tengah.png"
-ffmpeg -v error -y -sseof -0.05 -i "$f" -frames:v 1 "$keluar/akhir.png"
+ffmpeg -v error -y -sseof -1 -i "$f" -an -update 1 "$keluar/akhir.png"
 
 if [ -n "$tujuan" ]; then
   s="$(ssim "$keluar/akhir.png" "$bingkai/$tujuan.png")"
