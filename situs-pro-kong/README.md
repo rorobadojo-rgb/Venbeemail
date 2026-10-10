@@ -61,17 +61,19 @@ Dicek LO 10 Oktober 2026 (dua kali; blok kedua mencari letak /pro dengan cara la
 |---|---|
 | Letak folder /pro | **`/www/wwwroot/banamail-pro/`** (`index.html`, `aset/02-maskot.webp`). Bukan folder bernama `pro`, jadi pencarian PRD awal gagal (`FOLDER_PRO=` kosong). Blok di PRD 18 sudah diubah memakai `PRO=/www/wwwroot/banamail-pro` |
 | Pemilik berkas | `www:www` (akar proyek dan `server/`) |
-| Cara /pro dilayani | nginx langsung, berkas statis (`server: nginx`, `last-modified: Thu, 08 Oct 2026 03:32:46 GMT`, `etag`, `content-length: 40830`). Tidak ada rute /pro di program Node (`server/`). Aturan `location` nginx belum dilihat |
-| Fase 1 Panggung Pos terpasang? | Belum dicek langsung. Kemungkinan belum: `situs-pro/pasang/pasang.sh` mencari folder bernama `pro` dan akan berhenti |
-| Versi Kong terpasang? | Belum |
-| Cadangan yang ada | Belum dicek di blok kedua |
+| Cara /pro dilayani | nginx langsung, berkas statis (`server: nginx`, `last-modified: Thu, 08 Oct 2026 03:32:46 GMT`, `etag`, `content-length: 40830`). Tidak ada rute /pro di program Node (`server/`). Situs `venbeemail.com` di nginx: `server_name venbeemail.com www.venbeemail.com; root /www/wwwroot/venbeemail.com;`. Tidak ada `location /pro` atau tulisan `banamail-pro` di `/www/server/panel/vhost/nginx/`, jadi dugaan kuat `/www/wwwroot/venbeemail.com/pro` adalah symlink ke `banamail-pro` (pencarian `find -type d` dan `grep -r` tidak mengikuti symlink). Belum dipastikan |
+| Fase 1 Panggung Pos terpasang? | **Tidak** (`vbpro-hero:mulai` 0 kali) |
+| Versi Kong terpasang? | Tidak (`vbkong-halaman` 0 kali) |
+| Cadangan yang ada | Belum ada (`/www/backup/venbeemail-pro*` kosong) |
 | Header `Content-Security-Policy` | **Tidak ada.** Ada `strict-transport-security: max-age=31536000` |
 | `/api/health` | 200 |
 | Node | `/www/server/nodejs/v24.21.0/bin/node` (v24.21.0), ada di PATH |
 | Layanan | `banamail.service` (BanaMail, SMTP :25 + API), aktif sejak 8 Oktober 2026 |
 | Disk | 30 GB, terpakai 6 GB, sisa 24 GB |
 | Akar proyek | `/www/wwwroot/venbeemail` = salinan git repo ini + `server/` (`data/`, `deploy/`, `.env`, `node_modules/`, `banamail-kantor.zip`) |
-| Halaman depan | Belum ketemu. Ada folder situs `/www/wwwroot/banamail.venbeemail.com/` (berisi `proxy_cache_dir`) |
+| Aset /pro lama | `aset/01-latar.webp`, `02-maskot.webp`, `03-tulisan.webp`, `04-kera-flanel.webp`, `05-kera-kepang.webp`, `06-kera-rompi.webp`, `07-kera-kupluk.webp`, `08-amplop.webp`, `09-pesawat.webp`, `ikon.png` (semua `www:www`, 8 Oktober). Tidak boleh dihapus |
+| Situs lain di nginx | `banamail.venbeemail.com.conf`: `server_name banamail.venbeemail.com tempikmail.venbeemail.com pentilmail.venbeemail.com contolmail.venbeemail.com`, `root /www/wwwroot/banamail.venbeemail.com`, `proxy_pass http://127.0.0.1:3000` (program Node) |
+| Halaman depan | Belum pasti. Kandidat: `/www/wwwroot/venbeemail.com/index.html` (root situs venbeemail.com) |
 
 ## Isi /pro lama (PRD 18.2)
 

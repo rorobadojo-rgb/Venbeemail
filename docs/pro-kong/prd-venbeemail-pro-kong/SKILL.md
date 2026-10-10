@@ -113,6 +113,8 @@ Dicek 10 Oktober 2026 (cek server Fase 0, hasil lengkap di `situs-pro-kong/READM
 
 - **Halaman /pro ada di `/www/wwwroot/banamail-pro/`** (`index.html` 40.830 byte, `aset/02-maskot.webp`), bukan folder bernama `pro` di dalam `/www/wwwroot/venbeemail`. Halaman dilayani langsung oleh nginx sebagai berkas statis (header `server: nginx`, `last-modified`, `etag`); program Node tidak punya rute /pro. Karena itu semua blok server di bagian 18 memakai `PRO=/www/wwwroot/banamail-pro` (bisa diganti dengan mengetik `PRO=...` sebelum menempel blok), bukan mencari folder bernama `pro`. Alat pasang PRD pertama (`situs-pro/pasang/pasang.sh`) masih mencari folder bernama `pro`, jadi kemungkinan besar Fase 1 Panggung Pos belum pernah terpasang.
 - Tidak ada header `Content-Security-Policy`. Ada `strict-transport-security`.
+- Isi `aset/` lama: `01-latar.webp` sampai `09-pesawat.webp` (`04-kera-flanel`, `05-kera-kepang`, `06-kera-rompi`, `07-kera-kupluk`, `08-amplop`, `09-pesawat`) dan `ikon.png`. Semuanya tidak boleh dihapus. Panggung Pos (Fase 1 PRD pertama) dan versi Kong belum terpasang; belum ada cadangan.
+- nginx: situs `venbeemail.com` ber-`root /www/wwwroot/venbeemail.com`, tanpa `location /pro` di `vhost/nginx/`. Dugaan: `/www/wwwroot/venbeemail.com/pro` adalah symlink ke `/www/wwwroot/banamail-pro` (dipastikan di cek berikutnya).
 - `/api/health` menjawab 200. Node v24.21.0 di `/www/server/nodejs/v24.21.0/bin/node`. `banamail.service` (SMTP :25 + API) berjalan. Sisa disk 24 GB.
 - `/www/wwwroot/venbeemail` adalah salinan git repo ini ditambah `server/`, pemilik `www:www`.
 
