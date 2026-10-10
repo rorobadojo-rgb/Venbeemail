@@ -55,12 +55,12 @@ python3 situs-pro-kong/alat/bingkai_kunci.py      # seedance/bingkai/*.png + lem
 
 ## Hasil cek server (PRD 18.1)
 
-**Menunggu LO** (R1). Setelah LO menempel hasilnya, catat di sini:
+**Sebagian** (R1, 10 Oktober 2026). Percobaan pertama: `/www/wwwroot/venbeemail` berisi salinan git repo ini (`app`, `components`, `public`, `scripts`, `.git`, dan seterusnya) ditambah folder `server/` dan `banamail-kantor.zip`, pemilik `www:www`. Pencarian folder /pro (folder bernama `pro` berisi `index.html` dan `aset/02-maskot.webp`) **tidak menemukan apa pun** (`FOLDER_PRO=` kosong), jadi letak /pro harus dicari dengan cara lain. Sisa keluaran belum terbaca.
 
 | Hal | Hasil |
 |---|---|
 | Letak folder /pro | |
-| Pemilik berkas | |
+| Pemilik berkas | `www:www` (akar proyek) |
 | Fase 1 Panggung Pos terpasang? | |
 | Versi Kong terpasang? | |
 | Cadangan yang ada | |
