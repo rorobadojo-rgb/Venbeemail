@@ -176,6 +176,10 @@ Dikunci LO pada 10 Oktober 2026. Jangan ditanyakan lagi.
 | D8 | Sosial media | Footer memuat logo X, Threads, GitHub, LinkedIn sebagai SVG di dalam HTML. Nama akun diisi LO belakangan. Ikon yang akunnya belum diisi tidak ditampilkan. Jangan mengarang nama akun |
 | D9 | Fakta pendiri | Tahun mulai, kota, dan cerita pribadi belum diberikan. Pakai `[ISI ...]`, dan bagian itu tidak tampil sampai diisi |
 | D10 | Cakupan perubahan | Semua bagian halaman /pro berubah ke gaya Kong. Aset gambar tetap sama. Halaman depan BanaMail hanya footer yang ditambah tautan |
+| D11 | Teks hero (10 Oktober 2026) | Campur: kalimat 1 dari PRD ("Kotak masuk uji lewat API." / "A test inbox over an API."), kalimat 2 dari halaman lama (`hero.lede`, ID dan EN persis). Judul hero lama (`hero.h1`) tidak dipakai |
+| D12 | Fakta lama (10 Oktober 2026) | "7 endpoint aktif · 4 domain email · Tiap alamat punya masa berlaku" (`hero.facts`, persis) di hero, baris mono kecil di bawah dua tombol |
+| D13 | Pita kegunaan lama (10 Oktober 2026) | "Dipakai untuk menguji" + tiga kegunaan (`uses.*`, persis) sebagai chip di bawah pengantar Cara kerja |
+| D14 | Judul lama (10 Oktober 2026) | `how.title` "Empat langkah, dari alamat baru sampai bersih lagi" menjadi pengantar Cara kerja (menggantikan kalimat PRD 11.1). `end.title` "Mulai dari satu alamat." menjadi kalimat Penutup (menggantikan kalimat PRD 12). `end.p` tidak dipakai (Tentang sudah punya ajakan) |
 
 Rekomendasi tambahan yang dipakai sebagai bawaan selama LO tidak meminta lain (boleh diubah tanpa membongkar halaman):
 
