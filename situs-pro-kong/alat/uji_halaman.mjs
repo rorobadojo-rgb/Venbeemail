@@ -1,5 +1,6 @@
 // Uji fungsi halaman di Chromium (Playwright): tab, salin, awalan, perangko,
-// bahasa, menu HP, kurangi gerakan, tanpa JavaScript.
+// bahasa, menu HP, kurangi gerakan, tanpa JavaScript, dan gerak Fase 3
+// (layar muat, hero, video, film, estafet, Lewati film, kartu bab).
 //
 //     cd situs-pro-kong && python3 -m http.server 8766 &
 //     node alat/uji_halaman.mjs
@@ -101,6 +102,71 @@ async function halaman(opsi = {}) {
   const { p, ctx } = await halaman({ js: false });
   cek("tanpa JS: panel 2 tampil, judul teks tampil", await p.evaluate(() => getComputedStyle(document.getElementById("vbk-panel-2")).display !== "none" && getComputedStyle(document.querySelector("#judul-cara")).fontSize !== ""));
   cek("tanpa JS: EN tersembunyi", await p.evaluate(() => getComputedStyle(document.querySelector('.vbk-hero-k1 [lang="en"]')).display === "none"));
+  await ctx.close();
+}
+// 6. Fase 3: layar muat, hero, film, Lewati film, kartu bab (gerak diizinkan)
+{
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
+  const p = await ctx.newPage(); const galat = [];
+  p.on("pageerror", (e) => galat.push(String(e)));
+  await p.goto("http://127.0.0.1:8766/index.html", { waitUntil: "commit" });
+  await p.waitForSelector("#vbk-muat", { state: "attached" });
+  cek("layar muat menutup halaman di kunjungan pertama", await p.evaluate(() => document.documentElement.classList.contains("vbk-muat") || !!window.VBK_MUAT));
+  await p.waitForFunction(() => window.VBK && VBK.gerakSiap, null, { timeout: 8000 });
+  await p.waitForTimeout(2500);
+  cek("layar muat selesai dan tersimpan di sesi", await p.evaluate(() => document.getElementById("vbk-muat").hidden && sessionStorage.getItem("vbk-muat") === "1"));
+  cek("gerak.js jalan tanpa galat", galat.length === 0, galat.join("; "));
+  cek("teks hero tampil sesudah intro", await p.evaluate(() => !document.documentElement.classList.contains("vbk-tunggu") && getComputedStyle(document.querySelector(".vbk-hero-k1")).opacity === "1"));
+  cek("video hero dibuat sesudah load, tanpa suara", await p.evaluate(() => { const v = document.querySelector(".vbk-hero-latar video"); return !!v && v.muted && v.hasAttribute("playsinline") && /hero-1280\.(mp4|webm)$/.test(v.currentSrc); }));
+  await p.click(".vbk-hero .vbk-jeda");
+  cek("tombol jeda menjeda video dan disimpan", await p.evaluate(() => document.querySelector(".vbk-hero-latar video").paused && localStorage.getItem("vbk-jeda-video") === "1" && document.querySelector(".vbk-jeda").getAttribute("aria-pressed") === "true"));
+  await p.click(".vbk-hero .vbk-jeda");
+  const wajah = await p.evaluate(() => document.documentElement.dataset.wajah);
+  await p.click(".vbk-menu-kiri .vbk-b-tombol");
+  cek("huruf B berganti wajah", await p.evaluate((w) => document.documentElement.dataset.wajah !== w, wajah));
+  cek("komik jadi keterangan tersembunyi, canvas film terpasang", await p.evaluate(() => document.querySelector(".vbk-film").classList.contains("vbk-film-siap") && document.querySelectorAll(".vbk-komik figcaption").length === 6 && !!document.querySelector(".vbk-film-kanvas")));
+  const pin = await p.evaluate(() => { const st = ScrollTrigger.getAll().find((t) => t.pin && t.pin.classList.contains("vbk-film-pin")); return st ? { a: st.start, z: st.end } : null; });
+  cek("film di-pin 600 persen di desktop", !!pin && Math.abs(pin.z - pin.a - 900 * 6) < 2, JSON.stringify(pin));
+  const ke = async (t) => { await p.evaluate((y) => (window.VBK.lenis ? VBK.lenis.scrollTo(y, { immediate: true }) : scrollTo(0, y)), Math.round(pin.a + (pin.z - pin.a) * t)); await p.waitForTimeout(1300); };
+  await ke(0.5);
+  const isi = await p.evaluate(() => { const c = document.querySelector(".vbk-film-kanvas"), x = c.getContext("2d").getImageData(c.width / 2, c.height * 0.8, 1, 1).data; return { lebar: c.width, rgb: [x[0], x[1], x[2]] }; });
+  cek("canvas menggambar bingkai adegan 3", isi.lebar > 0 && isi.rgb.some((v) => v > 40), JSON.stringify(isi));
+  cek("garis rute: Dioper aktif di tengah film", await p.evaluate(() => document.querySelector(".vbk-frute-titik[aria-current]")?.textContent.includes("Dioper")));
+  cek("monyet dan amplop estafet tampil", await p.evaluate(() => getComputedStyle(document.querySelector(".vbk-estafet")).visibility === "visible" && document.querySelector(".vbk-monyet-gambar").complete));
+  cek("menu redup dan Lewati film tampil selama film", await p.evaluate(() => document.documentElement.classList.contains("vbk-film-aktif") && getComputedStyle(document.querySelector(".vbk-lewati")).visibility === "visible"));
+  await p.click(".vbk-lewati"); await p.waitForTimeout(1800);
+  cek("Lewati film membawa ke kartu bab", await p.evaluate(() => { const r = document.getElementById("bab-2").getBoundingClientRect(); return Math.abs(r.top) < 120 && document.activeElement.id === "bab-2"; }));
+  await p.waitForTimeout(800);
+  cek("cap kartu bab dihentakkan ke posisi akhir", await p.evaluate(() => getComputedStyle(document.querySelector(".vbk-cap")).opacity === "1"));
+  await ctx.close();
+  // kunjungan kedua di sesi yang sama: tanpa layar muat
+  const ctx2 = await b.newContext({ viewport: { width: 1440, height: 900 } });
+  const p2 = await ctx2.newPage();
+  await p2.goto("http://127.0.0.1:8766/index.html", { waitUntil: "networkidle" });
+  await p2.evaluate(() => sessionStorage.setItem("vbk-muat", "1"));
+  await p2.reload({ waitUntil: "commit" });
+  await p2.waitForSelector("#vbk-muat", { state: "attached" });
+  cek("kunjungan kedua: layar muat tidak tampil", await p2.evaluate(() => !document.documentElement.classList.contains("vbk-muat")));
+  await ctx2.close();
+}
+// 7. Fase 3 di HP: set bingkai 405x720, pin 450 persen, tanpa gulir menyamping di dalam film
+{
+  const { p, ctx } = await halaman({ vp: { width: 390, height: 844 }, hp: true });
+  await p.waitForFunction(() => window.VBK && VBK.gerakSiap, null, { timeout: 8000 });
+  await p.waitForTimeout(1500);
+  const pin = await p.evaluate(() => { const st = ScrollTrigger.getAll().find((t) => t.pin && t.pin.classList.contains("vbk-film-pin")); return st ? { a: st.start, z: st.end } : null; });
+  cek("HP: film di-pin 450 persen", !!pin && Math.abs(pin.z - pin.a - 844 * 4.5) < 2, JSON.stringify(pin));
+  await p.evaluate((y) => scrollTo(0, y), Math.round(pin.a + (pin.z - pin.a) * 0.5));
+  await p.waitForTimeout(1500);
+  cek("HP: bingkai dari set h", await p.evaluate(() => performance.getEntriesByType("resource").some((r) => /film\/h\/f3_\d{3}\.webp$/.test(r.name)) && !performance.getEntriesByType("resource").some((r) => /film\/d\//.test(r.name))));
+  cek("HP: paling banyak dua monyet terlihat", await p.evaluate(() => [...document.querySelectorAll(".vbk-monyet")].filter((m) => { const r = m.getBoundingClientRect(); return r.right > 0 && r.left < innerWidth; }).length <= 2));
+  cek("HP: tanpa gulir menyamping di tengah film", await p.evaluate(() => document.documentElement.scrollWidth === 390));
+  await ctx.close();
+}
+// 8. kurangi gerakan: GSAP, video, dan layar muat tidak dimuat sama sekali
+{
+  const { p, ctx } = await halaman({ diam: true });
+  cek("kurangi gerakan: tanpa GSAP, video, layar muat; komik tampil", await p.evaluate(() => !document.querySelector('script[src*="gsap"]') && !document.querySelector("video") && document.getElementById("vbk-muat").hidden && getComputedStyle(document.querySelector(".vbk-komik img")).display !== "none"));
   await ctx.close();
 }
 console.log(hasil.join("\n"));

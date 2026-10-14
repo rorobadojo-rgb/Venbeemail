@@ -28,6 +28,20 @@
 <!-- twitter:creator ditulis rakit.py kalau akun X sudah diisi LO -->
 <link rel="icon" type="image/png" href="/pro/aset/ikon.png">
 <link rel="preload" href="aset/vbkong/font/archivo-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+/* Sebelum CSS: kalau gerak diizinkan, tandai halaman (vbk-gerak: gambar komik tidak
+   diunduh), sembunyikan teks hero sampai intro (vbk-tunggu), dan tutup halaman dengan
+   layar muat di kunjungan pertama per sesi (vbk-muat). */
+(function (h) {
+  try {
+    var diam = (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+      localStorage.getItem("vbk-kurangi-gerak") === "1" || (navigator.connection && navigator.connection.saveData);
+    if (diam) return;
+    h.className += " vbk-gerak vbk-tunggu";
+    if (!location.hash && !sessionStorage.getItem("vbk-muat")) h.className += " vbk-muat";
+  } catch (e) {}
+})(document.documentElement);
+</script>
 <link rel="stylesheet" href="aset/vbkong/gaya.css">
 <script src="aset/vbkong/halaman.js" defer></script>
 <script type="application/ld+json">
@@ -38,6 +52,17 @@
 <span id="top"></span>
 <a class="vbk-lompat" href="#bab-2"><span lang="id">Langsung ke isi</span><span lang="en">Skip to content</span></a>
 <div class="vbk-umum vbk-sr" role="status" aria-live="polite" id="vbk-umum"></div>
+
+<!-- ============ LAYAR MUAT (LM1 + LM2), hanya saat gerak diizinkan ============ -->
+<div class="vbk-muat-layar" id="vbk-muat" role="status" aria-live="polite">
+  <span class="vbk-sr"><span lang="id">Memuat halaman</span><span lang="en">Loading the page</span></span>
+  <div class="vbk-muat-isi" aria-hidden="true">
+    <div class="vbk-muat-logo"><span class="vbk-muat-kata" data-gunting-muat>VENBEEMAIL</span><span class="vbk-lencana">PRO</span></div>
+    <div class="vbk-muat-bilah"><span></span></div>
+    <p class="vbk-muat-baris"><span lang="id">Menyiapkan panggung</span><span lang="en">Setting the stage</span></p>
+    <p class="vbk-muat-api vbk-mono"><span class="vbk-api-sedang">GET /api/health …</span><span class="vbk-api-ok-teks"><span lang="id">GET /api/health · menjawab</span><span lang="en">GET /api/health · responding</span></span></p>
+  </div>
+</div>
 
 <!-- ============ MENU (MN1) ============ -->
 <header class="vbk-menu" id="vbk-menu">

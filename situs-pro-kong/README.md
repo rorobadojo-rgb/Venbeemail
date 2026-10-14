@@ -9,7 +9,8 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | 0. Persiapan | Selesai: folder, gambar, GSAP, Lenis, font, `isian.json`, cek server, isi /pro lama + inventaris |
 | 1. Aset dan bingkai kunci | Selesai: turunan gambar, huruf gunting, font, og.jpg, 11 bingkai kunci + 6 referensi, paket Seedance |
 | 2. Kerangka dan Bab 2 | Selesai: `sumber.html` utuh (semua bagian, tampilan diam, ID dan EN), `gaya.css`, `halaman.js`, `rakit.py`, gambar diam dari bingkai kunci. Isi teknis lama persis (`cek_teks_lama.mjs` lolos), 38/38 uji fungsi lolos, muatan awal HP 0,29 MB |
-| 3, 4 | Belum |
+| 3. Pembuka dan film | Selesai (14 Oktober 2026): layar muat, intro dan scrub hero, video hero + tombol jeda, wajah huruf B, film canvas dari urutan bingkai, estafet monyet, sambungan antaradegan, garis rute, Lewati film, kartu penutup bab. 59/59 uji fungsi, muatan awal HP 0,93 MB |
+| 4. Akhir halaman | Belum |
 | 5. Video | Olah web selesai (14 Oktober 2026): film V1-V5 jadi urutan WebP + `film/daftar.json`, loop hero dan sorotan MP4 + WebM + poster, komik 6 panel dan latar panel dari video. Pemutar film dan `<video>` hero/sorotan dipasang di Fase 3 |
 | 6 sampai 9 | Belum |
 
@@ -65,6 +66,7 @@ Halaman sudah lengkap dalam **tampilan diam**: ini juga tampilan saat kurangi ge
 |---|---|
 | `sumber.html` | Semua bagian PRD 8.2: menu, hero, film (mode komik 6 panel), kartu penutup bab, Cara kerja, API, Semua endpoint, Domain, Tentang, Penutup, footer maskot (komposisi akhir), kaki halaman. Semua teks `<span lang="id">` + `<span lang="en">` |
 | `aset/vbkong/gaya.css` | Semua gaya, kelas `vbk-`. Tanpa huruf atau skrip dari CDN |
+| `aset/vbkong/gerak.js` | Semua gerak GSAP (Fase 3): Lenis, hero, pemutar film, estafet, sambungan, garis rute, Lewati film, kartu bab. Dimuat `halaman.js` hanya kalau gerak diizinkan |
 | `aset/vbkong/halaman.js` | Bahasa (juga membaca kunci lama `bm-lang`), huruf gunting (memuat `gunting.svg` lalu merakit judul per kata), menu dan lembar HP, salin + cap tersalin, tab, pemeriksa awalan dengan aturan lama, perangko domain, label amplop AW4, cek `/api/health`, kurangi gerakan, tahun berjalan |
 | `alat/rakit.py` | `sumber.html` + `isian.json` → `index.html`. Isian kosong dihapus dari HTML. `--pratinjau` menulis `pratinjau.html` (tidak di-commit) dengan tempat isian bertanda kuning |
 | `alat/cek_teks_lama.mjs` | Membandingkan 44 teks lama (ID dan EN), 2 curl, 7 endpoint, 4 domain, 5 field dengan `lama/inventaris.json`, huruf demi huruf. 16 kunci lama yang tidak dipakai punya alasan tercatat |
@@ -79,6 +81,35 @@ Catatan isi:
 - Nilai contoh `expiresAt` ditulis `<milidetik epoch>` (halaman lama menyebut satuannya, bukan contoh angkanya). Contoh alamat `qa-signup.62yt8v@kotak.venbeemail.com` diambil dari halaman lama; saat pengunjung mengetik awalan sendiri, akhiran ditulis `<acak>`.
 - Favicon `/pro/aset/ikon.png` (absolut) supaya benar di `/pro/` dan `/pro/kong/`.
 - Muatan awal (server lokal tanpa gzip, 10 Oktober 2026): HP 390x844 DPR 3: 0,29 MB / 19 berkas; desktop 1440x900 DPR 2: 0,64 MB / 25 berkas.
+
+## Fase 3: pembuka dan film
+
+Gerak dipasang di atas tampilan diam Fase 2. Tanpa JavaScript, saat kurangi gerakan, atau saat Save-Data, halaman tetap tampilan diam: GSAP, `gerak.js`, video, dan layar muat tidak dimuat sama sekali. Kalau GSAP gagal dimuat, halaman kembali ke tampilan diam.
+
+| Bagian | Isi |
+|---|---|
+| Skrip kecil di `<head>` (`sumber.html`) | Sebelum CSS: memasang `vbk-gerak` (gambar komik tidak diunduh), `vbk-tunggu` (teks hero ditahan sampai intro), dan `vbk-muat` (layar muat, kunjungan pertama per sesi tanpa jangkar) |
+| Layar muat (8.5) | Logo gunting + lencana PRO, bilah yang menghitung 24 berkas (gunting.svg, Archivo 700 dan 900, poster hero, 20 bingkai pertama adegan 1), paling lama 1,2 detik, bisa dilewati (ketuk, Esc, gulir). Baris `GET /api/health` berubah jadi "menjawab" kalau 2xx, memudar tanpa tulisan kalau gagal |
+| Hero (8.7) | Intro 0,8 detik (huruf ditempel satu per satu, PRO dihentakkan, teks naik), langsung selesai kalau pengunjung menggulir. Saat keluar: wordmark naik dan mengecil, video membesar dan menggelap ke kecerahan 0,35, teks memudar, tirai `#00141a` di 85-100 persen |
+| Video hero (8.7, 10.5) | Dibuat sesudah event `load` (`halaman.js`), 540 untuk lebar 720 ke bawah, MP4 lalu WebM dengan codec ditulis lengkap (browser tanpa H.264 tidak mengunduh MP4), dijeda saat hero tidak terlihat. Tombol "Jeda video" / "Putar video", pilihan disimpan di `localStorage`. `window.VBK_VIDEO.pasang()` dan `.tombolJeda()` siap dipakai Penutup (Fase 4) |
+| Wajah huruf B (8.6, 8.7) | Dua lubang huruf B gunting jadi mata (seperti PRD pertama), mulut di kanan; empat wajah (senyum, nyengir, lidah, kaget) bergantian saat tombol B ditekan (logo dan wordmark hero). Berkedip tiap 3-6 detik dan mata melirik kursor, hanya saat gerak diizinkan |
+| Film (9.1, 9.2) | Canvas `cover` di-pin `+=600%` (HP `+=450%`), `scrub: 0.5`, bobot adegan 5/5/12/5/7. Membaca `film/daftar.json`, set `h` di lebar 720 ke bawah. Memuat per adegan (adegan yang dilihat + satu di depan, 6 unduhan bersamaan), HP melepas adegan yang sudah lewat dua adegan, koneksi 2g/3g hanya setiap bingkai kedua. Campuran dua bingkai hanya selama bergerak; saat gulir berhenti digambar bingkai terdekat (campuran diam tampak dobel). Bingkai belum datang: bingkai terdekat, lalu `film/diam`. Tanpa `daftar.json`: gambar diam per adegan dengan zoom pelan. Adegan 3: latar melambat di q 0,48-0,80 |
+| Estafet monyet (9.3) | Empat potongan (desktop ukuran penuh 34svh, HP versi 512 22svh) dengan cahaya tepi, bayangan lantai, jejak bayangan (2 di HP), miring saat melesat; amplop dengan busur MotionPath. Garis roda = garis bibir podium V3 (y 545 dari 720) dihitung dari pemetaan cover dan disimpan di `--vbk-garis-lantai`. HP: paling banyak dua monyet terlihat. Monyet baru dimuat saat adegan 2 tercapai |
+| Sambungan (9.4) | 1→2 sapuan kertas (SSIM V1→V2 di bawah 0,85), 2→3 amplop menutup layar lalu mengecil ke tangan merah, 3→4 sapuan kertas, 4→5 TR1 versi CSS dari letak amplop di akhir V4, akhir adegan 5 zoom 1,8 ke celah (46 %, 44 %), vinyet, berkas cahaya hangat, lalu `#00141a` |
+| Garis rute dan Lewati film (9.5) | Desktop di bawah tengah, HP tegak di kanan dengan label titik aktif saja. Kelas `vbk-frute` (nama `vbk-rute` sudah dipakai garis rute footer). Tombol Lewati film tampil selama film di-pin, ke `#bab-2` (Lenis di desktop) dan memindah fokus ke sana. Menu turun ke opacity 0,55 selama film |
+| Kartu penutup bab (9.7) | Cap dihentakkan (skala 1,4 ke 1, -14 ke -8 derajat, 0,35 detik), isi kartu bergetar 2 piksel 150 ms, baris mono dan label menyusul. Desktop di-pin 60 persen |
+| Lenis | Desktop dengan mouse saja, disambung ke ScrollTrigger; tautan `#` digulir halus |
+
+Uji (`alat/uji_halaman.mjs`, sekarang 59 uji, 21 di antaranya untuk Fase 3): layar muat dan sesi, intro, video dan tombol jeda, wajah B, pin 600/450 persen, canvas menggambar adegan 3, garis rute, estafet, menu redup, Lewati film, cap kartu bab, set bingkai `h` di HP, paling banyak dua monyet di HP, tanpa gulir menyamping di tengah film, dan kurangi gerakan tanpa GSAP/video/layar muat.
+
+Muatan awal (14 Oktober 2026, `ukur_muatan.mjs`): **HP 0,93 MB / 44 berkas** (target 1,3 MB, batas 2,5 MB), **desktop 1,18 MB / 46 berkas** (batas 3 MB). Termasuk video hero 540/1280 setelah `load`, GSAP + ScrollTrigger + MotionPath, `gerak.js`, dan 20 bingkai pertama. Di Chromium uji (tanpa H.264) yang termuat versi WebM; di Safari dan Chrome biasa versi MP4 yang lebih kecil. Tiga potongan monyet 512 di daftar HP berasal dari kartu Cara kerja (sebelum ruang pin film dipasang, kartu itu masuk jangkauan muat malas browser).
+
+Belum dikerjakan atau berbeda dari PRD:
+
+- Urutan fokus tombol Lewati film "tepat setelah tautan terakhir di menu" belum diatur; tombol ada di dalam bagian film.
+- Wajah huruf B dibuat ulang lebih sederhana (bentuk B gunting berbeda dari B PRD pertama).
+- Kalimat 2 hero tetap teks halaman lama (keputusan Fase 2).
+- Uji Safari iPhone asli (16.5) masuk Fase 6.
 
 ## Fase 5: video untuk web (PRD 7.7)
 

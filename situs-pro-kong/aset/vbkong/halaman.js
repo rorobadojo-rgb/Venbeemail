@@ -106,7 +106,10 @@
       var miring = h.miring + (opsi.goyang ? (acak(benih + j) - .5) * 4 : 0);
       var g = document.createElementNS(SVGNS, "g");
       g.setAttribute("class", "vbk-huruf");
+      g.setAttribute("data-k", k);
       g.setAttribute("transform", "translate(" + x + " " + h.naik + ") rotate(" + miring.toFixed(2) + " " + (h.w / 2) + " 50)");
+      var isi = document.createElementNS(SVGNS, "g");
+      isi.setAttribute("class", "vbk-huruf-isi");
       var bay = document.createElementNS(SVGNS, "use");
       bay.setAttribute("href", "#g-" + k);
       bay.setAttribute("transform", "translate(" + (opsi.geser || 6) + " " + (opsi.geser || 6) + ")");
@@ -116,7 +119,8 @@
       muka.setAttribute("href", "#g-" + k);
       muka.setAttribute("fill", ISIAN[opsi.tekstur] || ISIAN.kertas);
       muka.setAttribute("width", h.w); muka.setAttribute("height", 100);
-      g.appendChild(bay); g.appendChild(muka);
+      isi.appendChild(bay); isi.appendChild(muka);
+      g.appendChild(isi);
       svg.appendChild(g);
       x += h.w + JARAK;
     });
@@ -128,7 +132,7 @@
     kunci.forEach(function (k, i) { lebar += (k === " " ? SPASI : GUNTING[k].w) + (i ? JARAK : 0); });
     var hasil = svgKata(kunci.filter(function (k) { return k !== " "; }), opsi, benih);
     // susun ulang posisi x dengan spasi
-    var x = 0, gs = hasil.querySelectorAll("g"), gi = 0;
+    var x = 0, gs = hasil.querySelectorAll("g.vbk-huruf"), gi = 0;
     kunci.forEach(function (k) {
       if (k === " ") { x += SPASI + JARAK; return; }
       var h = GUNTING[k], g = gs[gi++];
@@ -202,8 +206,13 @@
       var pro = svgBaris("PRO", { tekstur: "kertas", bayangan: "#00141a", geser: 6 }, 5);
       pro.setAttribute("class", "vbk-gunting-kata vbk-wordmark-pro");
       wm.appendChild(d); wm.appendChild(hp); wm.appendChild(pro);
-      wm.style.position = wm.style.position || "";
+      // isi wordmark sudah aria-hidden per SVG; tombol huruf B di dalamnya harus terbaca
+      wm.removeAttribute("aria-hidden");
     }
+    $$("[data-gunting-muat]").forEach(function (el) {
+      el.textContent = "";
+      el.appendChild(svgKata(kunciHuruf("VENBEEMAIL"), { tekstur: "bunga", geser: 6 }, 1));
+    });
     var sl = $("[data-gunting-slogan]");
     if (sl) {
       var BARIS = {
@@ -221,6 +230,7 @@
         });
       });
     }
+    pasangWajahB();
     html.classList.add("vbk-gunting-siap");
     document.dispatchEvent(new CustomEvent("vbk:gunting"));
   }
@@ -247,6 +257,248 @@
   }
   muatGunting();
   window.VBK = { rakitGunting: function (t, o) { return GUNTING ? rakitGunting(t, o || {}) : null; }, diam: diam, akar: akar };
+
+  /* ================= wajah huruf B (logo dan wordmark hero) ================= */
+  // Dua lubang huruf B gunting jadi mata (seperti wordmark berwajah PRD pertama),
+  // mulut di sisi kanan. Ditekan: ganti wajah. Berkedip dan melirik kursor hanya
+  // kalau gerak diizinkan.
+  var WAJAH = ["senyum", "nyengir", "lidah", "kaget"], wajahKe = 0;
+  function el(tag, atr, induk) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in atr) e.setAttribute(k, atr[k]);
+    if (induk) induk.appendChild(e);
+    return e;
+  }
+  function buatWajah(induk) {
+    var g = el("g", { "class": "vbk-wajah" }, induk);
+    [["M28 17L54 20L29 41Z", 36, 26], ["M28 58L57 61L29 84Z", 37, 67]].forEach(function (m) {
+      var mata = el("g", { "class": "vbk-mata" }, g);
+      el("path", { "class": "vbk-mata-putih", d: m[0] }, mata);
+      el("circle", { "class": "vbk-pupil", cx: m[1], cy: m[2], r: 4.4 }, mata);
+    });
+    el("path", { "class": "vbk-mulut vbk-w-senyum", d: "M58 32Q69 50 58 68" }, g);
+    el("path", { "class": "vbk-mulut-isi vbk-w-nyengir", d: "M57 31Q72 50 57 69Z" }, g);
+    el("path", { "class": "vbk-gigi vbk-w-nyengir", d: "M57 36L61 39L57 42ZM57 47L61 50L57 53ZM57 58L61 61L57 64Z" }, g);
+    el("path", { "class": "vbk-mulut vbk-w-lidah", d: "M58 32Q69 50 58 68" }, g);
+    el("path", { "class": "vbk-lidah vbk-w-lidah", d: "M63 44L76 43Q82 50 76 57L63 56Z" }, g);
+    el("ellipse", { "class": "vbk-mulut-isi vbk-w-kaget", cx: 63, cy: 50, rx: 5, ry: 8 }, g);
+    return g;
+  }
+  function pasangWajahB() {
+    $$('.vbk-logo g.vbk-huruf[data-k="B"] .vbk-huruf-isi, .vbk-wordmark g.vbk-huruf[data-k="B"] .vbk-huruf-isi').forEach(buatWajah);
+    html.setAttribute("data-wajah", WAJAH[wajahKe]);
+    var kiri = $(".vbk-menu-kiri"), wm = $("[data-gunting-wordmark]");
+    [[kiri, ".vbk-logo"], [wm, ".vbk-wordmark-desktop, .vbk-wordmark-hp"]].forEach(function (x) {
+      if (!x[0]) return;
+      var t = document.createElement("button");
+      t.type = "button";
+      t.className = "vbk-b-tombol";
+      t.setAttribute("data-label-id", "Ganti wajah huruf B");
+      t.setAttribute("data-label-en", "Change the B's face");
+      t.setAttribute("aria-label", bahasa === "en" ? "Change the B's face" : "Ganti wajah huruf B");
+      t.addEventListener("click", function () {
+        wajahKe = (wajahKe + 1) % WAJAH.length;
+        html.setAttribute("data-wajah", WAJAH[wajahKe]);
+      });
+      x[0].appendChild(t);
+      t._vbkCari = x[1];
+    });
+    letakkanTombolB();
+    addEventListener("resize", letakkanTombolB);
+    if (!diam) mulaiKedip();
+  }
+  // Tombol transparan 44x44 di atas huruf B yang sedang tampil.
+  function letakkanTombolB() {
+    $$(".vbk-b-tombol").forEach(function (t) {
+      var induk = t.parentNode, b = null;
+      $$(t._vbkCari, induk).forEach(function (w) {
+        if (w.offsetParent !== null || w.getClientRects().length) b = b || $('g.vbk-huruf[data-k="B"]', w);
+      });
+      if (!b) { t.hidden = true; return; }
+      var rb = b.getBoundingClientRect(), ri = induk.getBoundingClientRect();
+      if (!rb.width) { t.hidden = true; return; }
+      t.hidden = false;
+      var w = Math.max(44, rb.width), h = Math.max(44, rb.height);
+      t.style.width = w + "px"; t.style.height = h + "px";
+      t.style.left = (rb.left - ri.left + rb.width / 2 - w / 2) + "px";
+      t.style.top = (rb.top - ri.top + rb.height / 2 - h / 2) + "px";
+    });
+  }
+  function mulaiKedip() {
+    (function kedip() {
+      setTimeout(function () {
+        html.classList.add("vbk-kedip");
+        setTimeout(function () { html.classList.remove("vbk-kedip"); kedip(); }, 140);
+      }, 3000 + Math.random() * 3000);
+    })();
+    if (!window.matchMedia || !matchMedia("(pointer: fine)").matches) return;
+    var antreMata = false, mx = 0, my = 0;
+    addEventListener("mousemove", function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (antreMata) return;
+      antreMata = true;
+      requestAnimationFrame(function () {
+        antreMata = false;
+        $$(".vbk-wajah").forEach(function (w) {
+          var r = w.getBoundingClientRect();
+          if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
+          var dx = mx - (r.left + r.width / 2), dy = my - (r.top + r.height / 2), d = Math.sqrt(dx * dx + dy * dy) || 1;
+          var k = Math.min(1, d / 300) * 2.4;
+          $$(".vbk-pupil", w).forEach(function (p) { p.setAttribute("transform", "translate(" + (dx / d * k).toFixed(2) + " " + (dy / d * k).toFixed(2) + ")"); });
+        });
+      });
+    }, { passive: true });
+  }
+
+  /* ================= layar muat (LM1 + LM2) ================= */
+  // Tampil hanya kunjungan pertama per sesi, tanpa jangkar, saat gerak diizinkan.
+  // Kelas vbk-muat dipasang skrip kecil di <head> supaya layar langsung menutup.
+  var layarMuat = $("#vbk-muat");
+  var setBingkai = innerWidth <= 720 ? "h" : "d";
+  window.VBK_MUAT = { selesai: false };
+  function selesaiMuat() {
+    if (window.VBK_MUAT.selesai) return;
+    window.VBK_MUAT.selesai = true;
+    html.classList.remove("vbk-muat");
+    document.dispatchEvent(new CustomEvent("vbk:muat-selesai"));
+  }
+  if (layarMuat && html.classList.contains("vbk-muat") && !diam) {
+    simpanSesi("vbk-muat", "1");
+    var isiBilah = $(".vbk-muat-bilah span", layarMuat), barisApi = $(".vbk-muat-api", layarMuat);
+    var jumlahBerkas = 24, beres = 0, tutup = false;
+    var bilah = function () { beres++; if (isiBilah) isiBilah.style.transform = "scaleX(" + Math.min(1, beres / jumlahBerkas).toFixed(3) + ")"; if (beres >= jumlahBerkas) keluarMuat(); };
+    var keluarMuat = function () {
+      if (tutup) return;
+      tutup = true;
+      layarMuat.classList.add("vbk-muat-keluar");
+      setTimeout(function () { layarMuat.classList.add("vbk-muat-buka"); selesaiMuat(); }, 300);
+      setTimeout(function () { layarMuat.hidden = true; }, 1000);
+      ["pointerdown", "keydown", "wheel", "touchmove"].forEach(function (n) { removeEventListener(n, lewati); });
+    };
+    var lewati = function (e) { if (e.type !== "keydown" || e.key === "Escape") keluarMuat(); };
+    ["pointerdown", "keydown", "wheel", "touchmove"].forEach(function (n) { addEventListener(n, lewati, { passive: true }); });
+    setTimeout(keluarMuat, 1200);
+    // berkas yang dihitung: gunting.svg, dua font, poster hero, 20 bingkai pertama adegan 1
+    document.addEventListener("vbk:gunting", bilah, { once: true });
+    if (document.fonts && document.fonts.load) {
+      document.fonts.load('700 20px "Archivo"').then(bilah, bilah);
+      document.fonts.load('900 20px "Archivo"').then(bilah, bilah);
+    } else { bilah(); bilah(); }
+    var poster = $(".vbk-hero-poster");
+    if (!poster || poster.complete) bilah(); else { poster.addEventListener("load", bilah); poster.addEventListener("error", bilah); }
+    window.VBK_MUAT.bingkai = [];
+    for (var nb = 1; nb <= 20; nb++) {
+      var im = new Image();
+      im.onload = im.onerror = bilah;
+      im.src = akar + "aset/vbkong/film/" + setBingkai + "/f1_" + ("00" + nb).slice(-3) + ".webp";
+      window.VBK_MUAT.bingkai.push(im);
+    }
+    document.addEventListener("vbk:api", function (e) {
+      if (!barisApi) return;
+      if (e.detail) barisApi.classList.add("vbk-api-ok"); else barisApi.classList.add("vbk-api-gagal");
+    });
+  } else {
+    html.classList.remove("vbk-muat");
+    if (layarMuat) layarMuat.hidden = true;
+    window.VBK_MUAT.selesai = true;
+  }
+
+  /* ================= video latar dan tombol jeda (PRD 8.7, 10.5) ================= */
+  // Video tidak ada di HTML: dibuat sesudah event load, hanya kalau gerak diizinkan.
+  // Lebar 720 ke bawah memakai versi 540. Dijeda saat tidak terlihat.
+  var videoLatar = [], jedaVideo = ambil("vbk-jeda-video") === "1";
+  function tulisJeda() {
+    $$("[data-jeda-video]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(jedaVideo));
+      b.classList.toggle("vbk-terjeda", jedaVideo);
+    });
+  }
+  function putarAtauJeda(v) {
+    if (jedaVideo || !v._vbkTerlihat) { v.pause(); return; }
+    var j = v.play();
+    if (j && j.catch) j.catch(function () {});
+  }
+  function buatTombolJeda(induk) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "vbk-jeda";
+    b.setAttribute("data-jeda-video", "");
+    b.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="vbk-ikon-jeda" d="M4 3h3v10H4zM9 3h3v10H9z"/><path class="vbk-ikon-putar" d="M4 3l9 5-9 5z"/></svg>' +
+      '<span class="vbk-jeda-teks"><span lang="id">Jeda video</span><span lang="en">Pause video</span></span>' +
+      '<span class="vbk-putar-teks"><span lang="id">Putar video</span><span lang="en">Play video</span></span>';
+    b.addEventListener("click", function () {
+      jedaVideo = !jedaVideo;
+      simpan("vbk-jeda-video", jedaVideo ? "1" : "0");
+      tulisJeda();
+      videoLatar.forEach(putarAtauJeda);
+    });
+    induk.appendChild(b);
+    tulisJeda();
+    return b;
+  }
+  // Dipakai juga oleh bagian lain (Penutup, Fase 4): wadah, nama berkas (hero/sorot), poster.
+  function pasangVideo(wadah, nama, pengamat) {
+    var kecil = innerWidth <= 720, ukuran = kecil ? "540" : "1280";
+    var v = document.createElement("video");
+    v.className = "vbk-video-latar";
+    v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = false;
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
+    v.preload = "auto";
+    v.poster = akar + "aset/vbkong/video/" + nama + "-poster-" + ukuran + ".webp";
+    // codec ditulis lengkap: browser tanpa H.264 langsung memilih WebM tanpa mengunduh MP4
+    // (H.264 High: level 3.1 untuk 1280, 3.0 untuk 540, sesuai hasil olah_video.sh)
+    [["mp4", 'video/mp4; codecs="avc1.6400' + (kecil ? "1E" : "1F") + '"'], ["webm", 'video/webm; codecs="vp9"']].forEach(function (f) {
+      var s = document.createElement("source");
+      s.src = akar + "aset/vbkong/video/" + nama + "-" + ukuran + "." + f[0];
+      s.type = f[1];
+      v.appendChild(s);
+    });
+    v.addEventListener("playing", function () { v.classList.add("vbk-siap"); });
+    wadah.appendChild(v);
+    videoLatar.push(v);
+    v._vbkTerlihat = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (isi) {
+        v._vbkTerlihat = isi[0].isIntersecting;
+        putarAtauJeda(v);
+      }).observe(pengamat || wadah);
+    } else putarAtauJeda(v);
+    return v;
+  }
+  window.VBK_VIDEO = { pasang: pasangVideo, tombolJeda: buatTombolJeda };
+  if (!diam) {
+    var mulaiVideoHero = function () {
+      var hero = $(".vbk-hero"), wadah = $(".vbk-hero-latar");
+      if (!hero || !wadah) return;
+      pasangVideo(wadah, "hero", hero);
+      buatTombolJeda(hero);
+    };
+    if (document.readyState === "complete") mulaiVideoHero(); else addEventListener("load", mulaiVideoHero);
+  }
+
+  /* ================= muat gerak (GSAP + gerak.js) ================= */
+  // Hanya kalau gerak diizinkan. Lenis hanya untuk desktop dengan mouse.
+  // Kalau gagal dimuat, halaman kembali ke tampilan diam.
+  function gagalGerak() {
+    if (window.VBK && window.VBK.gerakSiap) return;
+    html.classList.remove("vbk-gerak", "vbk-tunggu");
+  }
+  if (!diam) {
+    html.classList.add("vbk-gerak");
+    var berkasGerak = ["js/gsap.min.js", "js/ScrollTrigger.min.js", "js/MotionPathPlugin.min.js"];
+    if (window.matchMedia && matchMedia("(pointer: fine)").matches && innerWidth > 720) berkasGerak.push("js/lenis.min.js");
+    berkasGerak.push("gerak.js");
+    berkasGerak.forEach(function (f) {
+      var sk = document.createElement("script");
+      sk.src = akar + "aset/vbkong/" + f;
+      sk.async = false;
+      sk.onerror = gagalGerak;
+      document.head.appendChild(sk);
+    });
+    setTimeout(gagalGerak, 8000);
+  } else {
+    html.classList.remove("vbk-tunggu", "vbk-muat");
+  }
 
   /* ================= menu ================= */
   var lembar = $("#vbk-lembar"), latar = $("#vbk-lembar-latar"), tombolBuka = $(".vbk-menu-buka");
