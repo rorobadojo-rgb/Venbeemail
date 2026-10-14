@@ -1,0 +1,560 @@
+{
+  "sumber": "situs-pro-kong/lama/index.html",
+  "ukuran_byte": 40830,
+  "sha256": "10fbc28ea2a88fa666e9e097e2ec79191d477225aad6d6e0f61f2339856008da",
+  "catatan": "Diambil LO dari /www/wwwroot/banamail-pro/index.html lewat File Manager aaPanel, 10 Oktober 2026. Ukuran sama dengan content-length di server (40830). Tidak ada blok vbpro-*.",
+  "meta": {
+    "title": "BanaMail Pro",
+    "description": "Kotak masuk uji untuk developer. Buat alamat email sekali pakai lewat API, lalu ambil teks, HTML, dan lampiran email yang masuk.",
+    "og": {
+      "og:type": "website",
+      "og:title": "BanaMail Pro",
+      "og:description": "Kotak masuk uji untuk developer. Buat alamat email sekali pakai lewat API, lalu ambil teks, HTML, dan lampiran email yang masuk.",
+      "og:url": "https://venbeemail.com/pro/"
+    },
+    "theme_color": "#021820",
+    "favicon": "aset/ikon.png",
+    "font_luar": "https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
+    "html_lang": "id"
+  },
+  "id_bagian": [
+    "top",
+    "lang-id",
+    "lang-en",
+    "stage",
+    "scene",
+    "trail-back",
+    "trail-front",
+    "wordmark",
+    "cara",
+    "api",
+    "copy-curl",
+    "curl",
+    "copy-curl2",
+    "curl2",
+    "endpoint",
+    "domain",
+    "mail",
+    "copy-mail"
+  ],
+  "tautan": [
+    "aset/ikon.png",
+    "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com",
+    "https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
+    "#top",
+    "#cara",
+    "#api",
+    "#domain",
+    "/"
+  ],
+  "gambar": [
+    "aset/ikon.png",
+    "aset/01-latar.webp",
+    "aset/02-maskot.webp",
+    "aset/03-tulisan.webp",
+    "aset/04-kera-flanel.webp",
+    "aset/05-kera-kepang.webp",
+    "aset/06-kera-rompi.webp",
+    "aset/07-kera-kupluk.webp",
+    "aset/08-amplop.webp",
+    "aset/09-pesawat.webp"
+  ],
+  "curl": [
+    {
+      "id": "curl",
+      "teks": "curl -X POST https://venbeemail.com/api/addresses \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"prefix\": \"qa-signup\", \"domain\": \"kotak.venbeemail.com\"}'",
+      "sha256": "88ff259825f452390bc37dec1a95e48cf232cd8447b369f0255a7963ad394780"
+    },
+    {
+      "id": "curl2",
+      "teks": "curl https://venbeemail.com/api/mailbox \\\n  -H \"Authorization: Bearer $TOKEN\"",
+      "sha256": "d8dbf8093bef1f999f8e1894c7ecf140f3c88e4ef84c747bd7335a86f04f73a7"
+    }
+  ],
+  "endpoint": [
+    {
+      "metode": "POST",
+      "jalur": "/api/addresses",
+      "guna_id": "Buat alamat baru. Mengembalikan alamat, masa berlaku, dan token.",
+      "guna_en": "Create a new address. Returns the address, its expiry, and a token.",
+      "kunci": "man.1"
+    },
+    {
+      "metode": "GET",
+      "jalur": "/api/mailbox",
+      "guna_id": "Daftar email di <code>inbox</code>, <code>spam</code>, dan <code>sent</code>, serta masa berlaku alamat.",
+      "guna_en": "Lists the emails in <code>inbox</code>, <code>spam</code>, and <code>sent</code>, plus the address expiry.",
+      "kunci": "man.2"
+    },
+    {
+      "metode": "GET",
+      "jalur": "/api/messages/:id",
+      "guna_id": "Satu email lengkap: metadata, teks, dan HTML.",
+      "guna_en": "One full email: metadata, text, and HTML.",
+      "kunci": "man.3"
+    },
+    {
+      "metode": "PATCH",
+      "jalur": "/api/messages/:id",
+      "guna_id": "Pindahkan email antara inbox dan spam lewat field <code>folder</code>.",
+      "guna_en": "Move an email between inbox and spam with the <code>folder</code> field.",
+      "kunci": "man.4"
+    },
+    {
+      "metode": "GET",
+      "jalur": "/api/messages/:id/attachments/:n",
+      "guna_id": "Unduh satu lampiran dari sebuah email.",
+      "guna_en": "Download one attachment from an email.",
+      "kunci": "man.5"
+    },
+    {
+      "metode": "DELETE",
+      "jalur": "/api/addresses/me",
+      "guna_id": "Hapus alamat beserta semua isinya.",
+      "guna_en": "Delete the address and everything in it.",
+      "kunci": "man.6"
+    },
+    {
+      "metode": "GET",
+      "jalur": "/api/health",
+      "guna_id": "Periksa apakah layanan sedang berjalan.",
+      "guna_en": "Check whether the service is running.",
+      "kunci": "man.7"
+    }
+  ],
+  "domain": [
+    {
+      "domain": "venbeemail.com",
+      "keterangan_id": "utama",
+      "keterangan_en": "main"
+    },
+    {
+      "domain": "kotak.venbeemail.com",
+      "keterangan_id": "kotak",
+      "keterangan_en": "kotak = box"
+    },
+    {
+      "domain": "surat.venbeemail.com",
+      "keterangan_id": "surat",
+      "keterangan_en": "surat = letter"
+    },
+    {
+      "domain": "pos.venbeemail.com",
+      "keterangan_id": "pos",
+      "keterangan_en": "pos = post"
+    }
+  ],
+  "field": [
+    {
+      "field": "address",
+      "keterangan_id": "Alamat email lengkap",
+      "keterangan_en": "The full email address"
+    },
+    {
+      "field": "local",
+      "keterangan_id": "Bagian sebelum tanda @",
+      "keterangan_en": "The part before the @ sign"
+    },
+    {
+      "field": "domain",
+      "keterangan_id": "Domain yang dipakai",
+      "keterangan_en": "The domain in use"
+    },
+    {
+      "field": "expiresAt",
+      "keterangan_id": "Kapan alamat kedaluwarsa, dalam milidetik epoch",
+      "keterangan_en": "When the address expires, in epoch milliseconds"
+    },
+    {
+      "field": "token",
+      "keterangan_id": "Token untuk panggilan berikutnya",
+      "keterangan_en": "The token for later calls"
+    }
+  ],
+  "kamus": [
+    {
+      "kunci": "nav.aria",
+      "id": "Bagian halaman",
+      "en": "Page sections",
+      "tempat_baru": "Menu: label navigasi (PRD 8.6 'Bagian halaman')"
+    },
+    {
+      "kunci": "lang.aria",
+      "id": "Bahasa",
+      "en": "Language",
+      "tempat_baru": "Menu: label kelompok tombol bahasa"
+    },
+    {
+      "kunci": "nav.how",
+      "id": "Cara kerja",
+      "en": "How it works",
+      "tempat_baru": "Menu 1"
+    },
+    {
+      "kunci": "nav.api",
+      "id": "API",
+      "en": "API",
+      "tempat_baru": "Menu 2"
+    },
+    {
+      "kunci": "nav.domains",
+      "id": "Domain",
+      "en": "Domains",
+      "tempat_baru": "Menu 4"
+    },
+    {
+      "kunci": "hero.eyebrow",
+      "id": "Kotak masuk uji untuk developer",
+      "en": "A test inbox for developers",
+      "tempat_baru": "Hero: label kecil (lama, dipertahankan bila LO setuju; PRD 8.7 memakai 'Untuk developer')"
+    },
+    {
+      "kunci": "hero.h1",
+      "id": "Uji email aplikasi Anda tanpa <em>kotak masuk sungguhan</em>.",
+      "en": "Test your app’s email without <em>a real inbox</em>.",
+      "tempat_baru": "Hero: tidak dipakai sebagai <h1> (PRD 8.7: <h1> 'VenbeeMail Pro'); usul: kalimat 1 hero"
+    },
+    {
+      "kunci": "hero.lede",
+      "id": "Buat alamat sekali pakai lewat API, kirim email dari aplikasi Anda ke sana, lalu ambil teks, HTML, dan lampirannya.",
+      "en": "Create a disposable address through the API, send your app’s email to it, then fetch the text, HTML, and attachments.",
+      "tempat_baru": "Hero: usul kalimat 2 (isi sama dengan PRD 8.7, ditambah teks/HTML)"
+    },
+    {
+      "kunci": "hero.cta1",
+      "id": "Lihat API",
+      "en": "See the API",
+      "tempat_baru": "Hero: tombol 1"
+    },
+    {
+      "kunci": "hero.cta2",
+      "id": "Buka BanaMail",
+      "en": "Open BanaMail",
+      "tempat_baru": "Tentang: tombol 3 / kaki halaman"
+    },
+    {
+      "kunci": "hero.facts",
+      "id": "<span><b>7</b> endpoint aktif</span><span><b>4</b> domain email</span><span>Tiap alamat punya <b>masa berlaku</b></span>",
+      "en": "<span><b>7</b> live endpoints</span><span><b>4</b> email domains</span><span>Every address has an <b>expiry</b></span>",
+      "tempat_baru": "Hero atau Penutup: fakta '7 endpoint aktif · 4 domain email · masa berlaku' (angka nyata, boleh dipakai)"
+    },
+    {
+      "kunci": "stage.aria",
+      "id": "Maskot pisang BanaMail mengangkat kotak surat di atas panggung, dikelilingi amplop, pesawat kertas, dan empat kera berskateboard yang mengorbit.",
+      "en": "The BanaMail banana mascot lifts a mailbox on a stage while envelopes, paper planes, and four skateboarding monkeys orbit around it.",
+      "tempat_baru": "Tidak dipakai: adegan Orbit Surat diganti hero HR1 (D10); alt baru PRD 8.4/8.7"
+    },
+    {
+      "kunci": "uses.label",
+      "id": "Dipakai untuk menguji",
+      "en": "Used to test",
+      "tempat_baru": "Usul: pita kegunaan di bawah hero atau di Tentang ('Untuk siapa')"
+    },
+    {
+      "kunci": "uses.a",
+      "id": "Email verifikasi pendaftaran",
+      "en": "Sign-up verification emails",
+      "tempat_baru": "Usul: pita kegunaan"
+    },
+    {
+      "kunci": "uses.b",
+      "id": "Tautan reset kata sandi",
+      "en": "Password reset links",
+      "tempat_baru": "Usul: pita kegunaan"
+    },
+    {
+      "kunci": "uses.c",
+      "id": "Notifikasi berlampiran",
+      "en": "Notifications with attachments",
+      "tempat_baru": "Usul: pita kegunaan"
+    },
+    {
+      "kunci": "how.label",
+      "id": "Cara kerja",
+      "en": "How it works",
+      "tempat_baru": "Cara kerja: label kecil"
+    },
+    {
+      "kunci": "how.title",
+      "id": "Empat langkah, dari alamat baru sampai bersih lagi",
+      "en": "Four steps, from a fresh address to a clean slate",
+      "tempat_baru": "Cara kerja: pengantar (menggantikan 'Empat langkah, sama seperti perjalanan surat tadi.' kalau LO setuju)"
+    },
+    {
+      "kunci": "how.1t",
+      "id": "Buat alamat",
+      "en": "Create an address",
+      "tempat_baru": "Cara kerja: judul kartu 1"
+    },
+    {
+      "kunci": "how.1p",
+      "id": "Panggil <code>POST /api/addresses</code>. Awalan dan domain boleh Anda tentukan, boleh juga dikosongkan.",
+      "en": "Call <code>POST /api/addresses</code>. Set a prefix and a domain, or leave both out.",
+      "tempat_baru": "Cara kerja: teks kartu 1 (persis)"
+    },
+    {
+      "kunci": "how.2t",
+      "id": "Kirim email uji",
+      "en": "Send a test email",
+      "tempat_baru": "Cara kerja: judul kartu 2"
+    },
+    {
+      "kunci": "how.2p",
+      "id": "Jalankan alur di aplikasi Anda dan arahkan emailnya ke alamat tadi.",
+      "en": "Run the flow in your app and point its email at that address.",
+      "tempat_baru": "Cara kerja: teks kartu 2 (persis)"
+    },
+    {
+      "kunci": "how.3t",
+      "id": "Baca hasilnya",
+      "en": "Read the result",
+      "tempat_baru": "Cara kerja: judul kartu 3"
+    },
+    {
+      "kunci": "how.3p",
+      "id": "<code>GET /api/mailbox</code> menampilkan isi kotak. <code>GET /api/messages/:id</code> memberi teks dan HTML satu email.",
+      "en": "<code>GET /api/mailbox</code> lists what arrived. <code>GET /api/messages/:id</code> returns one email’s text and HTML.",
+      "tempat_baru": "Cara kerja: teks kartu 3 (persis)"
+    },
+    {
+      "kunci": "how.4t",
+      "id": "Hapus alamat",
+      "en": "Delete the address",
+      "tempat_baru": "Cara kerja: judul kartu 4"
+    },
+    {
+      "kunci": "how.4p",
+      "id": "<code>DELETE /api/addresses/me</code> menghapus alamat beserta semua isinya.",
+      "en": "<code>DELETE /api/addresses/me</code> removes the address and everything in it.",
+      "tempat_baru": "Cara kerja: teks kartu 4 (persis)"
+    },
+    {
+      "kunci": "first.title",
+      "id": "Buat alamat, lalu baca kotak masuknya",
+      "en": "Create an address, then read its mailbox",
+      "tempat_baru": "API: pengantar"
+    },
+    {
+      "kunci": "first.sub",
+      "id": "Field <code>prefix</code> dan <code>domain</code> sama-sama opsional. Token dari jawaban pertama dipakai di semua panggilan berikutnya.",
+      "en": "The <code>prefix</code> and <code>domain</code> fields are both optional. The token from the first response goes on every later call.",
+      "tempat_baru": "API: catatan field opsional dan token (persis)"
+    },
+    {
+      "kunci": "first.req",
+      "id": "Buat alamat",
+      "en": "Create an address",
+      "tempat_baru": "API: tab Contoh 1 (label)"
+    },
+    {
+      "kunci": "first.rule",
+      "id": "Awalan berisi 3 sampai 20 karakter dari huruf, angka, titik, garis bawah, dan tanda hubung. Karakter pertama dan terakhir harus huruf atau angka, dan dua tanda tidak boleh berdampingan. Server menambahkan akhiran acak, sehingga <code>qa-signup</code> menjadi alamat seperti <code class=\"long\">qa-signup.62yt8v@kotak.venbeemail.com</code>.",
+      "en": "A prefix is 3 to 20 characters of letters, digits, dots, underscores, and hyphens. It must start and end with a letter or digit, and two symbols cannot sit side by side. The server adds a random suffix, so <code>qa-signup</code> becomes an address like <code class=\"long\">qa-signup.62yt8v@kotak.venbeemail.com</code>.",
+      "tempat_baru": "API: aturan awalan (persis) + dasar pemeriksa AW1"
+    },
+    {
+      "kunci": "first.req2",
+      "id": "Baca kotak masuk",
+      "en": "Read the mailbox",
+      "tempat_baru": "API: tab Contoh 2 (label)"
+    },
+    {
+      "kunci": "first.note",
+      "id": "Isi <code>$TOKEN</code> dengan nilai <code>token</code> dari jawaban pertama.",
+      "en": "Replace <code>$TOKEN</code> with the <code>token</code> value from the first response.",
+      "tempat_baru": "API: catatan di bawah Contoh 2 (persis)"
+    },
+    {
+      "kunci": "first.res",
+      "id": "Jawaban berisi",
+      "en": "The response contains",
+      "tempat_baru": "API: judul resi jawaban"
+    },
+    {
+      "kunci": "f.address",
+      "id": "Alamat email lengkap",
+      "en": "The full email address",
+      "tempat_baru": "API: resi, keterangan address"
+    },
+    {
+      "kunci": "f.local",
+      "id": "Bagian sebelum tanda @",
+      "en": "The part before the @ sign",
+      "tempat_baru": "API: resi, keterangan local"
+    },
+    {
+      "kunci": "f.domain",
+      "id": "Domain yang dipakai",
+      "en": "The domain in use",
+      "tempat_baru": "API: resi, keterangan domain"
+    },
+    {
+      "kunci": "f.expires",
+      "id": "Kapan alamat kedaluwarsa, dalam milidetik epoch",
+      "en": "When the address expires, in epoch milliseconds",
+      "tempat_baru": "API: resi, keterangan expiresAt (bentuk nilai: milidetik epoch)"
+    },
+    {
+      "kunci": "f.token",
+      "id": "Token untuk panggilan berikutnya",
+      "en": "The token for later calls",
+      "tempat_baru": "API: resi, keterangan token"
+    },
+    {
+      "kunci": "man.label",
+      "id": "Daftar lengkap",
+      "en": "Full list",
+      "tempat_baru": "Semua endpoint: label kecil"
+    },
+    {
+      "kunci": "man.title",
+      "id": "Semua endpoint",
+      "en": "Every endpoint",
+      "tempat_baru": "Semua endpoint: judul gunting"
+    },
+    {
+      "kunci": "man.sub",
+      "id": "Selain <code>POST /api/addresses</code> dan <code>GET /api/health</code>, setiap panggilan wajib membawa header <code>Authorization: Bearer &lt;token&gt;</code>.",
+      "en": "Apart from <code>POST /api/addresses</code> and <code>GET /api/health</code>, every call must carry the header <code>Authorization: Bearer &lt;token&gt;</code>.",
+      "tempat_baru": "Semua endpoint: catatan header Authorization (persis)"
+    },
+    {
+      "kunci": "man.1",
+      "id": "Buat alamat baru. Mengembalikan alamat, masa berlaku, dan token.",
+      "en": "Create a new address. Returns the address, its expiry, and a token.",
+      "tempat_baru": "Papan baris 1, kolom guna"
+    },
+    {
+      "kunci": "man.2",
+      "id": "Daftar email di <code>inbox</code>, <code>spam</code>, dan <code>sent</code>, serta masa berlaku alamat.",
+      "en": "Lists the emails in <code>inbox</code>, <code>spam</code>, and <code>sent</code>, plus the address expiry.",
+      "tempat_baru": "Papan baris 2, kolom guna"
+    },
+    {
+      "kunci": "man.3",
+      "id": "Satu email lengkap: metadata, teks, dan HTML.",
+      "en": "One full email: metadata, text, and HTML.",
+      "tempat_baru": "Papan baris 3, kolom guna"
+    },
+    {
+      "kunci": "man.4",
+      "id": "Pindahkan email antara inbox dan spam lewat field <code>folder</code>.",
+      "en": "Move an email between inbox and spam with the <code>folder</code> field.",
+      "tempat_baru": "Papan baris 4, kolom guna (arti PATCH)"
+    },
+    {
+      "kunci": "man.5",
+      "id": "Unduh satu lampiran dari sebuah email.",
+      "en": "Download one attachment from an email.",
+      "tempat_baru": "Papan baris 5, kolom guna"
+    },
+    {
+      "kunci": "man.6",
+      "id": "Hapus alamat beserta semua isinya.",
+      "en": "Delete the address and everything in it.",
+      "tempat_baru": "Papan baris 6, kolom guna"
+    },
+    {
+      "kunci": "man.7",
+      "id": "Periksa apakah layanan sedang berjalan.",
+      "en": "Check whether the service is running.",
+      "tempat_baru": "Papan baris 7, kolom guna"
+    },
+    {
+      "kunci": "dom.label",
+      "id": "Domain",
+      "en": "Domains",
+      "tempat_baru": "Domain: label kecil"
+    },
+    {
+      "kunci": "dom.title",
+      "id": "Empat domain, satu API",
+      "en": "Four domains, one API",
+      "tempat_baru": "Domain: judul gunting atau subjudul"
+    },
+    {
+      "kunci": "dom.sub",
+      "id": "Tulis nama domainnya di field <code>domain</code> saat membuat alamat.",
+      "en": "Pass the domain name in the <code>domain</code> field when you create an address.",
+      "tempat_baru": "Domain: pengantar (PRD 11.4: dipakai karena halaman lama punya)"
+    },
+    {
+      "kunci": "dom.g0",
+      "id": "utama",
+      "en": "main",
+      "tempat_baru": "Perangko 1: keterangan"
+    },
+    {
+      "kunci": "dom.g1",
+      "id": "kotak",
+      "en": "kotak = box",
+      "tempat_baru": "Perangko 2: keterangan"
+    },
+    {
+      "kunci": "dom.g2",
+      "id": "surat",
+      "en": "surat = letter",
+      "tempat_baru": "Perangko 3: keterangan"
+    },
+    {
+      "kunci": "dom.g3",
+      "id": "pos",
+      "en": "pos = post",
+      "tempat_baru": "Perangko 4: keterangan"
+    },
+    {
+      "kunci": "end.title",
+      "id": "Mulai dari satu alamat.",
+      "en": "Start with one address.",
+      "tempat_baru": "Penutup: usul kalimat di bawah manifesto"
+    },
+    {
+      "kunci": "end.p",
+      "id": "BanaMail sudah berjalan di venbeemail.com. Ada pertanyaan soal API? Tulis ke alamat di samping.",
+      "en": "BanaMail is live at venbeemail.com. Questions about the API? Write to the address shown here.",
+      "tempat_baru": "Penutup atau Tentang: ajakan menghubungi"
+    },
+    {
+      "kunci": "copy.idle",
+      "id": "Salin",
+      "en": "Copy",
+      "tempat_baru": "Tombol Salin"
+    },
+    {
+      "kunci": "copy.done",
+      "id": "Tersalin",
+      "en": "Copied",
+      "tempat_baru": "Tombol Salin setelah berhasil"
+    },
+    {
+      "kunci": "copy.fail",
+      "id": "Tekan Ctrl+C",
+      "en": "Press Ctrl+C",
+      "tempat_baru": "Gagal salin: lama 'Tekan Ctrl+C'; PRD 10.3 'Tekan lama untuk menyalin' (HP). Usul: tampilkan sesuai perangkat"
+    }
+  ],
+  "kunci_tanpa_en": [],
+  "kunci_hanya_en": [],
+  "skrip": [
+    {
+      "nama": "dua bahasa + salin",
+      "fungsi": [
+        "Ganti bahasa ID/EN lewat data-i18n, data-i18n-html, data-i18n-aria",
+        "Simpan pilihan di localStorage 'bm-lang'",
+        "Salin #curl, #curl2, #mail dengan navigator.clipboard, cadangan: pilih teks + 'Tekan Ctrl+C'"
+      ],
+      "tempat_baru": "halaman.js: bahasa (juga membaca kunci lama 'bm-lang' supaya pilihan pengunjung lama terbawa), salin + cap KT4"
+    },
+    {
+      "nama": "adegan Orbit Surat",
+      "fungsi": [
+        "Kera, amplop, pesawat mengorbit maskot di dua cincin (canvas jejak)",
+        "Tetesan lelehan dari tulisan 03-tulisan",
+        "Paralaks kursor, berhenti saat tidak terlihat atau reduced-motion"
+      ],
+      "tempat_baru": "Diganti hero HR1 dan film (D10). Berkas aset lama tetap di server"
+    }
+  ],
+  "tanpa_analitik": true
+}
