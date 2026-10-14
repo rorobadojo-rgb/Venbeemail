@@ -540,14 +540,309 @@
     if (!layarHp()) ST.create({ trigger: bab, start: "top top", end: "+=60%", pin: true, anticipatePin: 1 });
   }
 
+
+  /* ================= huruf gunting: tunggu sampai dirakit ================= */
+  function setelahGunting(fn) {
+    if (html.classList.contains("vbk-gunting-siap")) { fn(); return; }
+    var sudah = false;
+    var jalan = function () { if (!sudah) { sudah = true; fn(); } };
+    document.addEventListener("vbk:gunting", jalan, { once: true });
+    setTimeout(jalan, 2500); // tanpa huruf gunting: gerak tetap jalan dengan teks biasa
+  }
+
+  /* ================= Penutup (PN1 + PN2, PRD 12) ================= */
+  function penutup() {
+    var sec = $("#penutup");
+    if (!sec) return;
+    var daftar = $(".vbk-manifesto", sec), kata = $$(".vbk-manifesto-kata", sec);
+    var chip = $$(".vbk-manifesto-baris .vbk-chip", sec);
+    var aksi = $$(".vbk-penutup-kalimat, .vbk-penutup-tombol", sec);
+    var cincin = $(".vbk-penutup-cincin", sec), latar = $(".vbk-penutup-latar", sec);
+    var redup = buat("div", "vbk-penutup-redup", latar);
+    function isi(k) { return k.querySelector(".vbk-gunting-dua") || k; }
+    setelahGunting(function () {
+      var bagian = kata.map(isi);
+      if (layarHp()) {
+        // HP: tanpa pin, tiap kata muncul sekali saat masuk layar
+        bagian.forEach(function (b, i) {
+          gsap.set(b, { yPercent: 120, rotation: i % 2 ? 4 : -4 });
+          gsap.set(chip[i], { autoAlpha: 0, y: 10 });
+          ST.create({ trigger: kata[i], start: "top 88%", once: true, onEnter: function () {
+            gsap.to(b, { yPercent: 0, rotation: 0, duration: 0.6, ease: "power3.out" });
+            gsap.to(chip[i], { autoAlpha: 1, y: 0, duration: 0.4, delay: 0.25 });
+          } });
+        });
+        return;
+      }
+      var tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+      tl.set({}, {}, 1);
+      bagian.forEach(function (b, i) {
+        tl.fromTo(b, { yPercent: 120, rotation: i % 2 ? 4 : -4 }, { yPercent: 0, rotation: 0, duration: 0.15, ease: "power2.out" }, i * 0.15);
+        if (chip[i]) tl.fromTo(chip[i], { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.05 }, i * 0.15 + 0.1);
+      });
+      tl.fromTo(aksi, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.1, stagger: 0.03 }, 0.6)
+        .to(daftar, { scale: 0.82, yPercent: -30, autoAlpha: 0, duration: 0.25, ease: "power1.in", transformOrigin: "50% 0%" }, 0.75)
+        .fromTo(cincin, { filter: "brightness(1)" }, { filter: "brightness(1.9)", duration: 0.25 }, 0.75)
+        .fromTo(redup, { opacity: 0 }, { opacity: 0.6, duration: 0.25 }, 0.75);
+      ST.create({ trigger: sec, start: "top top", end: "+=200%", pin: true, scrub: 0.6, anticipatePin: 1, animation: tl });
+      ST.sort();
+      ST.refresh();
+    });
+  }
+
+  /* ================= Tentang (TT1, PRD 13.2) ================= */
+  function tentang() {
+    var sec = $("#tentang");
+    if (!sec) return;
+    var kartu = $(".vbk-catatan-kertas", sec), polaroid = $(".vbk-polaroid", sec), img = polaroid && $("img", polaroid);
+    var foto = null;
+    if (img) {
+      // bungkus foto supaya bernapas dari kaki bersama kelopak matanya
+      foto = buat("div", "vbk-polaroid-foto");
+      img.parentNode.insertBefore(foto, img);
+      foto.appendChild(img);
+      var svgNs = "http://www.w3.org/2000/svg", mata = document.createElementNS(svgNs, "svg");
+      mata.setAttribute("class", "vbk-polaroid-mata");
+      mata.setAttribute("viewBox", "0 0 576 955");
+      mata.setAttribute("aria-hidden", "true");
+      mata.setAttribute("focusable", "false");
+      [[256, 320, 35, 41], [339.5, 331.5, 28, 32]].forEach(function (m) {
+        var e = document.createElementNS(svgNs, "ellipse");
+        e.setAttribute("class", "vbk-kelopak");
+        e.setAttribute("cx", m[0]); e.setAttribute("cy", m[1]); e.setAttribute("rx", m[2]); e.setAttribute("ry", m[3]);
+        mata.appendChild(e);
+      });
+      foto.appendChild(mata);
+    }
+    if (kartu) gsap.set(kartu, { y: 40, rotation: -3, autoAlpha: 0, "--selotip-1": 0, "--selotip-2": 0 });
+    if (polaroid) gsap.set(polaroid, { "--selotip-1": 0, "--selotip-2": 0 });
+    var judul = [];
+    setelahGunting(function () {
+      judul = $$("#judul-tentang .vbk-huruf-isi");
+      gsap.set(judul, { autoAlpha: 0, transformOrigin: "50% 50%" });
+    });
+    ST.create({ trigger: sec, start: "top 70%", once: true, onEnter: function () {
+      var tl = gsap.timeline();
+      if (judul.length) tl.fromTo(judul, { autoAlpha: 0, y: 30, rotation: function (i) { return (acak(i + 40) - 0.5) * 14; } },
+        { autoAlpha: 1, y: 0, rotation: 0, duration: 0.3, stagger: 0.035, ease: "back.out(1.6)", clearProps: "transform" }, 0);
+      if (kartu) tl.to(kartu, { y: 0, rotation: -1, autoAlpha: 1, duration: 0.7, ease: "power3.out" }, 0.15)
+        .to(kartu, { "--selotip-1": 1, duration: 0.2, ease: "power2.out" }, 0.7)
+        .to(kartu, { "--selotip-2": 1, duration: 0.2, ease: "power2.out" }, 0.82);
+      if (polaroid) tl.to(polaroid, { "--selotip-1": 1, duration: 0.2, ease: "power2.out" }, 0.3)
+        .to(polaroid, { "--selotip-2": 1, duration: 0.2, ease: "power2.out" }, 0.42);
+    } });
+    if (foto) {
+      // napas 3,2 detik dan kedip tiap 3-6 detik, hanya selama bagian ini terlihat
+      var napas = gsap.to(foto, { scaleY: 1.015, duration: 3.2, yoyo: true, repeat: -1, ease: "sine.inOut", paused: true });
+      var kedip = 0, terlihat = false;
+      var jadwalKedip = function () {
+        clearTimeout(kedip);
+        kedip = setTimeout(function () {
+          if (!terlihat) return;
+          polaroid.classList.add("vbk-kedip-polaroid");
+          setTimeout(function () { polaroid.classList.remove("vbk-kedip-polaroid"); jadwalKedip(); }, 120);
+        }, 3000 + Math.random() * 3000);
+      };
+      ST.create({ trigger: sec, start: "top bottom", end: "bottom top", onToggle: function (st) {
+        terlihat = st.isActive;
+        if (terlihat) { napas.play(); jadwalKedip(); } else { napas.pause(); clearTimeout(kedip); }
+      } });
+    }
+  }
+
+  /* ================= footer maskot (FT1, PRD 14) ================= */
+  function footer() {
+    var sec = $("#kaki"), pg = sec && $(".vbk-ka-panggung", sec);
+    if (!pg) return;
+    var padam = $(".vbk-ka-padam", pg), satu = $(".vbk-ka-satu", pg), sorot = $(".vbk-ka-sorot", pg);
+    var lubang = $(".vbk-ka-lubang", pg), sinar = $(".vbk-ka-sinar", pg), kontak = $(".vbk-ka-kontak", pg);
+    var maskot = $(".vbk-maskot", pg), badan = $(".vbk-maskot-badan", pg), kotak = $(".vbk-maskot-kotak", pg);
+    var kotakImg = $(".vbk-maskot-kotak > img", pg), amplopKotak = $(".vbk-ka-amplop", pg);
+    var kelopak = $$(".vbk-maskot-mata .vbk-kelopak", pg), rute = $(".vbk-rute", pg), ketuk = $(".vbk-ka-ketuk", pg);
+    var titikRute = rute ? $$("li", rute) : [];
+    var ruteAmplop = null;
+    if (rute && $("ol", rute)) { ruteAmplop = buat("span", "vbk-rute-amplop-ka", $("ol", rute)); ruteAmplop.setAttribute("aria-hidden", "true"); }
+    // pesawat yang membawa amplop dari film
+    var terbang = buat("div", "vbk-ka-terbang", pg);
+    terbang.setAttribute("aria-hidden", "true");
+    var pesawat = buat("img", "vbk-ka-terbang-pesawat", terbang), amplopTerbang = buat("img", "vbk-ka-terbang-amplop", terbang);
+    pesawat.alt = amplopTerbang.alt = "";
+    ST.create({ trigger: sec, start: "top 250%", once: true, onEnter: function () {
+      pesawat.src = akar + "aset/vbkong/gambar/pesawat.webp";
+      amplopTerbang.src = akar + "aset/vbkong/gambar/amplop.webp";
+    } });
+    function pendek() { return window.matchMedia("(max-width: 1024px), (max-height: 759px)").matches; }
+    function huruf() {
+      return $$(".vbk-ka-tulisan " + (pendek() ? ".vbk-ka-baris-hp" : ".vbk-ka-baris-desktop") + " .vbk-huruf-isi", pg);
+    }
+    function sampai(ya) {
+      // garis rute: titik Sampai menyala dan garis jadi utuh saat amplop masuk celah
+      if (!rute) return;
+      rute.classList.toggle("vbk-rute-penuh", ya);
+      if (titikRute[3]) titikRute[3].classList.toggle("vbk-rute-lewat", ya);
+      rute.setAttribute("aria-label", ya ? (html.getAttribute("data-bahasa") === "en" ? "Letter's journey progress: delivered" : "Kemajuan perjalanan surat: sampai")
+        : (html.getAttribute("data-bahasa") === "en" ? "Letter's journey progress: in the air" : "Kemajuan perjalanan surat: di udara"));
+    }
+
+    /* ---- diam yang hidup (14.5) ---- */
+    var diamJalan = false, idle = [], kedipKaki = 0, kemajuan = 0;
+    var miring = gsap.quickTo(maskot, "rotation", { duration: 0.6, ease: "power2.out" });
+    var geserKontak = gsap.quickTo(kontak, "x", { duration: 0.6, ease: "power2.out" });
+    function kedipDua() {
+      gsap.timeline().set(kelopak, { opacity: 1 }).set(kelopak, { opacity: 0 }, 0.12);
+    }
+    function mulaiDiam() {
+      if (diamJalan) return;
+      diamJalan = true;
+      idle.push(gsap.to(maskot, { scaleY: 1.015, duration: 3, yoyo: true, repeat: -1, ease: "sine.inOut", transformOrigin: "50% 100%" }));
+      idle.push(gsap.to(kotak, { "--angguk": "-4px", duration: 1.3, yoyo: true, repeat: -1, ease: "sine.inOut" }));
+      (function ulang() {
+        kedipKaki = setTimeout(function () { kedipDua(); ulang(); }, 3000 + Math.random() * 3000);
+      })();
+    }
+    function hentiDiam() {
+      if (!diamJalan) return;
+      diamJalan = false;
+      idle.forEach(function (t) { t.kill(); });
+      idle = [];
+      clearTimeout(kedipKaki);
+      gsap.set(maskot, { scaleY: 1 });
+      gsap.set(kotak, { "--angguk": "0px" });
+      miring(0); geserKontak(0);
+    }
+    if (window.matchMedia("(pointer: fine)").matches) {
+      addEventListener("mousemove", function (e) {
+        if (!diamJalan || pendek()) return;
+        var r = maskot.getBoundingClientRect(), dx = (e.clientX - (r.left + r.width / 2)) / innerWidth;
+        miring(apit(dx * 6, -3, 3));
+        geserKontak(apit(-dx * 30, -12, 12));
+      }, { passive: true });
+    }
+    // ketuk kotak: amplop meloncat keluar dari celah lalu masuk lagi, jeda 0,8 detik
+    var bolehKetuk = true;
+    if (ketuk) ketuk.addEventListener("click", function () {
+      if (!bolehKetuk || kemajuan < 0.95) return;
+      bolehKetuk = false;
+      setTimeout(function () { bolehKetuk = true; }, 800);
+      gsap.timeline()
+        .to(amplopKotak, { yPercent: -60, rotation: 100, duration: 0.25, ease: "power2.out" })
+        .to(amplopKotak, { yPercent: 46, rotation: 90, duration: 0.35, ease: "power2.in" })
+        .to(kotakImg, { keyframes: [{ scaleY: 0.95, scaleX: 1.03, duration: 0.08 }, { scaleY: 1, scaleX: 1, duration: 0.3, ease: "elastic.out(1, 0.4)" }] }, 0.5);
+    });
+
+    /* ---- garis waktu scrub (14.4) ---- */
+    var tl = null, st = null;
+    function bangun() {
+      if (st) { st.kill(true); st = null; }
+      if (tl) { tl.revert(); tl = null; }
+      hentiDiam();
+      // ukur dulu dalam komposisi akhir (tampilan diam), baru pasang keadaan awal
+      var rp = pg.getBoundingClientRect(), rk = kotakImg.getBoundingClientRect();
+      var celah = { x: rk.left - rp.left + rk.width * 250.5 / 576, y: rk.top - rp.top + rk.height * 63.3 / 304 };
+      var W = pg.clientWidth, H = pg.clientHeight, vw = innerWidth / 100, sv = H / 100, kecil = pendek();
+      var mulaiTerbang = kecil ? { x: -20 * vw, y: 10 * sv } : { x: -10 * vw, y: 8 * sv };
+      var lewatTerbang = kecil ? { x: 20 * vw, y: 6 * sv } : { x: 30 * vw, y: 4 * sv };
+      var hrf = huruf();
+      gsap.set(hrf, { transformOrigin: "50% 50%" });
+      gsap.set(sorot, { xPercent: -50, x: 0 });
+      gsap.set(sinar, { xPercent: -50, x: 0, transformOrigin: "50% 100%" });
+      gsap.set([lubang, kontak], { xPercent: -50, yPercent: -50, x: 0, y: 0 });
+      gsap.set(maskot, { xPercent: -50, x: 0, transformOrigin: "50% 100%" });
+      gsap.set(kotakImg, { transformOrigin: "50% 100%" });
+      gsap.set(badan, { transformOrigin: "50% 100%" });
+      gsap.set(amplopKotak, { xPercent: -50, yPercent: 46, rotation: 90, x: 0, y: 0 });
+      gsap.set(terbang, { xPercent: -50, yPercent: -100, x: mulaiTerbang.x, y: mulaiTerbang.y, autoAlpha: 0 });
+      gsap.set(pesawat, { x: 0, y: 0, rotation: 0 });
+      gsap.set(amplopTerbang, { autoAlpha: 1 });
+      sampai(false);
+
+      tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+      tl.set({}, {}, 1)
+        // 1. lampu padam, "Satu surat lagi."
+        .fromTo(padam, { opacity: 0 }, { opacity: 0.82, duration: 0.12 }, 0)
+        .fromTo(satu, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.07 }, 0.03)
+        .to(satu, { autoAlpha: 0, duration: 0.03 }, 0.12);
+      // 2. slogan ditempel huruf demi huruf (y dalam satuan huruf: tinggi huruf 100)
+      if (hrf.length) tl.fromTo(hrf, { y: 60, rotation: function (i) { return (acak(i + 7) - 0.5) * 10; }, scale: 1.1, autoAlpha: 0 },
+        { y: 0, rotation: 0, scale: 1, autoAlpha: 1, duration: 0.05, stagger: { amount: 0.17 }, ease: "back.out(2)" }, 0.12);
+      // 3. sorotan jatuh, pintu lift membuka, sinar hangat naik
+      tl.fromTo(sorot, { opacity: 0, scaleX: 2.3 }, { opacity: 0.85, scaleX: 1, duration: 0.10 }, 0.30)
+        .fromTo(lubang, { scaleX: 0 }, { scaleX: 1, duration: 0.06 }, 0.32)
+        .fromTo(sinar, { opacity: 0, scaleY: 0.4 }, { opacity: 1, scaleY: 1, duration: 0.06 }, 0.34)
+        // 4-5. maskot naik, kotak tertinggal lalu terdorong dan memantul
+        .fromTo(maskot, { yPercent: 100 }, { yPercent: 0, ease: "power2.out", duration: 0.36 }, 0.38)
+        .fromTo(maskot, { "--geser-kotak": 4 }, { "--geser-kotak": 0, duration: 0.30 }, 0.40)
+        .to(maskot, { "--geser-kotak": -3, duration: 0.04 }, 0.70)
+        .to(maskot, { "--geser-kotak": 0, ease: "back.out(2)", duration: 0.04 }, 0.74)
+        // 6. mendarat
+        .to(sinar, { opacity: 0, duration: 0.10 }, 0.70)
+        .to(lubang, { scaleX: 0, duration: 0.06 }, 0.74)
+        .to(maskot, { keyframes: [{ scaleY: 0.985, duration: 0.015 }, { scaleY: 1, duration: 0.025, ease: "back.out(3)" }] }, 0.74)
+        .fromTo(kontak, { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0.76);
+      // garis rute: muncul di 0,40 dengan amplop mini di "Di udara", ke "Sampai" di 0,95
+      if (rute) tl.fromTo(rute, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.04 }, 0.40);
+      if (ruteAmplop) tl.fromTo(ruteAmplop, { "--ka": 2 / 3 }, { "--ka": 1, duration: 0.05 }, 0.90);
+      // 7. pesawat datang membawa amplop ke atas celah
+      tl.set(terbang, { autoAlpha: 1 }, 0.80)
+        .to(terbang, { motionPath: { path: [mulaiTerbang, lewatTerbang, { x: celah.x, y: celah.y - 2 }], curviness: 1.1 }, duration: 0.10, ease: "power1.inOut" }, 0.80)
+        // 8. amplop lepas, pesawat naik ke kanan atas dan keluar
+        .set(amplopTerbang, { autoAlpha: 0 }, 0.90)
+        .to(pesawat, { x: W * 0.6, y: -H * 0.5, rotation: -18, duration: 0.10, ease: "power1.in" }, 0.90)
+        // 9. amplop berputar tegak lurus celah dan turun; bagian di bawah celah terpotong
+        .fromTo(amplopKotak, { autoAlpha: 0, yPercent: -230, rotation: 0 }, { autoAlpha: 1, yPercent: 46, rotation: 90, duration: 0.05, ease: "power2.in" }, 0.90)
+        // 10. kotak menerima: memipih lalu memantul, badan ikut, mata berkedip dua kali
+        .to(kotakImg, { keyframes: [{ scaleY: 0.93, scaleX: 1.04, duration: 0.015 }, { scaleY: 1, scaleX: 1, duration: 0.035, ease: "elastic.out(1, 0.4)" }] }, 0.95)
+        .to(badan, { keyframes: [{ scaleY: 0.99, duration: 0.015 }, { scaleY: 1, duration: 0.03 }] }, 0.95)
+        .to(kelopak, { keyframes: [{ opacity: 1, duration: 0.006 }, { opacity: 0, duration: 0.008 }, { opacity: 1, duration: 0.006 }, { opacity: 0, duration: 0.008 }] }, 0.955);
+
+      st = ST.create({
+        trigger: pg, start: "top top", end: kecil ? "+=130%" : "+=160%", pin: true, scrub: 0.6, anticipatePin: 1, animation: tl,
+        onUpdate: function (self) {
+          kemajuan = self.progress;
+          sampai(kemajuan >= 0.95);
+          // pesawat tiba tepat di bawah pil menu (puncak kotak sekitar 14 persen tinggi layar):
+          // menu menyingkir selama pesawat datang dan pergi
+          html.classList.toggle("vbk-menu-sembunyi", self.isActive && kemajuan >= 0.78 && kemajuan < 0.97);
+          if (kemajuan > 0.99) mulaiDiam(); else hentiDiam();
+          // gulir cepat: maskot terhuyung lalu tegak
+          if (diamJalan && Math.abs(self.getVelocity()) > 2500) {
+            gsap.fromTo(maskot, { rotation: self.direction > 0 ? 2 : -2 }, { rotation: 0, duration: 0.8, ease: "elastic.out(1, 0.35)", overwrite: "auto" });
+          }
+        }
+      });
+    }
+    setelahGunting(function () {
+      bangun();
+      ST.sort();
+      ST.refresh();
+      // bangun ulang saat ukuran berubah (letak celah dan lintasan pesawat diukur ulang)
+      var lebar = innerWidth, tinggi = innerHeight, tunda = 0;
+      addEventListener("resize", function () {
+        clearTimeout(tunda);
+        tunda = setTimeout(function () {
+          if (innerWidth === lebar && Math.abs(innerHeight - tinggi) < 120) return;
+          lebar = innerWidth; tinggi = innerHeight;
+          bangun();
+          ST.sort();
+          ST.refresh();
+        }, 250);
+      });
+      document.addEventListener("vbk:bahasa", function () { sampai(kemajuan >= 0.95); });
+    });
+  }
+
   /* ================= menu redup selama film ================= */
   // (kelas vbk-film-aktif dipasang pemicu film; CSS menurunkan opacity menu ke 0,55)
 
   hero();
   film();
   kartuBab();
+  tentang();
+  penutup();
+  footer();
   VBK.gerakSiap = true;
   VBK.gsap = gsap;
+  VBK.lenis = lenis;
 
   // jangkar di alamat (#api dan lain-lain): pin menambah jarak, jadi gulir ulang ke sasaran
   if (location.hash.length > 1) {

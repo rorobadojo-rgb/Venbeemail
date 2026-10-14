@@ -163,6 +163,56 @@ async function halaman(opsi = {}) {
   cek("HP: tanpa gulir menyamping di tengah film", await p.evaluate(() => document.documentElement.scrollWidth === 390));
   await ctx.close();
 }
+// 9. Fase 4: Tentang, Penutup, footer maskot (desktop)
+{
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
+  const p = await ctx.newPage(); const galat = [];
+  p.on("pageerror", (e) => galat.push(String(e)));
+  await p.goto("http://127.0.0.1:8766/index.html");
+  await p.waitForFunction(() => window.VBK && VBK.gerakSiap, null, { timeout: 8000 });
+  await p.waitForTimeout(2500);
+  const gulir = async (y) => { await p.evaluate((y) => (VBK.lenis ? VBK.lenis.scrollTo(y, { immediate: true }) : scrollTo(0, y)), Math.round(y)); await p.waitForTimeout(1300); };
+  const pinOf = (kelas) => p.evaluate((k) => { const t = ScrollTrigger.getAll().find((t) => t.pin && t.pin.classList.contains(k)); return t ? { a: t.start, z: t.end } : null; }, kelas);
+  cek("video sorotan belum dibuat saat halaman dibuka", await p.evaluate(() => !document.querySelector(".vbk-penutup video, .vbk-ka video")));
+  await gulir(await p.evaluate(() => document.getElementById("tentang").getBoundingClientRect().top + scrollY - 100));
+  await p.waitForTimeout(1200);
+  cek("Tentang: kartu catatan dan selotip ditempel", await p.evaluate(() => { const k = document.querySelector(".vbk-catatan-kertas"); return getComputedStyle(k).opacity === "1" && getComputedStyle(k).getPropertyValue("--selotip-2").trim() === "1"; }));
+  cek("Tentang: foto polaroid punya kelopak mata", await p.evaluate(() => document.querySelectorAll(".vbk-polaroid-foto .vbk-kelopak").length === 2));
+  const pen = await pinOf("vbk-penutup");
+  cek("Penutup di-pin 200 persen", !!pen && Math.abs(pen.z - pen.a - 1800) < 2, JSON.stringify(pen));
+  await gulir(pen.a + 2);
+  cek("Penutup: kata keempat masih di balik garis potong di awal", await p.evaluate(() => { const k = document.querySelectorAll(".vbk-manifesto-kata .vbk-gunting-dua")[3]; return gsap.getProperty(k, "yPercent") > 50; }));
+  await gulir(pen.a + (pen.z - pen.a) * 0.745);
+  cek("Penutup: kalimat dan tombol tampil di 60-75 persen", await p.evaluate(() => { const t = document.querySelector(".vbk-penutup-tombol"), r = t.getBoundingClientRect(); return getComputedStyle(t).opacity === "1" && r.bottom <= innerHeight && r.top > 0; }));
+  cek("Penutup: video sorotan dan tombol jeda", await p.evaluate(() => !!document.querySelector(".vbk-penutup video") && !!document.querySelector(".vbk-penutup .vbk-jeda")));
+  const kaki = await pinOf("vbk-ka-panggung");
+  cek("footer di-pin 160 persen", !!kaki && Math.abs(kaki.z - kaki.a - 1440) < 2, JSON.stringify(kaki));
+  await gulir(kaki.a + (kaki.z - kaki.a) * 0.05);
+  cek("footer awal: lampu padam mulai, maskot masih di bawah podium", await p.evaluate(() => gsap.getProperty(document.querySelector(".vbk-maskot"), "yPercent") > 90 && getComputedStyle(document.querySelector(".vbk-ka-satu")).opacity !== "0"));
+  await gulir(kaki.a + (kaki.z - kaki.a) * 0.85);
+  cek("footer 0,85: pesawat terbang, menu menyingkir", await p.evaluate(() => getComputedStyle(document.querySelector(".vbk-ka-terbang")).visibility === "visible" && document.documentElement.classList.contains("vbk-menu-sembunyi")));
+  await gulir(kaki.z + 4);
+  await p.waitForTimeout(600);
+  cek("footer akhir: maskot di podium, amplop di celah, rute sampai", await p.evaluate(() => gsap.getProperty(document.querySelector(".vbk-maskot"), "yPercent") < 1 && getComputedStyle(document.querySelector(".vbk-ka-amplop")).opacity === "1" && document.querySelector(".vbk-rute").classList.contains("vbk-rute-penuh") && !document.documentElement.classList.contains("vbk-menu-sembunyi")));
+  cek("footer akhir: hanya satu video yang diputar", await p.evaluate(() => [...document.querySelectorAll("video")].filter((v) => !v.paused).length <= 1));
+  const awalAmplop = await p.evaluate(() => getComputedStyle(document.querySelector(".vbk-ka-amplop")).transform);
+  await p.click(".vbk-ka-ketuk"); await p.waitForTimeout(220);
+  cek("ketuk kotak: amplop meloncat keluar celah", await p.evaluate((t) => getComputedStyle(document.querySelector(".vbk-ka-amplop")).transform !== t, awalAmplop));
+  cek("Fase 4 tanpa galat JavaScript", galat.length === 0, galat.join("; "));
+  await ctx.close();
+}
+// 10. Fase 4 di HP: Penutup tanpa pin, footer di-pin 130 persen
+{
+  const { p, ctx } = await halaman({ vp: { width: 390, height: 844 }, hp: true });
+  await p.waitForFunction(() => window.VBK && VBK.gerakSiap, null, { timeout: 8000 });
+  await p.waitForTimeout(2500);
+  const pins = await p.evaluate(() => ScrollTrigger.getAll().filter((t) => t.pin).map((t) => [t.pin.className, Math.round(t.end - t.start)]));
+  cek("HP: Penutup tanpa pin, footer 130 persen", !pins.some((x) => /penutup/.test(x[0])) && pins.some((x) => /ka-panggung/.test(x[0]) && Math.abs(x[1] - 844 * 1.3) < 2), JSON.stringify(pins));
+  await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await p.waitForTimeout(1500);
+  cek("HP: tanpa gulir menyamping di akhir halaman", await p.evaluate(() => document.documentElement.scrollWidth === 390));
+  await ctx.close();
+}
 // 8. kurangi gerakan: GSAP, video, dan layar muat tidak dimuat sama sekali
 {
   const { p, ctx } = await halaman({ diam: true });

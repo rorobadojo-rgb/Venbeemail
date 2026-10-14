@@ -474,6 +474,22 @@
       buatTombolJeda(hero);
     };
     if (document.readyState === "complete") mulaiVideoHero(); else addEventListener("load", mulaiVideoHero);
+    // Video sorotan V6 untuk Penutup dan footer: dibuat saat bagiannya berjarak 1,5 layar.
+    // Dua elemen video memakai berkas yang sama (unduh sekali, dari cache); yang tidak
+    // terlihat selalu dijeda, jadi paling banyak satu yang diputar.
+    var videoMalas = function (wadah, pengamat) {
+      if (!wadah || !pengamat) return;
+      if (!("IntersectionObserver" in window)) { pasangVideo(wadah, "sorot", pengamat); return; }
+      var io = new IntersectionObserver(function (isi) {
+        if (!isi[0].isIntersecting) return;
+        io.disconnect();
+        pasangVideo(wadah, "sorot", pengamat);
+      }, { rootMargin: "150% 0px" });
+      io.observe(pengamat);
+    };
+    videoMalas($(".vbk-penutup-latar"), $(".vbk-penutup"));
+    videoMalas($(".vbk-ka-set-belakang"), $(".vbk-ka"));
+    if ($(".vbk-penutup")) buatTombolJeda($(".vbk-penutup"));
   }
 
   /* ================= muat gerak (GSAP + gerak.js) ================= */

@@ -10,7 +10,7 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | 1. Aset dan bingkai kunci | Selesai: turunan gambar, huruf gunting, font, og.jpg, 11 bingkai kunci + 6 referensi, paket Seedance |
 | 2. Kerangka dan Bab 2 | Selesai: `sumber.html` utuh (semua bagian, tampilan diam, ID dan EN), `gaya.css`, `halaman.js`, `rakit.py`, gambar diam dari bingkai kunci. Isi teknis lama persis (`cek_teks_lama.mjs` lolos), 38/38 uji fungsi lolos, muatan awal HP 0,29 MB |
 | 3. Pembuka dan film | Selesai (14 Oktober 2026): layar muat, intro dan scrub hero, video hero + tombol jeda, wajah huruf B, film canvas dari urutan bingkai, estafet monyet, sambungan antaradegan, garis rute, Lewati film, kartu penutup bab. 59/59 uji fungsi, muatan awal HP 0,93 MB |
-| 4. Akhir halaman | Belum |
+| 4. Akhir halaman | Selesai (14 Oktober 2026): gerak Tentang, Penutup (pin 200 persen), footer maskot FT1 (pin 160/130 persen, lift, pesawat, amplop ke celah, diam yang hidup, ketuk kotak), video sorotan V6 malas dengan tombol jeda. 75/75 uji fungsi, muatan awal HP 0,96 MB |
 | 5. Video | Olah web selesai (14 Oktober 2026): film V1-V5 jadi urutan WebP + `film/daftar.json`, loop hero dan sorotan MP4 + WebM + poster, komik 6 panel dan latar panel dari video. Pemutar film dan `<video>` hero/sorotan dipasang di Fase 3 |
 | 6 sampai 9 | Belum |
 
@@ -110,6 +110,29 @@ Belum dikerjakan atau berbeda dari PRD:
 - Wajah huruf B dibuat ulang lebih sederhana (bentuk B gunting berbeda dari B PRD pertama).
 - Kalimat 2 hero tetap teks halaman lama (keputusan Fase 2).
 - Uji Safari iPhone asli (16.5) masuk Fase 6.
+
+## Fase 4: akhir halaman
+
+Markup dan tampilan diam Tentang, Penutup, footer maskot, dan kaki halaman sudah ada sejak Fase 2 (itu juga komposisi akhir saat kurangi gerakan). Fase 4 menambah gerak di `gerak.js` dan video sorotan di `halaman.js`.
+
+| Bagian | Isi |
+|---|---|
+| Video sorotan V6 (12, 14.2) | Dibuat saat Penutup atau footer berjarak 1,5 layar (`IntersectionObserver`, `rootMargin: 150%`). Tombol "Jeda video" kedua di Penutup; satu tombol menjeda semua video latar |
+| Tentang (13.2) | Judul ditempel huruf demi huruf, kartu catatan naik dari 40 px dan berputar -3 ke -1 derajat (0,7 detik), selotip ditempel (`--selotip-1/2`, karena pseudo-elemen tidak bisa dianimasikan langsung). Foto polaroid bernapas dari kaki (3,2 detik) dan berkedip tiap 3-6 detik (kelopak dari koordinat mata `ukuran-kong.json`), hanya selama bagian terlihat |
+| Penutup (12) | Desktop di-pin `+=200%`: empat kata naik dari balik garis potong satu per satu (0-60 persen), chip menyusul, kalimat dan tombol 60-75 persen, lalu kata mengecil dan naik keluar, cincin podium makin terang, lampu meredup. Di desktop ukuran kata diperkecil ke `min(12vw, 13svh)` supaya semua isi muat dalam satu layar selama di-pin. HP tanpa pin: tiap kata muncul sekali saat masuk layar. Cincin podium bernapas (4 detik) |
+| Footer maskot (14.4) | Satu garis waktu scrub (`+=160%`, layar pendek dan HP `+=130%`): lampu padam dan "Satu surat lagi.", slogan ditempel huruf demi huruf, sorotan jatuh, pintu lift membuka, maskot naik dengan kotak tertinggal lalu terdorong (`--geser-kotak`), mendarat, garis rute muncul dengan amplop mini di "Di udara", pesawat membawa amplop lewat MotionPath ke atas celah (diukur dari kotak di komposisi akhir, diukur ulang saat ukuran layar berubah), amplop berputar dan masuk celah, kotak memipih dan memantul, mata berkedip dua kali, titik "Sampai" menyala di 0,95 |
+| Diam yang hidup (14.5) | Mulai di kemajuan di atas 0,99, berhenti saat digulir mundur: napas 3 detik, kotak mengangguk 4 piksel (`--angguk`), kedip 3-6 detik, miring maksimal 3 derajat mengikuti kursor (desktop, bayangan kontak bergeser berlawanan), terhuyung saat gulir cepat (kecepatan di atas 2500). Ketuk kotak: amplop meloncat keluar celah lalu masuk lagi, jeda 0,8 detik |
+
+Berbeda dari PRD:
+
+- **Satu video untuk Penutup dan footer:** PRD meminta satu lapisan `position: sticky` di pembungkus `.vbk-panggung-akhir`. Penutup ada di `<main>` dan footer di `<footer>`, dan video footer harus ada di dalam kotak set 16:9 supaya podium tepat di bawah maskot. Jadi dipakai dua elemen video dengan berkas yang sama (diunduh sekali, dari cache); yang tidak terlihat selalu dijeda, jadi paling banyak satu yang diputar (diuji).
+- **Menu menyingkir saat pesawat tiba (0,78-0,97):** puncak kotak surat ada di sekitar 14 persen tinggi layar (14.1: y 125 di layar 1440x900), jadi pesawat dan amplop tiba tepat di belakang pil menu. Menu meluncur naik selama itu dan kembali sesudahnya (tetap muncul kalau difokus keyboard).
+- Amplop yang dibawa pesawat belum membawa label AW4; label tampil di amplop yang sudah masuk celah (seperti Fase 2).
+- Kalimat Penutup tetap "Mulai dari satu alamat." (keputusan Fase 2).
+
+Uji (`alat/uji_halaman.mjs`, sekarang 75): 16 uji baru untuk Fase 4, antara lain video sorotan malas, kartu Tentang dan selotip, kelopak polaroid, pin Penutup 200 persen dan kata masih tersembunyi di awal, kalimat dan tombol muat dalam layar, pin footer 160/130 persen, maskot di bawah podium di awal dan di podium di akhir, menu menyingkir di 0,85, rute sampai, hanya satu video diputar, ketuk kotak, dan tanpa gulir menyamping di akhir halaman HP.
+
+Muatan awal (14 Oktober 2026): HP 0,96 MB / 44 berkas, desktop 1,21 MB / 46 berkas.
 
 ## Fase 5: video untuk web (PRD 7.7)
 

@@ -559,7 +559,7 @@ a.vbk-chip:hover { box-shadow: 0 0 0 2px var(--vbk-oranye); }
 .vbk-tentang-kiri { display: flex; flex-direction: column; align-items: center; gap: 28px; padding-top: 80px; }
 .vbk-polaroid { position: relative; background: #fbfaf6; color: var(--vbk-tinta); padding: 14px 14px 18px; transform: rotate(-4deg); box-shadow: 0 18px 40px rgba(0, 0, 0, .4); max-width: 300px; }
 .vbk-polaroid::before, .vbk-polaroid::after { content: ""; position: absolute; top: -12px; width: 86px; height: 26px; background: rgba(231, 102, 60, .82); }
-.vbk-polaroid::before { left: -18px; transform: rotate(-30deg); } .vbk-polaroid::after { right: -18px; transform: rotate(32deg); }
+.vbk-polaroid::before { left: -18px; transform: rotate(-30deg) scaleX(var(--selotip-1, 1)); } .vbk-polaroid::after { right: -18px; transform: rotate(32deg) scaleX(var(--selotip-2, 1)); }
 .vbk-polaroid img { width: 100%; height: auto; background: linear-gradient(#035066, #01232d); aspect-ratio: 512 / 849; object-fit: contain; }
 .vbk-polaroid figcaption { margin-top: 10px; font-size: 15px; font-weight: 700; text-align: center; }
 .vbk-kartu-banamail {
@@ -573,7 +573,7 @@ a.vbk-chip:hover { box-shadow: 0 0 0 2px var(--vbk-oranye); }
   display: flex; flex-direction: column; gap: 14px; font-size: 17px; line-height: 1.75;
 }
 .vbk-catatan-kertas::before, .vbk-catatan-kertas::after { content: ""; position: absolute; top: -12px; width: 96px; height: 26px; background: rgba(231, 102, 60, .82); }
-.vbk-catatan-kertas::before { left: 24px; transform: rotate(-4deg); } .vbk-catatan-kertas::after { right: 24px; transform: rotate(5deg); }
+.vbk-catatan-kertas::before { left: 24px; transform: rotate(-4deg) scaleX(var(--selotip-1, 1)); } .vbk-catatan-kertas::after { right: 24px; transform: rotate(5deg) scaleX(var(--selotip-2, 1)); }
 .vbk-catatan-kertas a { color: #8a3416; }
 .vbk-fakta-daftar { display: grid; gap: 4px; padding: 10px 0; border-block: 1px dashed rgba(13, 27, 34, .25); }
 .vbk-fakta-daftar div { display: grid; grid-template-columns: 11em minmax(0, 1fr); gap: 10px; }
@@ -684,7 +684,7 @@ a.vbk-chip:hover { box-shadow: 0 0 0 2px var(--vbk-oranye); }
 .vbk-maskot > img, .vbk-maskot-kotak { position: absolute; }
 .vbk-maskot-badan { inset: 0; width: 100%; height: 100%; }
 .vbk-maskot-bayang { left: -4.94%; top: -2.69%; width: 113.9%; height: 108.4%; max-width: none; opacity: .45; }
-.vbk-maskot-kotak { left: 0; top: 0; width: 100%; height: 31.83%; transform: translateY(calc(var(--geser-kotak) * 1% * 3.14)); transform-origin: 50% 100%; }
+.vbk-maskot-kotak { left: 0; top: 0; width: 100%; height: 31.83%; transform: translateY(calc(var(--geser-kotak) * 1% * 3.14 + var(--angguk, 0px))); transform-origin: 50% 100%; }
 .vbk-maskot-kotak > img { position: relative; width: 100%; height: 100%; }
 .vbk-maskot-mata { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .vbk-kelopak { fill: #efe9d6; stroke: #3b2a1e; stroke-width: 4; opacity: 0; }
@@ -842,6 +842,9 @@ html[data-wajah="lidah"] .vbk-w-lidah, html[data-wajah="kaget"] .vbk-w-kaget { d
 /* ---------- menu redup selama film ---------- */
 .vbk-film-aktif .vbk-menu { opacity: .55; }
 .vbk-film-aktif .vbk-menu:hover, .vbk-film-aktif .vbk-menu:focus-within { opacity: 1; }
+.vbk-menu { transition: opacity .3s, transform .3s; }
+.vbk-menu-sembunyi .vbk-menu { opacity: 0; transform: translateY(-120%); }
+.vbk-menu-sembunyi .vbk-menu:focus-within { opacity: 1; transform: none; }
 
 /* ---------- Lenis ---------- */
 html.vbk-lenis, html.vbk-lenis body { height: auto; }
@@ -939,6 +942,51 @@ html.vbk-lenis, html.vbk-lenis body { height: auto; }
 @media (max-width: 720px) {
   .vbk-lewati { right: 40px; bottom: calc(16px + env(safe-area-inset-bottom)); background: rgba(1, 35, 45, .92); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+
+/* ---------- Fase 4: Penutup, Tentang, footer maskot (hanya saat gerak) ---------- */
+.vbk-penutup-latar .vbk-video-latar.vbk-siap { opacity: .75; }
+.vbk-penutup .vbk-jeda { top: auto; bottom: 24px; }
+.vbk-penutup-redup { position: absolute; inset: 0; z-index: 0; background: var(--vbk-hitam); opacity: 0; pointer-events: none; }
+.vbk-gerak .vbk-penutup-cincin { animation: vbk-napas-cincin 4s ease-in-out infinite alternate; }
+@keyframes vbk-napas-cincin { from { opacity: .5; } to { opacity: .9; } }
+/* kata naik dari balik garis potong: hanya bawahnya yang dipotong. Tinggi kotak kata
+   disamakan dengan huruf gunting (bukan tinggi baris huruf cadangan), supaya garis
+   potongnya tepat di bawah huruf */
+.vbk-gerak .vbk-manifesto-kata { clip-path: inset(-30% -6% 0 -6%); }
+.vbk-gerak.vbk-gunting-siap .vbk-manifesto-kata { line-height: 0; }
+/* pembungkus huruf harus kotak (transform tidak berlaku pada elemen inline) */
+.vbk-gerak .vbk-manifesto-kata .vbk-gunting-dua { display: inline-block; }
+@media (min-width: 721px) {
+  /* desktop di-pin satu layar: empat kata, chip, kalimat, dan tombol harus muat */
+  .vbk-gerak .vbk-penutup { min-height: calc(100 * var(--vbk-svh)); padding: calc(10 * var(--vbk-svh)) 0 calc(4 * var(--vbk-svh)); }
+  .vbk-gerak .vbk-manifesto { gap: 2px; }
+  .vbk-gerak .vbk-manifesto-baris { gap: 2px; }
+  .vbk-gerak .vbk-manifesto-kata .vbk-gunting { font-size: min(12vw, calc(13 * var(--vbk-svh))); }
+  .vbk-gerak .vbk-penutup-aksi { margin-top: calc(3 * var(--vbk-svh)); gap: 12px; }
+}
+@media (max-width: 720px) { .vbk-penutup .vbk-jeda { bottom: 16px; } }
+
+/* Tentang: kartu mulai miring -3 derajat; jangan sampai halaman melebar ke samping */
+.vbk-gerak .vbk-tentang { overflow-x: hidden; }
+@supports (overflow: clip) { .vbk-gerak .vbk-tentang { overflow-x: clip; } }
+/* Tentang: foto polaroid bernapas dan berkedip */
+.vbk-polaroid-foto { position: relative; transform-origin: 50% 100%; }
+.vbk-polaroid-mata { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.vbk-polaroid-mata .vbk-kelopak { opacity: 0; }
+.vbk-kedip-polaroid .vbk-polaroid-mata .vbk-kelopak { opacity: 1; }
+
+/* footer: pesawat yang membawa amplop, dan amplop mini di garis rute */
+.vbk-ka-terbang { position: absolute; z-index: 8; left: 0; top: 0; width: 9vw; pointer-events: none; will-change: transform; }
+.vbk-ka-terbang-pesawat { display: block; width: 100%; height: auto; max-width: none; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .35)); }
+.vbk-ka-terbang-amplop { display: block; width: 66%; height: auto; max-width: none; margin: -38% auto 0; position: relative; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .35)); }
+@media (max-width: 1024px), (max-height: 759px) { .vbk-ka-terbang { width: 18vw; } }
+.vbk-rute-amplop-ka {
+  position: absolute; z-index: 1; top: -2px; left: calc(5px + var(--ka, 1) * (100% - 10px)); width: 22px; height: 14px; margin-left: -11px;
+  background: var(--vbk-kobalt-muda); border-radius: 2px; clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+}
+@media (max-width: 720px) { .vbk-rute-amplop-ka { left: 5px; top: calc(5px + var(--ka, 1) * (100% - 10px)); margin: -7px 0 0 -11px; } }
+.vbk-ka-ketuk { z-index: 6; }
 
 /* ---------- penanda tempat isian, hanya di pratinjau rakit.py --pratinjau ---------- */
 .vbk-isian-pratinjau { outline: 2px dashed #f5d04a; outline-offset: 2px; background: rgba(245, 208, 74, .12); }
