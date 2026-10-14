@@ -12,7 +12,8 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | 3. Pembuka dan film | Selesai (14 Oktober 2026): layar muat, intro dan scrub hero, video hero + tombol jeda, wajah huruf B, film canvas dari urutan bingkai, estafet monyet, sambungan antaradegan, garis rute, Lewati film, kartu penutup bab. 59/59 uji fungsi, muatan awal HP 0,93 MB |
 | 4. Akhir halaman | Selesai (14 Oktober 2026): gerak Tentang, Penutup (pin 200 persen), footer maskot FT1 (pin 160/130 persen, lift, pesawat, amplop ke celah, diam yang hidup, ketuk kotak), video sorotan V6 malas dengan tombol jeda. 75/75 uji fungsi, muatan awal HP 0,96 MB |
 | 5. Video | Olah web selesai (14 Oktober 2026): film V1-V5 jadi urutan WebP + `film/daftar.json`, loop hero dan sorotan MP4 + WebM + poster, komik 6 panel dan latar panel dari video. Pemutar film dan `<video>` hero/sorotan dipasang di Fase 3 |
-| 6 sampai 9 | Belum |
+| 6. Periksa | Sebagian (14 Oktober 2026): gerak Bab 2, `pasang/siapkan.js`, audit aksesibilitas (axe-core tanpa pelanggaran), area sentuh 44 piksel, fokus keyboard, 83/83 uji. Tinggal uji Safari iPhone asli dan pratinjau untuk LO |
+| 7 sampai 9 | Belum |
 
 ## Isi folder
 
@@ -31,7 +32,7 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | `lama/` | Salinan /pro lama dan inventarisnya (R2) | Tidak |
 | `alat/` | Alat olah gambar, huruf gunting, bingkai kunci, video, rakit | Tidak |
 | `kerja/` | Berkas antara `alat/olah_video.sh` (tidak di-commit) | Tidak |
-| `pasang/` | Alat pasang dan kembalikan (Fase 7) | Dipakai dari unduhan, tidak disalin ke /pro |
+| `pasang/` | `siapkan.js` (cek + siapkan untuk pasang, PRD 18.3); alat pasang dan kembalikan menyusul di Fase 7 | Dipakai dari unduhan, tidak disalin ke /pro |
 
 ## Fase 1: aset dan bingkai kunci
 
@@ -110,6 +111,46 @@ Belum dikerjakan atau berbeda dari PRD:
 - Wajah huruf B dibuat ulang lebih sederhana (bentuk B gunting berbeda dari B PRD pertama).
 - Kalimat 2 hero tetap teks halaman lama (keputusan Fase 2).
 - Uji Safari iPhone asli (16.5) masuk Fase 6.
+
+## Fase 6: periksa
+
+**Gerak Bab 2 (PRD 11)** yang belum dikerjakan di fase lain, sekarang di `gerak.js` (`bab2()`):
+
+| Bagian | Gerak |
+|---|---|
+| Judul Bab 2 | Huruf gunting ditempel satu per satu saat bagian masuk 80 persen layar (sekali) |
+| Cara kerja | Desktop: empat kartu bertumpuk di satu sel, di-pin `+=300%`; kartu 2-4 naik dari bawah, kartu di bawahnya mengecil, naik sedikit, dan menggelap (`--gelap`), monyetnya melompat saat kartunya mendarat. HP: kartu `position: sticky` (kartu berikut menutupi yang sebelumnya), monyet melompat sekali |
+| API | Tiket naik dari 60 px dan berputar 4 ke 0 derajat (`expo.out`), panel tab yang dibuka bergeser masuk, amplop kecil melintas di tepi kanan latar (desktop) |
+| Semua endpoint | Keping tiap baris membalik sekali (`rotateX` -90 ke 0, poros atas, jeda 0,07 detik), lalu chip metode dicap |
+| Domain | Perangko ditempel (skala 1,15 ke 1, jeda 0,1 detik); maskot kecil bernapas dan berkedip (fungsi bersama dengan polaroid Tentang) |
+
+**Aksesibilitas dan fokus.** Isi yang bertulisan atau bisa difokus (tombol hero, tiket API, perangko, kartu Tentang, chip dan tombol Penutup, kartu bab) sekarang disembunyikan sebelum masuk dengan `opacity` saja, bukan `visibility`, supaya tetap bisa difokus keyboard dan dibaca pembaca layar. Fokus keyboard di dalamnya langsung menyelesaikan animasi masuk; di bagian yang di-pin (kartu Cara kerja, tombol Penutup) fokus menggulir ke titik pin tempat elemen itu terlihat.
+
+**Audit** (axe-core 4.10.2 dijalankan dari scratchpad, tidak ikut repo; aturan WCAG 2 A/AA dan praktik terbaik termasuk kontras warna) di desktop 1440 dan HP 360, mode diam dan mode gerak, setelah semua bagian digulir: **tanpa pelanggaran**. Pemeriksaan sendiri: satu `<h1>`, `<h2>` di setiap bagian lain, tautan "Langsung ke isi" ke `#bab-2`, tanpa gulir menyamping di 360 piksel, semua tombol dan tautan minimal 44x44 piksel (tombol Salin kode, Jeda video, dan tautan pendek di menu dan kaki halaman diperbesar).
+
+**`pasang/siapkan.js`** (PRD 18.3, Node lama juga bisa): memeriksa penanda `vbkong-halaman`, tanpa tempat isian, tujuh endpoint di papan, empat domain, lima field, kontak dan nama pembuat, lalu setiap blok curl halaman lama harus ada persis sama di sumber (tag dibuang, entitas diurai, akhir baris disamakan), dan blok curl halaman live harus sama dengan referensi kalau halaman live bukan halaman Kong. Lalu memberi awalan pada alamat aset, mengisi `data-akar`, dan menambah `noindex` untuk mode uji. Juga `--bersihkan` untuk membuang blok `vbpro-*`.
+
+```bash
+node situs-pro-kong/pasang/siapkan.js --cek --mode uji --awalan /pro/kong/ \
+  --sumber situs-pro-kong/index.html --referensi situs-pro-kong/lama/index.html
+# Endpoint: 7, domain: 4, field: 5, blok curl cocok: 2/2 ... CEK LOLOS
+```
+
+Dicoba juga dengan dua kerusakan sengaja (satu jalur endpoint diganti, satu baris curl diubah): keduanya berhenti dengan pesan jelas tanpa menulis apa pun.
+
+**Uji** (`alat/uji_halaman.mjs`): 83 uji, termasuk 8 baru untuk Fase 6 (pin kartu 300 persen, kartu 4 di bawah tumpukan di awal dan bertumpuk di akhir, keping papan membalik, perangko dan maskot Domain, fokus keyboard ke tombol Penutup terlihat, fokus ke perangko yang belum masuk langsung tampil). Uji klik tab sekarang menggulir ke bagian API dan menunggu dulu, karena Playwright mengklik saat tiket masih dalam animasi masuk.
+
+Muatan awal tetap: HP 0,96 MB / 44 berkas, desktop 1,21 MB / 46 berkas.
+
+**Status syarat selesai (PRD 20.2):**
+
+| Kelompok | Status |
+|---|---|
+| Isi dan kejujuran | Lolos: nama VenbeeMail Pro di kepala halaman, isi teknis persis (`cek_teks_lama.mjs`, `siapkan.js --cek`), NongBana di hero/Tentang/kaki, satu kontak, isian kosong tidak ada di HTML, ikon sosial dihapus selama akun kosong, hak cipta dengan tahun berjalan, tanpa testimoni atau aset Kong |
+| Tampilan dan gerak | Lolos semua yang bisa diuji otomatis (layar muat, hero, film, garis rute, Lewati film, kartu bab, gerak Bab 2, footer FT1, label AW4, wajah B, tombol). Penilaian rasa "sambungan tidak terlihat" dan "nyaris jatuh terasa lambat" perlu dilihat LO di pratinjau |
+| Video | Lolos (Fase 5) |
+| HP, kinerja, aksesibilitas | Lolos, kecuali **uji di Safari iPhone asli (16.5)**: harus dilakukan LO |
+| Server | Fase 7 dan 8 |
 
 ## Fase 4: akhir halaman
 

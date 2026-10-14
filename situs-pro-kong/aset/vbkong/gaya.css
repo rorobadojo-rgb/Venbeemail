@@ -970,11 +970,12 @@ html.vbk-lenis, html.vbk-lenis body { height: auto; }
 /* Tentang: kartu mulai miring -3 derajat; jangan sampai halaman melebar ke samping */
 .vbk-gerak .vbk-tentang { overflow-x: hidden; }
 @supports (overflow: clip) { .vbk-gerak .vbk-tentang { overflow-x: clip; } }
-/* Tentang: foto polaroid bernapas dan berkedip */
-.vbk-polaroid-foto { position: relative; transform-origin: 50% 100%; }
-.vbk-polaroid-mata { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.vbk-polaroid-mata .vbk-kelopak { opacity: 0; }
-.vbk-kedip-polaroid .vbk-polaroid-mata .vbk-kelopak { opacity: 1; }
+/* maskot kecil yang bernapas dan berkedip (polaroid Tentang, panggung Domain) */
+.vbk-maskot-hidup { position: relative; transform-origin: 50% 100%; }
+.vbk-maskot-hidup-mata { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.vbk-maskot-hidup-mata .vbk-kelopak { opacity: 0; }
+.vbk-kedip-maskot .vbk-maskot-hidup-mata .vbk-kelopak { opacity: 1; }
+.vbk-domain-maskot .vbk-maskot-hidup { position: relative; z-index: 1; }
 
 /* footer: pesawat yang membawa amplop, dan amplop mini di garis rute */
 .vbk-ka-terbang { position: absolute; z-index: 8; left: 0; top: 0; width: 9vw; pointer-events: none; will-change: transform; }
@@ -987,6 +988,31 @@ html.vbk-lenis, html.vbk-lenis body { height: auto; }
 }
 @media (max-width: 720px) { .vbk-rute-amplop-ka { left: 5px; top: calc(5px + var(--ka, 1) * (100% - 10px)); margin: -7px 0 0 -11px; } }
 .vbk-ka-ketuk { z-index: 6; }
+
+
+/* ---------- Fase 6: area sentuh minimal 44x44 (PRD 16.3) ---------- */
+.vbk-salin { min-height: 44px; }
+.vbk-pil-tautan a, .vbk-kaki-grid a { min-width: 44px; }
+.vbk-jeda { min-height: 44px; }
+
+/* ---------- Fase 6: gerak Bab 2 (hanya saat gerak) ---------- */
+/* Cara kerja desktop: empat kartu bertumpuk di satu sel, di-pin sambil kartu berikut naik */
+.vbk-kartu-tumpuk { display: grid; grid-template-columns: min(760px, 62vw); justify-content: center; padding: 96px 0 40px; overflow: hidden; }
+.vbk-kartu-tumpuk .vbk-kartu { grid-area: 1 / 1; min-height: 400px; }
+.vbk-kartu::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: var(--vbk-hitam); opacity: var(--gelap, 0);
+  clip-path: polygon(0 3%, 6% 0, 14% 2%, 23% 0, 34% 2.5%, 45% .5%, 57% 2%, 68% 0, 79% 2.5%, 90% .5%, 100% 2%, 100% 97%, 93% 100%, 82% 98%, 71% 100%, 59% 97.5%, 47% 100%, 35% 98%, 23% 100%, 12% 97.5%, 0 99%);
+}
+@media (max-width: 720px) {
+  /* HP: kartu sticky, kartu berikut menutupi kartu sebelumnya saat digulir */
+  .vbk-gerak .vbk-kartu-daftar { gap: 96px; }
+  .vbk-gerak .vbk-kartu { position: sticky; top: calc(84px + var(--n, 0) * 10px); }
+  .vbk-gerak .vbk-kartu:nth-child(2) { --n: 1; } .vbk-gerak .vbk-kartu:nth-child(3) { --n: 2; } .vbk-gerak .vbk-kartu:nth-child(4) { --n: 3; }
+}
+/* papan keberangkatan: keping membalik dari poros atas */
+.vbk-gerak .vbk-papan li { perspective: 700px; }
+/* amplop kecil melintas di tepi kanan latar API (hiasan, desktop) */
+.vbk-api-amplop { position: absolute; z-index: 0; right: 3vw; bottom: 4%; width: 46px; height: auto; opacity: .45; pointer-events: none; }
 
 /* ---------- penanda tempat isian, hanya di pratinjau rakit.py --pratinjau ---------- */
 .vbk-isian-pratinjau { outline: 2px dashed #f5d04a; outline-offset: 2px; background: rgba(245, 208, 74, .12); }

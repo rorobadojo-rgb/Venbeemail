@@ -24,6 +24,9 @@ async function halaman(opsi = {}) {
   cek("tanpa galat JavaScript", galat.length === 0, galat.join("; "));
   cek("huruf gunting terpasang", await p.evaluate(() => document.documentElement.classList.contains("vbk-gunting-siap")));
   cek("panel 2 tersembunyi awal", await p.evaluate(() => document.getElementById("vbk-panel-2").hidden));
+  // gulir ke bagian API dulu dan tunggu animasi masuk tiket selesai (seperti pengunjung sungguhan)
+  await p.evaluate(() => document.getElementById("api").scrollIntoView());
+  await p.waitForTimeout(1500);
   await p.click("#vbk-tab-2");
   cek("klik tab 2 menampilkan panel 2", await p.evaluate(() => !document.getElementById("vbk-panel-2").hidden && document.getElementById("vbk-panel-1").hidden));
   await p.focus("#vbk-tab-2"); await p.keyboard.press("ArrowLeft");
@@ -177,7 +180,7 @@ async function halaman(opsi = {}) {
   await gulir(await p.evaluate(() => document.getElementById("tentang").getBoundingClientRect().top + scrollY - 100));
   await p.waitForTimeout(1200);
   cek("Tentang: kartu catatan dan selotip ditempel", await p.evaluate(() => { const k = document.querySelector(".vbk-catatan-kertas"); return getComputedStyle(k).opacity === "1" && getComputedStyle(k).getPropertyValue("--selotip-2").trim() === "1"; }));
-  cek("Tentang: foto polaroid punya kelopak mata", await p.evaluate(() => document.querySelectorAll(".vbk-polaroid-foto .vbk-kelopak").length === 2));
+  cek("Tentang: foto polaroid punya kelopak mata", await p.evaluate(() => document.querySelectorAll(".vbk-polaroid .vbk-maskot-hidup .vbk-kelopak").length === 2));
   const pen = await pinOf("vbk-penutup");
   cek("Penutup di-pin 200 persen", !!pen && Math.abs(pen.z - pen.a - 1800) < 2, JSON.stringify(pen));
   await gulir(pen.a + 2);
@@ -211,6 +214,42 @@ async function halaman(opsi = {}) {
   await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   await p.waitForTimeout(1500);
   cek("HP: tanpa gulir menyamping di akhir halaman", await p.evaluate(() => document.documentElement.scrollWidth === 390));
+  await ctx.close();
+}
+// 11. Fase 6: gerak Bab 2 dan fokus keyboard pada isi yang belum "masuk"
+{
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
+  const p = await ctx.newPage(); const galat = [];
+  p.on("pageerror", (e) => galat.push(String(e)));
+  await p.goto("http://127.0.0.1:8766/index.html");
+  await p.waitForFunction(() => window.VBK && VBK.gerakSiap, null, { timeout: 8000 });
+  await p.waitForTimeout(2500);
+  const gulir = async (y, t = 1300) => { await p.evaluate((y) => (VBK.lenis ? VBK.lenis.scrollTo(y, { immediate: true }) : scrollTo(0, y)), Math.round(y)); await p.waitForTimeout(t); };
+  const atas = (id) => p.evaluate((id) => document.getElementById(id).getBoundingClientRect().top + scrollY, id);
+  const kartu = await p.evaluate(() => { const t = ScrollTrigger.getAll().find((t) => t.pin && t.pin.classList.contains("vbk-kartu-daftar")); return t ? { a: t.start, z: t.end } : null; });
+  cek("Cara kerja: kartu bertumpuk di-pin 300 persen", !!kartu && Math.abs(kartu.z - kartu.a - 2700) < 2, JSON.stringify(kartu));
+  await gulir(kartu.a + 2);
+  cek("Cara kerja: kartu 4 masih di bawah tumpukan di awal", await p.evaluate(() => gsap.getProperty(document.querySelectorAll(".vbk-kartu")[3], "yPercent") > 90));
+  await gulir(kartu.a + (kartu.z - kartu.a) * 0.9);
+  cek("Cara kerja: keempat kartu bertumpuk di akhir", await p.evaluate(() => [...document.querySelectorAll(".vbk-kartu")].every((k) => Math.abs(gsap.getProperty(k, "yPercent")) < 20)));
+  await gulir(await atas("endpoint") + 80, 2200);
+  cek("Semua endpoint: keping papan sudah membalik", await p.evaluate(() => [...document.querySelectorAll(".vbk-keping")].every((k) => getComputedStyle(k).transform === "none")));
+  await gulir(await atas("domain") + 120, 2000);
+  cek("Domain: perangko ditempel dan maskot hidup", await p.evaluate(() => [...document.querySelectorAll(".vbk-perangko")].every((k) => getComputedStyle(k).opacity === "1") && !!document.querySelector(".vbk-domain-maskot .vbk-maskot-hidup")));
+  // fokus keyboard dari atas ke tombol Penutup: tombol harus terlihat
+  await gulir(0, 600);
+  await p.evaluate(() => document.querySelector('.vbk-penutup-tombol a').focus());
+  await p.waitForTimeout(1500);
+  cek("fokus keyboard di tombol Penutup: tombol terlihat di layar", await p.evaluate(() => { const a = document.activeElement, r = a.getBoundingClientRect(); return a.closest(".vbk-penutup-tombol") && r.top >= 0 && r.bottom <= innerHeight && Number(getComputedStyle(a.closest(".vbk-penutup-tombol")).opacity) > 0.9; }));
+  // fokus keyboard ke perangko sebelum bagian Domain digulir: perangko langsung tampil
+  const p2 = await ctx.newPage();
+  await p2.goto("http://127.0.0.1:8766/index.html");
+  await p2.waitForFunction(() => window.VBK && VBK.gerakSiap, null, { timeout: 8000 });
+  await p2.waitForTimeout(1500);
+  await p2.evaluate(() => document.querySelector(".vbk-perangko").focus());
+  await p2.waitForTimeout(400);
+  cek("fokus keyboard ke perangko yang belum masuk: langsung tampil", await p2.evaluate(() => getComputedStyle(document.activeElement).opacity === "1" && getComputedStyle(document.activeElement).visibility === "visible"));
+  cek("Fase 6 tanpa galat JavaScript", galat.length === 0, galat.join("; "));
   await ctx.close();
 }
 // 8. kurangi gerakan: GSAP, video, dan layar muat tidak dimuat sama sekali
