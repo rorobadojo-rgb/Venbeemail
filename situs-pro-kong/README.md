@@ -13,7 +13,8 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | 4. Akhir halaman | Selesai (14 Oktober 2026): gerak Tentang, Penutup (pin 200 persen), footer maskot FT1 (pin 160/130 persen, lift, pesawat, amplop ke celah, diam yang hidup, ketuk kotak), video sorotan V6 malas dengan tombol jeda. 75/75 uji fungsi, muatan awal HP 0,96 MB |
 | 5. Video | Olah web selesai (14 Oktober 2026): film V1-V5 jadi urutan WebP + `film/daftar.json`, loop hero dan sorotan MP4 + WebM + poster, komik 6 panel dan latar panel dari video. Pemutar film dan `<video>` hero/sorotan dipasang di Fase 3 |
 | 6. Periksa | Sebagian (14 Oktober 2026): gerak Bab 2, `pasang/siapkan.js`, audit aksesibilitas (axe-core tanpa pelanggaran), area sentuh 44 piksel, fokus keyboard, 83/83 uji. Tinggal uji Safari iPhone asli dan pratinjau untuk LO |
-| 7 sampai 9 | Belum |
+| 7. Pasang uji | Alat siap dan diuji dengan server tiruan (14 Oktober 2026): `pasang/pasang-kong.sh` dan `pasang/kembalikan-kong.sh`. Tinggal dijalankan LO di server |
+| 8 dan 9 | Belum |
 
 ## Isi folder
 
@@ -32,7 +33,7 @@ Versi kedua halaman venbeemail.com/pro, dibangun dari PRD `docs/pro-kong/prd-ven
 | `lama/` | Salinan /pro lama dan inventarisnya (R2) | Tidak |
 | `alat/` | Alat olah gambar, huruf gunting, bingkai kunci, video, rakit | Tidak |
 | `kerja/` | Berkas antara `alat/olah_video.sh` (tidak di-commit) | Tidak |
-| `pasang/` | `siapkan.js` (cek + siapkan untuk pasang, PRD 18.3); alat pasang dan kembalikan menyusul di Fase 7 | Dipakai dari unduhan, tidak disalin ke /pro |
+| `pasang/` | `siapkan.js` (cek + siapkan untuk pasang, PRD 18.3), `pasang-kong.sh` (18.4), `kembalikan-kong.sh` (18.5) | Dipakai dari unduhan, tidak disalin ke /pro |
 
 ## Fase 1: aset dan bingkai kunci
 
@@ -153,6 +154,30 @@ Muatan awal tetap: HP 0,96 MB / 44 berkas, desktop 1,21 MB / 46 berkas.
 | Video | Lolos (Fase 5) |
 | HP, kinerja, aksesibilitas | Lolos, kecuali **uji di Safari iPhone asli (16.5)**: harus dilakukan LO |
 | Server | Fase 7 dan 8 |
+
+## Fase 7: pasang uji
+
+**`pasang/pasang-kong.sh`** (PRD 18.4). Dijalankan di server sebagai root, aman diulang:
+
+```
+curl -fsSL https://raw.githubusercontent.com/rorobadojo-rgb/Venbeemail/claude/epic-carson-4jmsuo/situs-pro-kong/pasang/pasang-kong.sh \
+  | MODE=uji CABANG=claude/epic-carson-4jmsuo bash
+```
+
+Urutan: cari folder /pro (`PRO`, bawaan `/www/wwwroot/banamail-pro`, dikenali dari `index.html` + `aset/02-maskot.webp`; kalau jalurnya symlink, folder aslinya yang dipakai), cari node (juga `/www/server/nodejs/*/bin/node`), unduh cabang dari GitHub dan cek berkas penting, `siapkan.js --cek` terhadap halaman live, cadangkan seluruh folder /pro ke `/www/backup/venbeemail-pro-kong/pro-YYYYMMDD-HHMMSS`, pasang, lalu periksa dari luar (halaman, penanda, gaya.css, gerak.js, gambar, bingkai film, video harus 200). Gagal di langkah mana pun sebelum pasang: tidak ada yang diubah. Gagal periksa sesudah pasang: folder /pro dikembalikan otomatis dari cadangan yang baru dibuat.
+
+- `MODE=uji`: hanya menambah `/pro/kong/` (noindex, `data-akar="/pro/kong/"`). `/pro/` tidak berubah.
+- `MODE=utama` (Fase 8, sesudah LO setuju dan uji iPhone): `aset/vbkong` + `index.html` di /pro, lalu `/pro/kong/` dihapus. Aset lama (`aset/01-09`, `aset/vbpro`, `ikon.png`) tidak disentuh.
+
+**`pasang/kembalikan-kong.sh`** (PRD 18.5): mengembalikan cadangan terakhir, atau `PILIH=pro-YYYYMMDD-HHMMSS`. Cadangan paling atas di daftar = keadaan sebelum versi Kong pernah dipasang.
+
+```
+curl -fsSL https://raw.githubusercontent.com/rorobadojo-rgb/Venbeemail/claude/epic-carson-4jmsuo/situs-pro-kong/pasang/kembalikan-kong.sh | bash
+```
+
+Diuji di sini dengan server tiruan (folder /pro palsu berisi `lama/index.html`, cabang dari tarball lokal, server HTTP lokal): uji berhasil dan `/pro/index.html` tetap sama byte demi byte; uji ulang aman; server yang tidak melayani `/pro/kong/` (404) memicu pengembalian otomatis dan isi /pro sama dengan sebelumnya; MODE salah dan unduhan gagal berhenti tanpa mengubah apa pun; utama berhasil dengan aset lama tetap ada; pemasangan ulang utama di atas halaman Kong dikenali; kembalikan ke cadangan pertama memulihkan halaman lama persis; `PRO` berupa symlink tetap utuh setelah pasang dan kembalikan; dijalankan lewat pipa `| bash` seperti di server. Halaman `/pro/kong/` di Chromium HP dan desktop: gerak aktif, tanpa galat JS, tanpa berkas gagal (kecuali `ikon.png` lama yang memang hanya ada di server).
+
+Catatan: setiap cadangan memuat seluruh /pro, termasuk `/pro/kong/` kalau sudah ada (sekitar 14 MB per cadangan). Cadangan tidak dihapus otomatis.
 
 ## Fase 4: akhir halaman
 
