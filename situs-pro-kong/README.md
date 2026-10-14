@@ -142,6 +142,8 @@ Dicoba juga dengan dua kerusakan sengaja (satu jalur endpoint diganti, satu bari
 
 Muatan awal tetap: HP 0,96 MB / 44 berkas, desktop 1,21 MB / 46 berkas.
 
+**Pratinjau untuk LO** (PRD 17): https://claude.ai/artifact/8EoWEARu2mSaGfLEjdLozk (pribadi). Halaman pembuka dengan daftar cek, situs lengkap di `situs/index.html`. Semua 300 bingkai HP ikut; desktop hanya setiap bingkai ketiga (120 bingkai, `daftar.json` pratinjau 21/21/33/21/29), karena batas 511 berkas per versi Artifact. Bukan pengganti uji Safari iPhone.
+
 **Status syarat selesai (PRD 20.2):**
 
 | Kelompok | Status |
