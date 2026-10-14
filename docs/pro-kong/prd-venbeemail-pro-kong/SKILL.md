@@ -1708,6 +1708,7 @@ Setiap fase diakhiri commit dan push ke cabang kerja, dengan ringkasan singkat k
 - 10 Oktober 2026: isi /pro lama diterima dari LO (R2) dan inventarisnya dibuat. Temuan di bagian 3.
 - 10 Oktober 2026: Fase 1 selesai: `huruf_gunting.py`, `olah_aset_kong.py`, `bingkai_kunci.py`, og.jpg, bingkai kunci, `seedance/PAKET-SEEDANCE.md`. Catatan: K5 memakai garis kaki y 605 (sama dengan footer) dan bibir podium di depan kaki, bukan y 630; tepi K0 diisi warna panggung gelap itu sendiri.
 - 10 Oktober 2026: Fase 2 selesai: halaman utuh dalam tampilan diam, dua bahasa, isi teknis lama persis (`alat/cek_teks_lama.mjs`), 38/38 uji fungsi (`alat/uji_halaman.mjs`), muatan awal HP 0,29 MB tanpa gzip. Penyesuaian dari PRD: hero HP menaruh panggung di atas dan teks di bawah (amplop video terlalu besar di belakang teks); pemeriksa awalan memeriksa semua aturan lama; nilai contoh alamat memakai akhiran acak.
+- 14 Oktober 2026: Fase 5, olah video untuk web (7.7) selesai dengan `alat/olah_video.sh`: film 360 bingkai desktop (6,3 MB) dan 300 bingkai HP (2,9 MB), `film/daftar.json`, loop hero dan sorotan (hero-1280.mp4 290 KB, hero-540.mp4 114 KB, poster 19/11 KB), komik dan latar panel dari video. Penyesuaian: loop hero memakai silang 4 bingkai, bukan 0,5 detik (silang panjang membuat amplop dobel karena tarikan bingkai akhir Seedance), sorotan silang 5 bingkai di bagian lampu padam. Untuk Fase 3: sambungan V1 ke V2 di bawah 0,85, jadi memakai sapuan kertas (9.4). Pemutar film dan video hero/sorotan belum dipasang (Fase 3). Rincian di `situs-pro-kong/README.md`.
 
 ---
 

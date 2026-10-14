@@ -10,11 +10,17 @@ Selama video Seedance belum ada, halaman memakai gambar ini:
 - aset/vbkong/gambar/latar-api.webp (K2), latar-endpoint.webp (K4),
   latar-domain.webp (K3a): buram dan digelapkan, untuk latar panel Bab 2.
 
-Setelah video jadi, olah_video.sh menimpa berkas yang sama dari video.
+Setelah video jadi, olah_video.sh menimpa berkas yang sama dari video:
+poster dan latar panel langsung dengan ffmpeg, komik 6 panel lewat skrip ini
+dengan --video (bingkai pilihan 1.png sampai 6.png, 1280x720, sudah diambil
+olah_video.sh). Di mode itu panel 3 memakai bingkai V3 sebagai panggung, dan
+panel 6 tidak diberi cahaya tambahan karena celah di akhir V5 sudah menyala.
 Jalankan dari akar repo, sesudah bingkai_kunci.py:
 
     python3 situs-pro-kong/alat/diam_dari_bingkai.py
+    python3 situs-pro-kong/alat/diam_dari_bingkai.py --video situs-pro-kong/kerja/diam
 """
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -43,8 +49,10 @@ def tempel(k, nama, tinggi, kaki_x, kaki_y, putar=0.0, cermin=False):
     k.alpha_composite(img, (round(kaki_x - img.width / 2), round(kaki_y - img.height)))
 
 
-def panel_estafet():
-    k = buka("K3a")
+def panel_estafet(k=None):
+    # Garis bibir podium di V3 sama dengan K3a (selisih paling banyak 6 piksel),
+    # jadi letak monyet yang sama dipakai untuk dua sumber.
+    k = buka("K3a") if k is None else k
     lantai = 545
     bay = Image.new("RGBA", k.size, (0, 0, 0, 0))
     from PIL import ImageDraw
@@ -95,6 +103,14 @@ def latar_panel(nama, img):
 
 
 def main():
+    if "--video" in sys.argv:
+        folder = Path(sys.argv[sys.argv.index("--video") + 1])
+        b = [Image.open(folder / f"{n}.png").convert("RGBA") for n in range(1, 7)]
+        for n, img in enumerate([b[0], b[1], panel_estafet(b[2]), b[3], b[4], b[5]], 1):
+            simpan_panel(img, n)
+        for p in sorted((VBK / "film/diam").rglob("*.webp")):
+            print(p.relative_to(VBK), p.stat().st_size // 1024, "KB")
+        return
     panel = [buka("K1"), buka("K2"), panel_estafet(), buka("K4"), buka("K5"), panel_celah()]
     for n, img in enumerate(panel, 1):
         simpan_panel(img, n)
