@@ -8,8 +8,8 @@ Diperbarui tiap kelompok selesai. Sumber kebenaran status: jalankan `python3 stu
 | 2 | Arsitektur final 45 skill + indeks + pemilik keputusan | selesai |
 | 3 | Aturan inti, skema serah terima, alat sinkronisasi dan uji | selesai |
 | 4A | Kelompok A (7 skill) | selesai |
-| 4B | Kelompok B (6 skill) | belum |
-| 4C | Kelompok C (5 skill) | belum |
+| 4B | Kelompok B (6 skill) | selesai |
+| 4C | Kelompok C (5 skill) | selesai |
 | 4D | Kelompok D (6 skill) | belum |
 | 4E | Kelompok E (5 skill) | belum |
 | 4F | Kelompok F (6 skill) | belum |
