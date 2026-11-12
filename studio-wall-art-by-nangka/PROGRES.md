@@ -15,6 +15,15 @@ Diperbarui tiap kelompok selesai. Sumber kebenaran status: jalankan `python3 stu
 | 4F | Kelompok F (6 skill) | selesai |
 | 4G | Kelompok G (6 skill) | selesai |
 | 4H | Kelompok H (4 skill) | selesai |
-| 5 | Uji perjalanan pengguna (contoh proyek) | belum |
-| 6 | Perbaikan kegagalan | belum |
-| 7 | Panduan, paket .skill, status pemasangan | belum |
+| 5 | Uji perjalanan pengguna (contoh proyek) | selesai: 31 dari 31 langkah |
+| 6 | Perbaikan kegagalan | selesai: 8 temuan, lihat HASIL-UJI.md |
+| 7 | Panduan, paket .skill, status pemasangan | selesai: README.md, ARSITEKTUR.md, dist/ |
+
+## Langkah berikutnya (butuh pemilik studio)
+
+1. Unggah berkas `.skill` ke akun claude.ai bila ingin dipakai di luar repositori ini.
+2. Isi nama toko dan konfirmasi lokasi penjual lewat `studio-brand-memory`.
+3. Kirim foto, gambar, dan referensi untuk membangun DNA visual.
+4. Isi lembar amatan Etsy 15 menit untuk niche pertama.
+5. Selesaikan kredensial konektor Etsy bila ingin skill membaca toko.
+6. Buka sesi baru memakai lingkungan "Venbeemail - Studio Wall Art (Etsy)" lalu minta fakta Etsy dicek ulang dari halaman resminya.
