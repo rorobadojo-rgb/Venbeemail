@@ -27,7 +27,7 @@ Proyek contoh `PRJ-202611-satwa-tropis` di `contoh-proyek/studio-nangka/`. Yang 
 | Gambar master | Digambar skrip 3600 x 5400 pixel (pengganti alat AI) | `master.jpg` |
 | Ukur warna | `extract_palette.py` | 5 warna berbeda |
 | Rencana rasio | `print_math.py` | 12 ukuran layak, 7 ditolak |
-| Ekspor | `export_print_files.py` | 5 JPEG sRGB 300 DPI, 0,55-1,21 MB |
+| Ekspor | `export_print_files.py` | 5 JPEG sRGB 300 DPI, 0,55-1,22 MB |
 | Panduan cetak | `make_guide_pdf.py` | PDF 2 halaman dengan nama file sebenarnya |
 | Paket | `build_package.py` | 6 file menjadi 5 (satu ZIP), verdict pass |
 | Gambar listing | `make_listing_images.py` | 3 gambar 2000 x 2000 |
