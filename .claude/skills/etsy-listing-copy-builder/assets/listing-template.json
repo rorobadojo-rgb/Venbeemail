@@ -1,0 +1,27 @@
+{
+  "schema": "studio-nangka/listing@1",
+  "sku": "",
+  "project_id": "",
+  "artwork_ids": [],
+  "version": "v1",
+  "status": "draft",
+  "language": "en-US",
+  "listing_type": "digital",
+  "title": "",
+  "description": "",
+  "tags": [],
+  "category": "",
+  "attributes": {},
+  "price_usd": null,
+  "ai_assisted": null,
+  "digital_files": [],
+  "images": [],
+  "claims": {
+    "sizes": [],
+    "file_count": null
+  },
+  "notes": {
+    "keyword_sources": "",
+    "facts_checked_on": ""
+  }
+}
