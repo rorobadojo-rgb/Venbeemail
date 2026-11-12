@@ -8,7 +8,7 @@ Jumlah skill: 45. Peran: pintu masuk (1), layanan (dipanggil skill lain), jalur 
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 01 | `studio-wall-art-orchestrator` | Mengarahkan permintaan ke skill yang tepat dan menyatukan hasilnya. | `scripts/validate_handoff.py`, `assets/handoff-template.json` |
+| 01 | `studio-wall-art-orchestrator` | Mengarahkan permintaan ke skill yang tepat dan menyatukan hasilnya. | `scripts/validate_handoff.py`, `assets/handoff-template.json`, `references/peta-skill.md` |
 | 02 | `studio-brief-interviewer` | Mengubah keinginan yang belum jelas menjadi brief proyek yang bisa dikerjakan. | `assets/brief-template.md` |
 | 03 | `studio-asset-rights-register` | Mencatat asal, pemilik, izin, batas pakai, dan bukti tiap bahan gambar. | `assets/asset-rights-register.csv` |
 | 04 | `studio-brand-memory` | Menyimpan identitas, preferensi, revisi, dan keputusan studio ke file memori. | `assets/brand-memory-template.md` |
@@ -20,21 +20,21 @@ Jumlah skill: 45. Peran: pintu masuk (1), layanan (dipanggil skill lain), jalur 
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 08 | `etsy-market-evidence-researcher` | Mengumpulkan sinyal pasar dari sumber yang bisa diperiksa. | - |
+| 08 | `etsy-market-evidence-researcher` | Mengumpulkan sinyal pasar dari sumber yang bisa diperiksa. | `assets/bukti-pasar.csv`, `assets/lembar-amati-manual.md` |
 | 09 | `etsy-micro-niche-mapper` | Memecah niche luas menjadi segmen sempit yang bisa dilayani. | - |
-| 10 | `wall-art-buyer-room-profiler` | Memetakan kebutuhan pembeli menurut ruangan, tujuan, dan selera dekorasi. | - |
+| 10 | `wall-art-buyer-room-profiler` | Memetakan kebutuhan pembeli menurut ruangan, tujuan, dan selera dekorasi. | `references/patokan-ruangan.md` |
 | 11 | `etsy-competitor-pattern-analyst` | Mempelajari pola penawaran dan celah pasar tanpa meniru produk pesaing. | - |
-| 12 | `etsy-seasonal-opportunity-planner` | Menyusun peluang musiman dengan waktu persiapan yang masuk akal. | - |
-| 13 | `etsy-keyword-evidence-researcher` | Mengembangkan keyword dan mencatat bukti, tanggal, sumber, serta ketidakpastiannya. | - |
+| 12 | `etsy-seasonal-opportunity-planner` | Menyusun peluang musiman dengan waktu persiapan yang masuk akal. | `references/momen-pasar-as.md` |
+| 13 | `etsy-keyword-evidence-researcher` | Mengembangkan keyword dan mencatat bukti, tanggal, sumber, serta ketidakpastiannya. | `assets/keyword-bank.csv` |
 
 ## Kelompok C - Identitas artistik
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 14 | `wall-art-reference-reader` | Membaca komposisi, palet, tekstur, cahaya, motif, dan karakter gambar referensi. | - |
-| 15 | `wall-art-visual-dna-builder` | Merumuskan aturan visual khas studio yang bisa diterapkan ulang. | - |
-| 16 | `wall-art-palette-material-director` | Mengatur warna, bahan visual, tekstur, dan tingkat kontras untuk koleksi atau karya. | - |
-| 17 | `wall-art-motif-originality-designer` | Menciptakan motif dan bahasa bentuk baru berdasarkan identitas studio. | - |
+| 14 | `wall-art-reference-reader` | Membaca komposisi, palet, tekstur, cahaya, motif, dan karakter gambar referensi. | `scripts/extract_palette.py`, `assets/lembar-bacaan-referensi.md` |
+| 15 | `wall-art-visual-dna-builder` | Merumuskan aturan visual khas studio yang bisa diterapkan ulang. | `assets/visual-dna-template.md` |
+| 16 | `wall-art-palette-material-director` | Mengatur warna, bahan visual, tekstur, dan tingkat kontras untuk koleksi atau karya. | `assets/kartu-palet.md` |
+| 17 | `wall-art-motif-originality-designer` | Menciptakan motif dan bahasa bentuk baru berdasarkan identitas studio. | `assets/kartu-motif.md` |
 | 18 | `wall-art-style-consistency-reviewer` | Memeriksa konsistensi gaya sekaligus mencegah pengulangan berlebihan. | - |
 
 ## Kelompok D - Penciptaan karya dan koleksi
@@ -43,51 +43,51 @@ Jumlah skill: 45. Peran: pintu masuk (1), layanan (dipanggil skill lain), jalur 
 |---|---|---|---|
 | 19 | `wall-art-concept-divergence` | Menghasilkan beberapa arah konsep yang benar-benar berbeda. | - |
 | 20 | `wall-art-reference-fusion-director` | Menetapkan peran tiap referensi dan mengarahkan sintesisnya menjadi karya baru yang utuh. | - |
-| 21 | `wall-art-composition-director` | Mengatur titik fokus, skala, ruang kosong, keseimbangan, dan alur pandang. | - |
-| 22 | `wall-art-image-prompt-engineer` | Menulis prompt pembuatan atau pengeditan gambar sesuai alat, dan menjalankannya bila alat terhubung dan diizinkan. | - |
-| 23 | `wall-art-series-collection-builder` | Merancang koleksi yang serasi tanpa terlihat seperti salinan satu gambar. | - |
-| 24 | `wall-art-personalization-designer` | Merancang produk custom dengan input pelanggan dan batas revisi yang jelas. | - |
+| 21 | `wall-art-composition-director` | Mengatur titik fokus, skala, ruang kosong, keseimbangan, dan alur pandang. | `references/zona-aman-crop.md` |
+| 22 | `wall-art-image-prompt-engineer` | Menulis prompt pembuatan atau pengeditan gambar sesuai alat, dan menjalankannya bila alat terhubung dan diizinkan. | `assets/catatan-generasi.csv`, `references/panduan-alat.md` |
+| 23 | `wall-art-series-collection-builder` | Merancang koleksi yang serasi tanpa terlihat seperti salinan satu gambar. | `assets/rencana-koleksi.md` |
+| 24 | `wall-art-personalization-designer` | Merancang produk custom dengan input pelanggan dan batas revisi yang jelas. | `assets/spesifikasi-custom.md` |
 
 ## Kelompok E - Produksi file dan pemeriksaan cetak
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 25 | `wall-art-artifact-retouch-reviewer` | Memeriksa cacat visual, objek aneh, tepi, tekstur, dan detail yang rusak. | - |
-| 26 | `wall-art-ratio-resolution-planner` | Merencanakan crop ke tiap rasio dan menghitung kecukupan pixel terhadap ukuran cetak dan target PPI. | - |
-| 27 | `wall-art-color-export-manager` | Menentukan ruang warna dan pengaturan ekspor, lalu mengekspor file cetak. | - |
-| 28 | `wall-art-download-package-builder` | Menyusun paket unduhan dengan nama file dan struktur yang mudah dipahami pembeli. | - |
-| 29 | `wall-art-print-instruction-writer` | Menulis panduan cetak yang jelas dan tidak menjanjikan warna identik. | - |
+| 25 | `wall-art-artifact-retouch-reviewer` | Memeriksa cacat visual, objek aneh, tepi, tekstur, dan detail yang rusak. | `references/daftar-cacat.md` |
+| 26 | `wall-art-ratio-resolution-planner` | Merencanakan crop ke tiap rasio dan menghitung kecukupan pixel terhadap ukuran cetak dan target PPI. | `scripts/print_math.py`, `references/ukuran-cetak.md` |
+| 27 | `wall-art-color-export-manager` | Menentukan ruang warna dan pengaturan ekspor, lalu mengekspor file cetak. | `scripts/export_print_files.py`, `references/pengaturan-ekspor.md` |
+| 28 | `wall-art-download-package-builder` | Menyusun paket unduhan dengan nama file dan struktur yang mudah dipahami pembeli. | `scripts/build_package.py` |
+| 29 | `wall-art-print-instruction-writer` | Menulis panduan cetak yang jelas dan tidak menjanjikan warna identik. | `scripts/make_guide_pdf.py`, `assets/print-guide-template.txt` |
 
 ## Kelompok F - Produk dan listing Etsy
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 30 | `wall-art-product-offer-planner` | Menentukan isi produk, variasi, bundel, dan batas layanan. | - |
-| 31 | `etsy-digital-pricing-modeler` | Menghitung skenario harga berdasarkan biaya, waktu, dan margin. | - |
-| 32 | `wall-art-mockup-art-director` | Mengarahkan gambar listing dan mockup yang menarik tanpa menyesatkan ukuran atau isi produk. | - |
-| 33 | `etsy-listing-copy-builder` | Menulis judul, deskripsi, dan informasi produk secara akurat. | - |
-| 34 | `etsy-tag-attribute-mapper` | Memetakan keyword ke tag, kategori, dan atribut sesuai aturan terkini. | - |
-| 35 | `etsy-listing-preflight-reviewer` | Memeriksa kecocokan gambar, teks, file, harga, dan kebijakan sebelum listing diterbitkan. | - |
+| 30 | `wall-art-product-offer-planner` | Menentukan isi produk, variasi, bundel, dan batas layanan. | `assets/lembar-penawaran.md` |
+| 31 | `etsy-digital-pricing-modeler` | Menghitung skenario harga berdasarkan biaya, waktu, dan margin. | `scripts/pricing_model.py`, `assets/contoh-input-harga.json` |
+| 32 | `wall-art-mockup-art-director` | Mengarahkan gambar listing dan mockup yang menarik tanpa menyesatkan ukuran atau isi produk. | `scripts/make_listing_images.py`, `references/urutan-gambar-listing.md` |
+| 33 | `etsy-listing-copy-builder` | Menulis judul, deskripsi, dan informasi produk secara akurat. | `assets/listing-template.json`, `references/kerangka-listing.md` |
+| 34 | `etsy-tag-attribute-mapper` | Memetakan keyword ke tag, kategori, dan atribut sesuai aturan terkini. | `scripts/check_tags.py` |
+| 35 | `etsy-listing-preflight-reviewer` | Memeriksa kecocokan gambar, teks, file, harga, dan kebijakan sebelum listing diterbitkan. | `scripts/check_listing.py`, `references/daftar-preflight.md` |
 
 ## Kelompok G - Operasional toko
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 36 | `etsy-storefront-brand-planner` | Menyusun pembukaan toko, identitas toko, section, banner, about, dan struktur katalog. | - |
-| 37 | `etsy-catalog-sku-manager` | Mengatur SKU, status produk, versi, file sumber, dan relasi antarlisting. | - |
-| 38 | `etsy-customer-message-drafter` | Membuat draf balasan pelanggan berdasarkan informasi pesanan yang tersedia. | - |
-| 39 | `etsy-custom-order-workflow` | Mengatur input, proof, revisi, persetujuan, dan penyerahan pesanan custom. | - |
-| 40 | `etsy-issue-resolution-assistant` | Menyusun langkah penanganan masalah berdasarkan fakta dan kebijakan yang berlaku. | - |
-| 41 | `etsy-store-operations-planner` | Membuat rutinitas kerja mingguan berdasarkan kapasitas dan prioritas toko. | - |
+| 36 | `etsy-storefront-brand-planner` | Menyusun pembukaan toko, identitas toko, section, banner, about, dan struktur katalog. | `assets/rencana-toko.md` |
+| 37 | `etsy-catalog-sku-manager` | Mengatur SKU, status produk, versi, file sumber, dan relasi antarlisting. | `scripts/check_catalog.py`, `assets/katalog-template.csv` |
+| 38 | `etsy-customer-message-drafter` | Membuat draf balasan pelanggan berdasarkan informasi pesanan yang tersedia. | `references/pola-balasan.md` |
+| 39 | `etsy-custom-order-workflow` | Mengatur input, proof, revisi, persetujuan, dan penyerahan pesanan custom. | `assets/kartu-pesanan-custom.md` |
+| 40 | `etsy-issue-resolution-assistant` | Menyusun langkah penanganan masalah berdasarkan fakta dan kebijakan yang berlaku. | `references/peta-masalah.md` |
+| 41 | `etsy-store-operations-planner` | Membuat rutinitas kerja mingguan berdasarkan kapasitas dan prioritas toko. | `assets/rencana-mingguan.md` |
 
 ## Kelompok H - Analisis dan pertumbuhan
 
 | No | Skill | Fungsi | File pendukung |
 |---|---|---|---|
-| 42 | `etsy-performance-data-reader` | Membaca data toko dengan definisi metrik yang benar. | - |
-| 43 | `etsy-portfolio-decision-reviewer` | Membantu memutuskan produk yang dipertahankan, direvisi, dihentikan, atau dikembangkan menjadi koleksi lanjutan. | - |
-| 44 | `wall-art-pinterest-content-planner` | Membuat rencana konten Pinterest dari aset yang boleh dipakai. | - |
-| 45 | `studio-monthly-strategy-reviewer` | Menggabungkan hasil kreatif, operasional, dan penjualan menjadi prioritas bulan berikutnya. | - |
+| 42 | `etsy-performance-data-reader` | Membaca data toko dengan definisi metrik yang benar. | `references/definisi-metrik.md` |
+| 43 | `etsy-portfolio-decision-reviewer` | Membantu memutuskan produk yang dipertahankan, direvisi, dihentikan, atau dikembangkan menjadi koleksi lanjutan. | `assets/lembar-portofolio.md` |
+| 44 | `wall-art-pinterest-content-planner` | Membuat rencana konten Pinterest dari aset yang boleh dipakai. | `assets/kalender-pin.md` |
+| 45 | `studio-monthly-strategy-reviewer` | Menggabungkan hasil kreatif, operasional, dan penjualan menjadi prioritas bulan berikutnya. | `assets/tinjauan-bulanan.md` |
 
 ## Pemilik tiap keputusan
 

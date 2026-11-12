@@ -13,8 +13,8 @@ Diperbarui tiap kelompok selesai. Sumber kebenaran status: jalankan `python3 stu
 | 4D | Kelompok D (6 skill) | selesai |
 | 4E | Kelompok E (5 skill) | selesai |
 | 4F | Kelompok F (6 skill) | selesai |
-| 4G | Kelompok G (6 skill) | belum |
-| 4H | Kelompok H (4 skill) | belum |
+| 4G | Kelompok G (6 skill) | selesai |
+| 4H | Kelompok H (4 skill) | selesai |
 | 5 | Uji perjalanan pengguna (contoh proyek) | belum |
 | 6 | Perbaikan kegagalan | belum |
 | 7 | Panduan, paket .skill, status pemasangan | belum |

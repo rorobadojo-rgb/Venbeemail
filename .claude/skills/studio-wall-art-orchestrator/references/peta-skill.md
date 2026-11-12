@@ -41,7 +41,7 @@ Dibuat otomatis dari indeks arsitektur. Pakai untuk memilih skill dan mengetahui
 |---|---|---|---|---|
 | wall-art-concept-divergence | jalur | Arah konsep yang ditawarkan | wall-art-reference-fusion-director, wall-art-composition-director | - |
 | wall-art-reference-fusion-director | jalur | Peran tiap referensi dan resep sintesis | wall-art-composition-director | studio-asset-rights-register |
-| wall-art-composition-director | jalur | Rancangan komposisi karya | wall-art-image-prompt-engineer | - |
+| wall-art-composition-director | jalur | Rancangan komposisi karya | wall-art-image-prompt-engineer | studio-quality-gate |
 | wall-art-image-prompt-engineer | jalur | Prompt dan catatan generasi | wall-art-artifact-retouch-reviewer | studio-asset-rights-register |
 | wall-art-series-collection-builder | jalur | Rencana koleksi | wall-art-palette-material-director, wall-art-concept-divergence, wall-art-product-offer-planner | - |
 | wall-art-personalization-designer | jalur | Spesifikasi produk custom | wall-art-product-offer-planner, etsy-custom-order-workflow | - |
