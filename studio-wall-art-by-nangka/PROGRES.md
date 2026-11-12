@@ -11,7 +11,7 @@ Diperbarui tiap kelompok selesai. Sumber kebenaran status: jalankan `python3 stu
 | 4B | Kelompok B (6 skill) | selesai |
 | 4C | Kelompok C (5 skill) | selesai |
 | 4D | Kelompok D (6 skill) | selesai |
-| 4E | Kelompok E (5 skill) | belum |
+| 4E | Kelompok E (5 skill) | selesai |
 | 4F | Kelompok F (6 skill) | belum |
 | 4G | Kelompok G (6 skill) | belum |
 | 4H | Kelompok H (4 skill) | belum |
