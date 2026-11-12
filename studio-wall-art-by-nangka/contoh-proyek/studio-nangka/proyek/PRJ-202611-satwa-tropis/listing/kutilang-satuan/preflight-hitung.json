@@ -1,0 +1,95 @@
+{
+  "verdict": "pass_with_notes",
+  "results": [
+    {
+      "check": "judul terisi dan <= batas karakter",
+      "result": "pass",
+      "notes": "84 karakter (batas 140)"
+    },
+    {
+      "check": "deskripsi terisi",
+      "result": "pass",
+      "notes": "995 karakter (minimal kerja studio 200)"
+    },
+    {
+      "check": "tag sesuai batas",
+      "result": "pass",
+      "notes": "13 tag"
+    },
+    {
+      "check": "harga terisi dan lebih dari 0",
+      "result": "pass",
+      "notes": "6.0"
+    },
+    {
+      "check": "category terisi",
+      "result": "warn",
+      "notes": ""
+    },
+    {
+      "check": "sku terisi",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "file digital ada di disk",
+      "result": "pass",
+      "notes": "5 file"
+    },
+    {
+      "check": "jumlah file digital <= batas",
+      "result": "pass",
+      "notes": "5 (batas 5)"
+    },
+    {
+      "check": "ukuran tiap file digital <= batas",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "gambar listing ada di disk",
+      "result": "pass",
+      "notes": "3 gambar"
+    },
+    {
+      "check": "gambar pertama cukup besar",
+      "result": "pass",
+      "notes": "sisi pendek 2000 px (minimum 635, saran 2000)"
+    },
+    {
+      "check": "jumlah gambar listing",
+      "result": "warn",
+      "notes": "3 gambar; saran kerja studio minimal 5"
+    },
+    {
+      "check": "deskripsi menyebut produk digital",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "deskripsi menyebut tidak ada barang fisik",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "deskripsi menyebut bantuan AI",
+      "result": "pass",
+      "notes": "wajib menurut catatan fakta Etsy"
+    },
+    {
+      "check": "tanpa kata berisiko atau menyesatkan",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "ukuran yang diklaim memenuhi target PPI",
+      "result": "pass",
+      "notes": "12 ukuran cocok dengan rencana cetak"
+    },
+    {
+      "check": "jumlah file yang dijanjikan sama dengan yang diunggah",
+      "result": "pass",
+      "notes": "dijanjikan 5, diunggah 5"
+    }
+  ]
+}

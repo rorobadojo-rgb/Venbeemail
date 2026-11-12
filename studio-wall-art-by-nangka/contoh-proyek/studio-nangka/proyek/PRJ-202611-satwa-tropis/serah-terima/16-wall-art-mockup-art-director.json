@@ -1,0 +1,31 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-mockup-art-director",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "ready_for_review",
+  "artwork_id": "ART-satwa-tropis-01",
+  "unresolved_questions": [
+    "Mockup ruangan (kamar bayi) belum dibuat; butuh template berlisensi atau alat gambar"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_01-bingkai.jpg",
+      "type": "gambar listing",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_02-ukuran.jpg",
+      "type": "gambar listing",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_03-detail.jpg",
+      "type": "gambar listing",
+      "verified": true
+    }
+  ],
+  "next_skill": "etsy-listing-preflight-reviewer"
+}

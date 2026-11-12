@@ -1,0 +1,21 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-color-export-manager",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "5 JPEG sRGB bertanda 300 DPI; salinan di folder ekspor dihapus setelah masuk paket untuk menghemat ruang repositori"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/ekspor/satwa-tropis-01_laporan-ekspor.json",
+      "type": "laporan ekspor",
+      "verified": true
+    }
+  ],
+  "next_skill": "wall-art-download-package-builder"
+}

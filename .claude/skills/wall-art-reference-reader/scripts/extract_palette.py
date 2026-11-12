@@ -12,17 +12,32 @@ import json
 import sys
 
 
-def palette(image, colors=6):
+def palette(image, colors=6, merge_distance=30):
+    """Warna dominan yang benar-benar berbeda.
+
+    Gambar dikuantisasi ke banyak warna dulu, lalu warna yang hampir sama digabung.
+    Tanpa penggabungan, latar berbutir akan memenuhi daftar dengan beberapa warna yang nyaris kembar
+    dan warna aksen kecil tidak terlihat.
+    """
     from PIL import Image
 
     img = image.convert("RGB")
-    img.thumbnail((400, 400))
-    quant = img.quantize(colors=colors, method=Image.Quantize.MEDIANCUT)
+    # Pengecilan tanpa pencampuran pixel, supaya tepi bentuk tidak melahirkan warna campuran yang tidak ada di gambar.
+    img.thumbnail((400, 400), Image.Resampling.NEAREST)
+    quant = img.quantize(colors=max(colors * 6, 32), method=Image.Quantize.MEDIANCUT)
     pal = quant.getpalette()
     total = img.width * img.height
-    rows = []
+    groups = []  # [jumlah pixel, (r, g, b) wakil = anggota terbesar]
     for count, index in sorted(quant.getcolors(), reverse=True):
-        r, g, b = pal[index * 3: index * 3 + 3]
+        rgb = tuple(pal[index * 3: index * 3 + 3])
+        for group in groups:
+            if sum((a - b) ** 2 for a, b in zip(group[1], rgb)) ** 0.5 < merge_distance:
+                group[0] += count
+                break
+        else:
+            groups.append([count, rgb])
+    rows = []
+    for count, (r, g, b) in sorted(groups, reverse=True)[:colors]:
         lum = round((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255, 2)
         rows.append({"hex": f"#{r:02X}{g:02X}{b:02X}", "persen": round(100 * count / total, 1), "terang_0_1": lum})
     return rows

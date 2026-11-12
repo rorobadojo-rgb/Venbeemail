@@ -1,0 +1,11 @@
+Biaya tetap per listing: USD 22.7 (waktu 20.0 + alat 2.5 + biaya listing 0.2)
+
+  Harga  Biaya/pesanan  % harga  Bersih/pesanan  Impas (pesanan)
+    4.5           1.08     24.1            3.42              6.6
+    6.0           1.25     20.8            4.75              4.8
+    9.0           1.58     17.5            7.42              3.1
+PERINGATAN: biaya 'payment_processing_rate' berkeyakinan rendah; hasil bersifat perkiraan
+PERINGATAN: biaya 'payment_processing_fixed_local' berkeyakinan rendah; hasil bersifat perkiraan
+PERINGATAN: pajak atas biaya penjual (vat_on_fees_rate) belum diketahui; dihitung 0, biaya nyata bisa lebih tinggi
+PERINGATAN: biaya perpanjangan saat terjual dianggap sama dengan biaya listing; cek di catatan fakta
+Hasil disimpan: /home/user/Venbeemail/studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/model-harga.json

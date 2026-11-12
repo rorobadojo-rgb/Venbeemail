@@ -1,0 +1,28 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-concept-divergence",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "approved",
+  "artwork_id": "ART-satwa-tropis-01",
+  "decisions": [
+    {
+      "what": "Arah 1 'Kutilang di dahan' dipakai untuk contoh",
+      "by": "pemilik",
+      "date": "2026-11-12"
+    }
+  ],
+  "assumptions": [
+    "Pilihan arah diambil sebagai default contoh; di proyek nyata menunggu pemilik"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/catatan-kreatif.md",
+      "type": "arah konsep",
+      "verified": true
+    }
+  ],
+  "next_skill": "wall-art-composition-director"
+}

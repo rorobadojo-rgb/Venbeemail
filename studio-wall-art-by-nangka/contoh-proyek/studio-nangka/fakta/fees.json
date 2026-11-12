@@ -1,0 +1,47 @@
+{
+  "_petunjuk": "Angka biaya untuk kalkulator harga. Pemilik file: etsy-policy-fact-checker. Setiap angka wajib punya source dan confidence. Kurs wajib diisi sebelum biaya tetap dalam mata uang lokal bisa dihitung.",
+  "verified_on": "2026-11-12",
+  "seller_country": "ID",
+  "price_currency": "USD",
+  "listing_fee": {
+    "value": 0.2,
+    "confidence": "sedang",
+    "source": "https://www.etsy.com/legal/fees/"
+  },
+  "listing_duration_months": {
+    "value": 4,
+    "confidence": "sedang",
+    "source": "https://www.etsy.com/legal/fees/"
+  },
+  "transaction_fee_rate": {
+    "value": 0.065,
+    "confidence": "sedang",
+    "source": "https://www.etsy.com/legal/fees/"
+  },
+  "payment_processing_rate": {
+    "value": 0.045,
+    "confidence": "rendah",
+    "source": "pihak ketiga yang mengutip Pusat Bantuan Etsy; cek https://www.etsy.com/legal/etsy-payments/"
+  },
+  "payment_processing_fixed_local": {
+    "value": 7000,
+    "currency": "IDR",
+    "confidence": "rendah",
+    "source": "pihak ketiga yang mengutip Pusat Bantuan Etsy"
+  },
+  "fx_local_per_usd": {
+    "value": 18069.1,
+    "confidence": "sedang",
+    "source": "Katadata Databoks, kurs spot 9 November 2026 (https://databoks.katadata.co.id/en/market/statistics/32ec67c22c32882/rupiah-exchange-rate-strengthens-to-idr-180691-per-us-dollar-monday-09-november-2026); bukan kurs hari cek, perbarui sebelum memutuskan harga"
+  },
+  "offsite_ads_rate": {
+    "value": 0.15,
+    "confidence": "sedang",
+    "source": "https://www.etsy.com/legal/fees/"
+  },
+  "vat_on_fees_rate": {
+    "value": null,
+    "confidence": null,
+    "source": "PPN atas biaya penjual Indonesia disebut pihak ketiga; tarif belum diverifikasi"
+  }
+}

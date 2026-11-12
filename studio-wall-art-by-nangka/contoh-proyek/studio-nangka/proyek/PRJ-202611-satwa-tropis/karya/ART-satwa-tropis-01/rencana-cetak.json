@@ -1,0 +1,293 @@
+{
+  "master": {
+    "width": 3600,
+    "height": 5400,
+    "orientation": "tegak",
+    "file": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/master.jpg"
+  },
+  "target_ppi": 300,
+  "min_ppi": 150,
+  "focus": [
+    0.5,
+    0.6
+  ],
+  "ratios": [
+    {
+      "key": "2x3",
+      "label": "2:3",
+      "crop_box": [
+        0,
+        0,
+        3600,
+        5400
+      ],
+      "crop_px": [
+        3600,
+        5400
+      ],
+      "kept_width_pct": 100.0,
+      "kept_height_pct": 100.0,
+      "sizes": [
+        {
+          "size": "4x6",
+          "width_in": 4,
+          "height_in": 6,
+          "ppi": 900.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "8x12",
+          "width_in": 8,
+          "height_in": 12,
+          "ppi": 450.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "12x18",
+          "width_in": 12,
+          "height_in": 18,
+          "ppi": 300.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "16x24",
+          "width_in": 16,
+          "height_in": 24,
+          "ppi": 225.0,
+          "status": "cukup",
+          "upscale_needed": 1.33
+        },
+        {
+          "size": "20x30",
+          "width_in": 20,
+          "height_in": 30,
+          "ppi": 180.0,
+          "status": "cukup",
+          "upscale_needed": 1.67
+        },
+        {
+          "size": "24x36",
+          "width_in": 24,
+          "height_in": 36,
+          "ppi": 150.0,
+          "status": "cukup",
+          "upscale_needed": 2.0
+        }
+      ],
+      "largest_at_target_ppi": "12x18",
+      "largest_at_min_ppi": "24x36",
+      "export_px": [
+        3600,
+        5400
+      ],
+      "export_for_size": "12x18"
+    },
+    {
+      "key": "3x4",
+      "label": "3:4",
+      "crop_box": [
+        0,
+        600,
+        3600,
+        5400
+      ],
+      "crop_px": [
+        3600,
+        4800
+      ],
+      "kept_width_pct": 100.0,
+      "kept_height_pct": 88.9,
+      "sizes": [
+        {
+          "size": "6x8",
+          "width_in": 6,
+          "height_in": 8,
+          "ppi": 600.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "9x12",
+          "width_in": 9,
+          "height_in": 12,
+          "ppi": 400.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "12x16",
+          "width_in": 12,
+          "height_in": 16,
+          "ppi": 300.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "18x24",
+          "width_in": 18,
+          "height_in": 24,
+          "ppi": 200.0,
+          "status": "cukup",
+          "upscale_needed": 1.5
+        }
+      ],
+      "largest_at_target_ppi": "12x16",
+      "largest_at_min_ppi": "18x24",
+      "export_px": [
+        3600,
+        4800
+      ],
+      "export_for_size": "12x16"
+    },
+    {
+      "key": "4x5",
+      "label": "4:5",
+      "crop_box": [
+        0,
+        900,
+        3600,
+        5400
+      ],
+      "crop_px": [
+        3600,
+        4500
+      ],
+      "kept_width_pct": 100.0,
+      "kept_height_pct": 83.3,
+      "sizes": [
+        {
+          "size": "4x5",
+          "width_in": 4,
+          "height_in": 5,
+          "ppi": 900.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "8x10",
+          "width_in": 8,
+          "height_in": 10,
+          "ppi": 450.0,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "16x20",
+          "width_in": 16,
+          "height_in": 20,
+          "ppi": 225.0,
+          "status": "cukup",
+          "upscale_needed": 1.33
+        }
+      ],
+      "largest_at_target_ppi": "8x10",
+      "largest_at_min_ppi": "16x20",
+      "export_px": [
+        2400,
+        3000
+      ],
+      "export_for_size": "8x10"
+    },
+    {
+      "key": "11x14",
+      "label": "11:14",
+      "crop_box": [
+        0,
+        818,
+        3600,
+        5400
+      ],
+      "crop_px": [
+        3600,
+        4582
+      ],
+      "kept_width_pct": 100.0,
+      "kept_height_pct": 84.9,
+      "sizes": [
+        {
+          "size": "11x14",
+          "width_in": 11,
+          "height_in": 14,
+          "ppi": 327.3,
+          "status": "ok",
+          "upscale_needed": 1.0
+        }
+      ],
+      "largest_at_target_ppi": "11x14",
+      "largest_at_min_ppi": "11x14",
+      "export_px": [
+        3300,
+        4200
+      ],
+      "export_for_size": "11x14"
+    },
+    {
+      "key": "iso",
+      "label": "Seri A (ISO)",
+      "crop_box": [
+        0,
+        309,
+        3600,
+        5400
+      ],
+      "crop_px": [
+        3600,
+        5091
+      ],
+      "kept_width_pct": 100.0,
+      "kept_height_pct": 94.3,
+      "sizes": [
+        {
+          "size": "A5",
+          "width_in": 5.83,
+          "height_in": 8.27,
+          "ppi": 615.8,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "A4",
+          "width_in": 8.27,
+          "height_in": 11.69,
+          "ppi": 435.4,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "A3",
+          "width_in": 11.69,
+          "height_in": 16.54,
+          "ppi": 307.9,
+          "status": "ok",
+          "upscale_needed": 1.0
+        },
+        {
+          "size": "A2",
+          "width_in": 16.54,
+          "height_in": 23.39,
+          "ppi": 217.7,
+          "status": "cukup",
+          "upscale_needed": 1.38
+        },
+        {
+          "size": "A1",
+          "width_in": 23.39,
+          "height_in": 33.11,
+          "ppi": 153.8,
+          "status": "cukup",
+          "upscale_needed": 1.95
+        }
+      ],
+      "largest_at_target_ppi": "A3",
+      "largest_at_min_ppi": "A1",
+      "export_px": [
+        3508,
+        4961
+      ],
+      "export_for_size": "A3"
+    }
+  ]
+}

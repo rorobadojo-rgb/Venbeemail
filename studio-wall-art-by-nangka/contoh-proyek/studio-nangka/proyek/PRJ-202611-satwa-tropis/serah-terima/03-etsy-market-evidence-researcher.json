@@ -1,0 +1,26 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "etsy-market-evidence-researcher",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "ready_for_review",
+  "observations": [
+    "5 baris bukti dari pencarian web 2026-11-12; semuanya pihak ketiga atau kutipan tidak langsung"
+  ],
+  "assumptions": [
+    "Halaman Etsy tidak bisa dibuka dari sesi ini, jadi tidak ada amatan langsung hasil pencarian Etsy"
+  ],
+  "unresolved_questions": [
+    "Amatan manual 15 menit oleh pemilik untuk tiga istilah (lihat lembar amatan)"
+  ],
+  "output_artifacts": [
+    {
+      "path": "riset/bukti-pasar.csv",
+      "type": "bukti pasar",
+      "verified": true
+    }
+  ],
+  "next_skill": "etsy-micro-niche-mapper"
+}

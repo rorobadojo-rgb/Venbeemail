@@ -1,0 +1,26 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "etsy-digital-pricing-modeler",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "needs_input",
+  "artwork_id": "ART-satwa-tropis-01",
+  "assumptions": [
+    "Jam kerja 4 jam dan nilai jam USD 5 adalah asumsi",
+    "Dua angka biaya berkeyakinan rendah"
+  ],
+  "unresolved_questions": [
+    "Harga akhir: USD 6 adalah usulan, menunggu keputusan pemilik",
+    "Dugaan jumlah pesanan belum diberikan, jadi skenario tidak dihitung"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/model-harga.txt",
+      "type": "model harga",
+      "verified": true
+    }
+  ],
+  "next_skill": "etsy-listing-copy-builder"
+}

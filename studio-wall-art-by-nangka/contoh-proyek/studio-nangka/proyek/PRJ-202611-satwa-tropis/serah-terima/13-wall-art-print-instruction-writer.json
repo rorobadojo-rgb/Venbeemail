@@ -1,0 +1,23 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-print-instruction-writer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/print-guide.txt",
+      "type": "teks panduan",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/satwa-tropis-01_print-guide.pdf",
+      "type": "panduan PDF",
+      "verified": true
+    }
+  ],
+  "next_skill": "wall-art-mockup-art-director"
+}

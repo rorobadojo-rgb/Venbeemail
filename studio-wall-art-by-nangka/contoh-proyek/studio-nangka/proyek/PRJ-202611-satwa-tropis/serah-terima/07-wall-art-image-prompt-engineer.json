@@ -1,0 +1,31 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-image-prompt-engineer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "ready_for_review",
+  "artwork_id": "ART-satwa-tropis-01",
+  "input_assets": [
+    {
+      "asset_id": "AST-0001",
+      "role": "subjek dan susunan (gambar uji sintetis)"
+    }
+  ],
+  "rights_status": "cleared",
+  "observations": [
+    "Master 3600 x 5400 pixel dibaca dari file"
+  ],
+  "assumptions": [
+    "Alat AI tidak dijalankan (tidak ada izin kredit); gambar uji digambar skrip sebagai pengganti"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/master.jpg",
+      "type": "gambar master (sintetis)",
+      "verified": true
+    }
+  ],
+  "next_skill": "wall-art-artifact-retouch-reviewer"
+}

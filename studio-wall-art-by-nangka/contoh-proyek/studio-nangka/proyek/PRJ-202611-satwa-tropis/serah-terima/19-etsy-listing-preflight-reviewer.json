@@ -1,0 +1,43 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "etsy-listing-preflight-reviewer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "ready_for_review",
+  "artwork_id": "ART-satwa-tropis-01",
+  "input_assets": [
+    {
+      "asset_id": "AST-0001",
+      "role": "subjek dan susunan (gambar uji sintetis)"
+    }
+  ],
+  "rights_status": "cleared",
+  "unresolved_questions": [
+    "Kategori kosong",
+    "Hanya 3 gambar listing",
+    "Harga belum diputuskan pemilik",
+    "Ini contoh uji: tidak untuk diterbitkan"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/preflight-hitung.json",
+      "type": "hasil preflight hitung",
+      "verified": true
+    }
+  ],
+  "quality_results": [
+    {
+      "check": "G5 hitung",
+      "result": "warn",
+      "notes": "0 gagal; catatan: kategori kosong, 3 gambar"
+    },
+    {
+      "check": "G5 keputusan",
+      "result": "warn",
+      "notes": "SIAP DENGAN CATATAN secara teknis; BELUM diterbitkan dan tidak boleh diterbitkan (karya uji)"
+    }
+  ],
+  "next_skill": "etsy-catalog-sku-manager"
+}
