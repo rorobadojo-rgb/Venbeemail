@@ -1,0 +1,71 @@
+{
+  "schema": "studio-nangka/listing@1",
+  "sku": "NGK-STRP-01",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "artwork_ids": [
+    "ART-satwa-tropis-01"
+  ],
+  "version": "v1",
+  "status": "draft",
+  "language": "en-US",
+  "listing_type": "digital",
+  "title": "Tropical Bird Nursery Wall Art, Printable Jungle Animal Print, Neutral Nursery Decor",
+  "description": "A calm tropical bird print for a nursery or kids room, drawn in soft olive, terracotta, and warm ivory.\n\nTHIS IS A DIGITAL DOWNLOAD. No physical item will be shipped. Frame not included.\n\nWHAT YOU GET\n- 5 high-resolution JPG files (300 DPI)\n- A simple print guide (PDF)\nTwo of the image files arrive together in one ZIP folder.\n\nSIZES INCLUDED\n- 2:3 ratio: 4x6, 8x12, 12x18\n- 3:4 ratio: 6x8, 9x12, 12x16\n- 4:5 ratio: 4x5, 8x10\n- 11x14\n- International A sizes: A5, A4, A3\n\nHOW IT WORKS\n1. Purchase and download your files from your Etsy account (Purchases and reviews).\n2. Choose the file that matches your frame size.\n3. Print at home, at a local print shop, or with an online print service.\n\nPLEASE NOTE\n- Colors may vary slightly between screens and printers.\n- This artwork was created with the help of AI tools and finished by our studio.\n\nTERMS OF USE\nFor personal use only. Files may not be resold, shared, or used on products for sale.\n\nQuestions? Send us a message, we are happy to help.",
+  "tags": [
+    "nursery wall art",
+    "tropical nursery art",
+    "bird nursery print",
+    "printable wall art",
+    "neutral nursery art",
+    "jungle nursery decor",
+    "kids room wall art",
+    "baby room print",
+    "bird wall art",
+    "digital download",
+    "nursery printables",
+    "baby shower gift",
+    "animal wall art"
+  ],
+  "category": "",
+  "attributes": {
+    "orientation": "vertical",
+    "subject": "bird",
+    "room": "nursery"
+  },
+  "price_usd": 6.0,
+  "ai_assisted": true,
+  "digital_files": [
+    "karya/ART-satwa-tropis-01/paket/satwa-tropis-01_print-guide.pdf",
+    "karya/ART-satwa-tropis-01/paket/satwa-tropis-01_bundle-1.zip",
+    "karya/ART-satwa-tropis-01/paket/satwa-tropis-01_3x4_12x16in.jpg",
+    "karya/ART-satwa-tropis-01/paket/satwa-tropis-01_2x3_12x18in.jpg",
+    "karya/ART-satwa-tropis-01/paket/satwa-tropis-01_iso_a3.jpg"
+  ],
+  "images": [
+    "karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_01-bingkai.jpg",
+    "karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_02-ukuran.jpg",
+    "karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_03-detail.jpg"
+  ],
+  "claims": {
+    "sizes": [
+      "4x6",
+      "8x12",
+      "12x18",
+      "6x8",
+      "9x12",
+      "12x16",
+      "4x5",
+      "8x10",
+      "11x14",
+      "A5",
+      "A4",
+      "A3"
+    ],
+    "file_count": 5
+  },
+  "notes": {
+    "keyword_sources": "riset/keyword-bank.csv (sebagian besar HIPOTESIS)",
+    "facts_checked_on": "2026-11-12",
+    "contoh": "CONTOH UJI. Karya adalah gambar sintetis. Jangan diterbitkan. Kalimat penyebutan AI ditulis seolah karya dibuat alat AI, untuk menguji pemeriksaan."
+  }
+}

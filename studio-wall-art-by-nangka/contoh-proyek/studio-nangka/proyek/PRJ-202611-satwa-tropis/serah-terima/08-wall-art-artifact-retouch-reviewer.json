@@ -1,0 +1,21 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-artifact-retouch-reviewer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "Diperiksa pada pratinjau dan potongan detail 2000 pixel: tidak ada teks, tanda air, bingkai, atau bentuk nyasar"
+  ],
+  "quality_results": [
+    {
+      "check": "cek cacat tujuh kelompok",
+      "result": "pass",
+      "notes": "bersih pada pemeriksaan ini; gambar vektor sederhana"
+    }
+  ],
+  "next_skill": "wall-art-style-consistency-reviewer"
+}

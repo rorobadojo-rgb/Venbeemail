@@ -1,0 +1,57 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-download-package-builder",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "input_assets": [
+    {
+      "asset_id": "AST-0001",
+      "role": "subjek dan susunan (gambar uji sintetis)"
+    }
+  ],
+  "rights_status": "cleared",
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/satwa-tropis-01_print-guide.pdf",
+      "type": "file akhir",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/satwa-tropis-01_bundle-1.zip",
+      "type": "file akhir",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/satwa-tropis-01_3x4_12x16in.jpg",
+      "type": "file akhir",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/satwa-tropis-01_2x3_12x18in.jpg",
+      "type": "file akhir",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/satwa-tropis-01_iso_a3.jpg",
+      "type": "file akhir",
+      "verified": true
+    },
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/manifest.json",
+      "type": "manifest",
+      "verified": true
+    }
+  ],
+  "quality_results": [
+    {
+      "check": "G4 paket cetak",
+      "result": "pass",
+      "notes": "manifest verdict pass; 5 file akhir"
+    }
+  ],
+  "next_skill": "wall-art-print-instruction-writer"
+}

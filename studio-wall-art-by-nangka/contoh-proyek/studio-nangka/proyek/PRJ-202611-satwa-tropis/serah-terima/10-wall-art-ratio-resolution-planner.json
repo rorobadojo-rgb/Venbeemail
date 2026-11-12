@@ -1,0 +1,28 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-ratio-resolution-planner",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "Ukuran layak per rasio: {\"2x3\": [\"4x6\", \"8x12\", \"12x18\"], \"3x4\": [\"6x8\", \"9x12\", \"12x16\"], \"4x5\": [\"4x5\", \"8x10\"], \"11x14\": [\"11x14\"], \"iso\": [\"A5\", \"A4\", \"A3\"]}"
+  ],
+  "decisions": [
+    {
+      "what": "Tidak ditawarkan karena di bawah 300 PPI: 16x24, 20x30, 24x36, 18x24, 16x20, A2, A1",
+      "by": "wall-art-ratio-resolution-planner",
+      "date": "2026-11-12"
+    }
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/rencana-cetak.json",
+      "type": "rencana cetak",
+      "verified": true
+    }
+  ],
+  "next_skill": "wall-art-color-export-manager"
+}

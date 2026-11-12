@@ -1,0 +1,37 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "studio-brief-interviewer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "assumptions": [
+    "Suasana lembut dan 6 karya adalah default, belum dikonfirmasi pemilik"
+  ],
+  "decisions": [
+    {
+      "what": "Tema hewan tropis untuk kamar bayi dan anak sebagai proyek contoh",
+      "by": "pemilik",
+      "date": "2026-11-12"
+    }
+  ],
+  "unresolved_questions": [
+    "Rentang usia anak yang dituju?"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/brief.md",
+      "type": "brief",
+      "verified": true
+    }
+  ],
+  "quality_results": [
+    {
+      "check": "G1 brief",
+      "result": "pass",
+      "notes": "lima inti terisi, berlabel, tanpa angka pasar"
+    }
+  ],
+  "next_skill": "etsy-market-evidence-researcher"
+}

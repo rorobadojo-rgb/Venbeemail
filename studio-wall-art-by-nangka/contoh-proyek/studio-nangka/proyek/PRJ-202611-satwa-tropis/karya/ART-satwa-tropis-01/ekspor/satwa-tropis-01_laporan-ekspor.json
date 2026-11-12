@@ -1,0 +1,73 @@
+{
+  "master": "/home/user/Venbeemail/studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/master.jpg",
+  "ppi_tag": 300,
+  "max_mb": 20,
+  "warnings": [],
+  "files": [
+    {
+      "file": "satwa-tropis-01_2x3_12x18in.jpg",
+      "ratio": "2x3",
+      "for_size": "12x18",
+      "pixel": [
+        3600,
+        5400
+      ],
+      "mb": 1.16,
+      "jpeg_quality": 95,
+      "over_limit": false,
+      "warnings": []
+    },
+    {
+      "file": "satwa-tropis-01_3x4_12x16in.jpg",
+      "ratio": "3x4",
+      "for_size": "12x16",
+      "pixel": [
+        3600,
+        4800
+      ],
+      "mb": 1.04,
+      "jpeg_quality": 95,
+      "over_limit": false,
+      "warnings": []
+    },
+    {
+      "file": "satwa-tropis-01_4x5_8x10in.jpg",
+      "ratio": "4x5",
+      "for_size": "8x10",
+      "pixel": [
+        2400,
+        3000
+      ],
+      "mb": 0.55,
+      "jpeg_quality": 95,
+      "over_limit": false,
+      "warnings": []
+    },
+    {
+      "file": "satwa-tropis-01_11x14_11x14in.jpg",
+      "ratio": "11x14",
+      "for_size": "11x14",
+      "pixel": [
+        3300,
+        4200
+      ],
+      "mb": 0.98,
+      "jpeg_quality": 95,
+      "over_limit": false,
+      "warnings": []
+    },
+    {
+      "file": "satwa-tropis-01_iso_a3.jpg",
+      "ratio": "iso",
+      "for_size": "A3",
+      "pixel": [
+        3508,
+        4961
+      ],
+      "mb": 1.22,
+      "jpeg_quality": 95,
+      "over_limit": false,
+      "warnings": []
+    }
+  ]
+}

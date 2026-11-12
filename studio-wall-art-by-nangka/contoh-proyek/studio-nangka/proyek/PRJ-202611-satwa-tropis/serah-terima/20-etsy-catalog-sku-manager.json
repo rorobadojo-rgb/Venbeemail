@@ -1,0 +1,21 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "etsy-catalog-sku-manager",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "NGK-STRP-01 dicatat berstatus siap, bukan terbit"
+  ],
+  "output_artifacts": [
+    {
+      "path": "register/katalog.csv",
+      "type": "katalog",
+      "verified": true
+    }
+  ],
+  "next_skill": null
+}

@@ -1,0 +1,260 @@
+{
+  "tanggal": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "master_pixel": [
+    3600,
+    5400
+  ],
+  "ukuran_layak": {
+    "2x3": [
+      "4x6",
+      "8x12",
+      "12x18"
+    ],
+    "3x4": [
+      "6x8",
+      "9x12",
+      "12x16"
+    ],
+    "4x5": [
+      "4x5",
+      "8x10"
+    ],
+    "11x14": [
+      "11x14"
+    ],
+    "iso": [
+      "A5",
+      "A4",
+      "A3"
+    ]
+  },
+  "file_akhir": [
+    "satwa-tropis-01_print-guide.pdf",
+    "satwa-tropis-01_bundle-1.zip",
+    "satwa-tropis-01_3x4_12x16in.jpg",
+    "satwa-tropis-01_2x3_12x18in.jpg",
+    "satwa-tropis-01_iso_a3.jpg"
+  ],
+  "langkah_total": 31,
+  "langkah_sesuai_harapan": 31,
+  "langkah": [
+    {
+      "langkah": "ukur warna karya uji",
+      "skrip": "extract_palette.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "{\n  \"file\": \"studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/master.jpg\",\n  \"pixel\": [\n    3600,\n    5400\n  ],\n  \"warna\": [\n    {\n      \"hex\": \"#EEE6D9\",\n      \"persen\": 91.0,\n      \"terang_0_1\": 0.9\n    },\n    {\n      \"hex\": \"#89996C\",\n      \"persen\": 6.1,\n      \"terang_0_1\": 0.57\n    },\n    {\n      \"hex\": \"#C78C6C\",\n      \"persen\": 1.6,\n      \"terang_0_1\": 0.59\n    },\n    {\n      \"hex\": \"#4B3D32\",\n      \"persen\": 1.1,\n      \"terang_0_1\": 0.25\n    },\n    {\n      \"hex\": \"#D4A243\",\n      \"persen\": 0.2,\n      \"terang_0_1\": 0.65\n    }\n  ]\n}"
+    },
+    {
+      "langkah": "rencana rasio dan resolusi",
+      "skrip": "print_math.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "MASTER 3600 x 5400 px (tegak)  target 300 PPI, minimum 150 PPI\nTitik fokus: x=0.5, y=0.6 (0 = kiri/atas, 1 = kanan/bawah)\n\nRASIO 2:3  crop 3600 x 5400 px  tersisa lebar 100.0%, tinggi 100.0%  kotak [0, 0, 3600, 5400]\n       4x6    900.0 PPI  ok\n      8x12    450.0 PPI  ok\n     12x18    300.0 PPI  ok\n     16x24    225.0 PPI  cukup  (perlu pembesaran 1.33x untuk target)\n     20x30    180.0 PPI  cukup  (perlu pembesaran 1.67x untuk target)\n     24x36    150.0 PPI  cukup  (perlu pembesaran 2.0x untuk target)\n   Terbesar pada target PPI: 12x18; pada PPI minimum: 24x36\n   File ekspor: 3600 x 5400 px untuk 12x18\n\nRASIO 3:4  crop 3600 x 4800 px  tersisa lebar 100.0%, tinggi 88.9%  kotak [0, 600, 3600, 5400]\n       6x8    600.0 PPI  ok\n      9x12    400.0 PPI  ok\n     12x16    300.0 PPI  ok\n     18x24    200.0 PPI  cukup  (perlu pembesaran 1.5x untuk target)\n   Terbesar pada target PPI: 12x16; pada PPI minimum: 18x24\n   File ekspor: 3600 x 4800 px untuk 12x16\n\nRASIO 4:5  crop 3600 x 4500 px  tersisa lebar 100.0%, tinggi 83.3%  kotak [0, 900, 3600, 5400]\n       4x5    900.0 PPI  ok\n      8x10    450.0 PPI  ok\n     16x20    225.0 PPI  cukup  (perlu pembesaran 1.33x untuk target)\n   Terbesar pada target PPI: 8x10; pada PPI minimum: 16x20\n   File ekspor: 2400 x 3000 px untuk 8x10\n\nRASIO 11:14  crop 3600 x 4582 px  tersisa lebar 100.0%, tinggi 84.9%  kotak [0, 818, 3600, 5400]\n     11x14    327.3 PPI  ok\n   Terbesar pada target PPI: 11x14; pada PPI minimum: 11x14\n   File ekspor: 3300 x 4200 px untuk 11x14\n\nRASIO Seri A (ISO)  crop 3600 x 5091 px  tersisa lebar 100.0%, tinggi 94.3%  kotak [0, 309, 3600, 5400]\n        A5    615.8 PPI  ok\n        A4    435.4 PPI  ok\n        A3    307.9 PPI  ok\n        A2    217.7 PPI  cukup  (perlu pembesaran 1.38x untuk target)\n        A1    153.8 PPI  cukup  (perlu pembesaran 1.95x untuk target)\n   Terbesar pada target PPI: A3; pada PPI minimum: A1\n   File ekspor: 3508 x 4961 px untuk A3\n\nArti status: ok = memenuhi target PPI; cukup = di antara minimum dan target (layak untuk dilihat dari jauh); kurang = di bawah minimum.\n\nRencana disimpan: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/rencana-cetak.json"
+    },
+    {
+      "langkah": "ekspor file cetak sRGB",
+      "skrip": "export_print_files.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "ok    satwa-tropis-01_2x3_12x18in.jpg  3600 x 5400 px  1.16 MB  q95\nok    satwa-tropis-01_3x4_12x16in.jpg  3600 x 4800 px  1.04 MB  q95\nok    satwa-tropis-01_4x5_8x10in.jpg  2400 x 3000 px  0.55 MB  q95\nok    satwa-tropis-01_11x14_11x14in.jpg  3300 x 4200 px  0.98 MB  q95\nok    satwa-tropis-01_iso_a3.jpg  3508 x 4961 px  1.22 MB  q95\nLaporan: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/ekspor/satwa-tropis-01_laporan-ekspor.json"
+    },
+    {
+      "langkah": "panduan cetak menjadi PDF",
+      "skrip": "make_guide_pdf.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "PDF dibuat: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/ekspor/satwa-tropis-01_print-guide.pdf  (2 halaman, 4.0 KB)"
+    },
+    {
+      "langkah": "susun dan periksa paket unduhan",
+      "skrip": "build_package.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "PASS  nama file (huruf kecil, angka, - dan _, tanpa spasi; jpg/png/pdf/zip)\nPASS  ukuran tiap file <= 20 MB\nPASS  semua rasio yang dijanjikan ada\nPASS  tiap gambar bisa dibuka ulang\nPASS  gambar bermode RGB\nPASS  gambar punya tag DPI\nPASS  jumlah file akhir <= 5  -> 5 file\n\nFile akhir untuk diunggah ke listing:\n  satwa-tropis-01_print-guide.pdf  0.0 MB\n  satwa-tropis-01_bundle-1.zip  1.53 MB  berisi: satwa-tropis-01_4x5_8x10in.jpg, satwa-tropis-01_11x14_11x14in.jpg\n  satwa-tropis-01_3x4_12x16in.jpg  1.04 MB\n  satwa-tropis-01_2x3_12x18in.jpg  1.16 MB\n  satwa-tropis-01_iso_a3.jpg  1.22 MB\n\nHasil: PASS   manifest: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/paket/manifest.json"
+    },
+    {
+      "langkah": "gambar listing dasar",
+      "skrip": "make_listing_images.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "dibuat: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_01-bingkai.jpg  68 KB  (karya dalam bingkai datar, tanpa teks)\ndibuat: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_02-ukuran.jpg  136 KB  (rasio dan ukuran yang berstatus ok di rencana cetak)\ndibuat: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/gambar-listing/satwa-tropis-01_03-detail.jpg  165 KB  (potongan 2000 x 2000 pixel dari karya)"
+    },
+    {
+      "langkah": "model harga",
+      "skrip": "pricing_model.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "Biaya tetap per listing: USD 22.7 (waktu 20.0 + alat 2.5 + biaya listing 0.2)\n\n  Harga  Biaya/pesanan  % harga  Bersih/pesanan  Impas (pesanan)\n    4.5           1.08     24.1            3.42              6.6\n    6.0           1.25     20.8            4.75              4.8\n    9.0           1.58     17.5            7.42              3.1\nPERINGATAN: biaya 'payment_processing_rate' berkeyakinan rendah; hasil bersifat perkiraan\nPERINGATAN: biaya 'payment_processing_fixed_local' berkeyakinan rendah; hasil bersifat perkiraan\nPERINGATAN: pajak atas biaya penjual (vat_on_fees_rate) belum diketahui; dihitung 0, biaya nyata bisa lebih tinggi\nPERINGATAN: biaya perpanjangan saat terjual dianggap sama dengan biaya listing; cek di catatan fakta\nHasil disimpan: studio-wall-art-by-nangka/contoh-proyek/studio-nangka/proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/model-harga.json"
+    },
+    {
+      "langkah": "periksa 13 tag",
+      "skrip": "check_tags.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "ok 16  nursery wall art\nok 20  tropical nursery art\nok 18  bird nursery print\nok 18  printable wall art\nok 19  neutral nursery art\nok 20  jungle nursery decor\nok 18  kids room wall art\nok 15  baby room print\nok 13  bird wall art\nok 16  digital download\nok 18  nursery printables\nok 16  baby shower gift\nok 15  animal wall art\nCATATAN: 1 tag muncul utuh di judul: nursery wall art\nLULUS: 13 tag sesuai batas (13 tag, 20 karakter)"
+    },
+    {
+      "langkah": "preflight hitung (G5)",
+      "skrip": "check_listing.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "PASS  judul terisi dan <= batas karakter  -> 84 karakter (batas 140)\nPASS  deskripsi terisi  -> 995 karakter (minimal kerja studio 200)\nPASS  tag sesuai batas  -> 13 tag\nPASS  harga terisi dan lebih dari 0  -> 6.0\nWARN  category terisi\nPASS  sku terisi\nPASS  file digital ada di disk  -> 5 file\nPASS  jumlah file digital <= batas  -> 5 (batas 5)\nPASS  ukuran tiap file digital <= batas\nPASS  gambar listing ada di disk  -> 3 gambar\nPASS  gambar pertama cukup besar  -> sisi pendek 2000 px (minimum 635, saran 2000)\nWARN  jumlah gambar listing  -> 3 gambar; saran kerja studio minimal 5\nPASS  deskripsi menyebut produk digital\nPASS  deskripsi menyebut tidak ada barang fisik\nPASS  deskripsi menyebut bantuan AI  -> wajib menurut catatan fakta Etsy\nPASS  tanpa kata berisiko atau menyesatkan\nPASS  ukuran yang diklaim memenuhi target PPI  -> 12 ukuran cocok dengan rencana cetak\nPASS  jumlah file yang dijanjikan sama dengan yang diunggah  -> dijanjikan 5, diunggah 5\n\nHasil hitung: PASS_WITH_NOTES  (0 gagal, 2 catatan)"
+    },
+    {
+      "langkah": "periksa katalog",
+      "skrip": "check_catalog.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "LULUS: 1 baris katalog sah"
+    },
+    {
+      "langkah": "uji negatif: klaim 24x36 harus ditolak",
+      "skrip": "check_listing.py",
+      "kode_keluar": 1,
+      "sesuai_harapan": true,
+      "keluaran": "PASS  judul terisi dan <= batas karakter  -> 84 karakter (batas 140)\nPASS  deskripsi terisi  -> 995 karakter (minimal kerja studio 200)\nPASS  tag sesuai batas  -> 13 tag\nPASS  harga terisi dan lebih dari 0  -> 6.0\nWARN  category terisi\nPASS  sku terisi\nPASS  file digital ada di disk  -> 5 file\nPASS  jumlah file digital <= batas  -> 5 (batas 5)\nPASS  ukuran tiap file digital <= batas\nPASS  gambar listing ada di disk  -> 3 gambar\nPASS  gambar pertama cukup besar  -> sisi pendek 2000 px (minimum 635, saran 2000)\nWARN  jumlah gambar listing  -> 3 gambar; saran kerja studio minimal 5\nPASS  deskripsi menyebut produk digital\nPASS  deskripsi menyebut tidak ada barang fisik\nPASS  deskripsi menyebut bantuan AI  -> wajib menurut catatan fakta Etsy\nPASS  tanpa kata berisiko atau menyesatkan\nFAIL  ukuran yang diklaim memenuhi target PPI  -> 24x36\nPASS  jumlah file yang dijanjikan sama dengan yang diunggah  -> dijanjikan 5, diunggah 5\n\nHasil hitung: FAIL  (1 gagal, 2 catatan)"
+    },
+    {
+      "langkah": "serah terima 01-studio-brief-interviewer.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 02-studio-asset-rights-register.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 03-etsy-market-evidence-researcher.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 04-wall-art-series-collection-builder.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 05-wall-art-concept-divergence.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 06-wall-art-composition-director.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 07-wall-art-image-prompt-engineer.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 08-wall-art-artifact-retouch-reviewer.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 09-wall-art-style-consistency-reviewer.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 10-wall-art-ratio-resolution-planner.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 11-wall-art-color-export-manager.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 12-wall-art-download-package-builder.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 13-wall-art-print-instruction-writer.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 14-wall-art-product-offer-planner.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 15-etsy-digital-pricing-modeler.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 16-wall-art-mockup-art-director.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 17-etsy-listing-copy-builder.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 18-etsy-tag-attribute-mapper.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 19-etsy-listing-preflight-reviewer.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    },
+    {
+      "langkah": "serah terima 20-etsy-catalog-sku-manager.json",
+      "skrip": "validate_handoff.py",
+      "kode_keluar": 0,
+      "sesuai_harapan": true,
+      "keluaran": "VALID"
+    }
+  ]
+}

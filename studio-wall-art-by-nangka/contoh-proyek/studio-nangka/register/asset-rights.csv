@@ -1,0 +1,2 @@
+asset_id,tanggal_catat,nama_atau_url,jenis,pembuat_atau_pemilik,alat_dan_paket,dasar_izin,bukti,batas_pakai,rights_status,dipakai_di,catatan
+AST-0001,2026-11-12,proyek/PRJ-202611-satwa-tropis/karya/ART-satwa-tropis-01/master.jpg,gambar_sendiri,Studio (digambar skrip tools/build_example.py),Pillow; tanpa alat AI,milik sendiri,skrip pembuatnya ada di repositori,gambar uji untuk menguji alur; bukan karya jual,cleared,ART-satwa-tropis-01,sintetis; tidak ada bahan pihak ketiga

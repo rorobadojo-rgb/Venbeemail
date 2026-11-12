@@ -1,0 +1,82 @@
+{
+  "system": "Studio Wall Art by Nangka",
+  "version": "1.0.0",
+  "roles": {
+    "router": "Pintu masuk. Mengarahkan ke skill lain; tidak ada skill yang menyerahkan balik kepadanya.",
+    "service": "Layanan. Dipanggil oleh skill lain lalu mengembalikan hasil; tidak pernah memanggil skill jalur.",
+    "pipeline": "Jalur kerja. Menerima hasil skill sebelumnya dan menyerahkan ke skill berikutnya."
+  },
+  "groups": {
+    "A": "Pengarah sistem dan pengetahuan studio",
+    "B": "Riset pasar dan pembeli",
+    "C": "Identitas artistik",
+    "D": "Penciptaan karya dan koleksi",
+    "E": "Produksi file dan pemeriksaan cetak",
+    "F": "Produk dan listing Etsy",
+    "G": "Operasional toko",
+    "H": "Analisis dan pertumbuhan"
+  },
+  "skills": [
+    {"id": "01", "name": "studio-wall-art-orchestrator", "group": "A", "role": "router", "function": "Mengarahkan permintaan ke skill yang tepat dan menyatukan hasilnya.", "owns": "Skill mana yang dijalankan berikutnya", "next": [], "uses": []},
+    {"id": "02", "name": "studio-brief-interviewer", "group": "A", "role": "pipeline", "function": "Mengubah keinginan yang belum jelas menjadi brief proyek yang bisa dikerjakan.", "owns": "Isi brief proyek", "next": ["etsy-market-evidence-researcher", "wall-art-reference-reader", "wall-art-series-collection-builder"], "uses": ["studio-brand-memory"]},
+    {"id": "03", "name": "studio-asset-rights-register", "group": "A", "role": "service", "function": "Mencatat asal, pemilik, izin, batas pakai, dan bukti tiap bahan gambar.", "owns": "Status hak tiap bahan (rights_status)", "next": [], "uses": []},
+    {"id": "04", "name": "studio-brand-memory", "group": "A", "role": "service", "function": "Menyimpan identitas, preferensi, revisi, dan keputusan studio ke file memori.", "owns": "Isi memori merek (brand-memory.md)", "next": [], "uses": []},
+    {"id": "05", "name": "studio-experiment-planner", "group": "A", "role": "pipeline", "function": "Mengubah ide atau perubahan listing menjadi eksperimen terukur dengan hipotesis dan pencatatan faktor pengganggu.", "owns": "Rancangan eksperimen dan cara mengukurnya", "next": ["studio-monthly-strategy-reviewer"], "uses": []},
+    {"id": "06", "name": "studio-quality-gate", "group": "A", "role": "service", "function": "Menilai lulus atau tidaknya hasil pada gerbang brief, konsep, gambar master, dan paket cetak.", "owns": "Lulus/tidaknya tahap G1-G4", "next": [], "uses": []},
+    {"id": "07", "name": "etsy-policy-fact-checker", "group": "A", "role": "service", "function": "Memeriksa dan mencatat biaya serta aturan Etsy terkini beserta sumber dan tanggalnya.", "owns": "Fakta biaya dan kebijakan Etsy yang dipakai studio", "next": [], "uses": []},
+
+    {"id": "08", "name": "etsy-market-evidence-researcher", "group": "B", "role": "pipeline", "function": "Mengumpulkan sinyal pasar dari sumber yang bisa diperiksa.", "owns": "Catatan bukti pasar (bukti-pasar.csv)", "next": ["etsy-micro-niche-mapper", "etsy-competitor-pattern-analyst", "etsy-keyword-evidence-researcher", "etsy-seasonal-opportunity-planner"], "uses": []},
+    {"id": "09", "name": "etsy-micro-niche-mapper", "group": "B", "role": "pipeline", "function": "Memecah niche luas menjadi segmen sempit yang bisa dilayani.", "owns": "Niche yang diusulkan untuk dipilih", "next": ["wall-art-buyer-room-profiler", "etsy-keyword-evidence-researcher"], "uses": []},
+    {"id": "10", "name": "wall-art-buyer-room-profiler", "group": "B", "role": "pipeline", "function": "Memetakan kebutuhan pembeli menurut ruangan, tujuan, dan selera dekorasi.", "owns": "Profil pembeli dan ruangan", "next": ["wall-art-series-collection-builder", "wall-art-product-offer-planner"], "uses": []},
+    {"id": "11", "name": "etsy-competitor-pattern-analyst", "group": "B", "role": "pipeline", "function": "Mempelajari pola penawaran dan celah pasar tanpa meniru produk pesaing.", "owns": "Peta pola pesaing dan celah", "next": ["etsy-micro-niche-mapper", "wall-art-product-offer-planner"], "uses": []},
+    {"id": "12", "name": "etsy-seasonal-opportunity-planner", "group": "B", "role": "pipeline", "function": "Menyusun peluang musiman dengan waktu persiapan yang masuk akal.", "owns": "Kalender musiman studio", "next": ["wall-art-series-collection-builder", "etsy-store-operations-planner"], "uses": []},
+    {"id": "13", "name": "etsy-keyword-evidence-researcher", "group": "B", "role": "pipeline", "function": "Mengembangkan keyword dan mencatat bukti, tanggal, sumber, serta ketidakpastiannya.", "owns": "Bank keyword (keyword-bank.csv)", "next": ["etsy-listing-copy-builder", "etsy-tag-attribute-mapper"], "uses": []},
+
+    {"id": "14", "name": "wall-art-reference-reader", "group": "C", "role": "pipeline", "function": "Membaca komposisi, palet, tekstur, cahaya, motif, dan karakter gambar referensi.", "owns": "Bacaan visual tiap referensi", "next": ["wall-art-visual-dna-builder", "wall-art-reference-fusion-director"], "uses": ["studio-asset-rights-register"]},
+    {"id": "15", "name": "wall-art-visual-dna-builder", "group": "C", "role": "pipeline", "function": "Merumuskan aturan visual khas studio yang bisa diterapkan ulang.", "owns": "Aturan visual studio (visual-dna.md)", "next": ["wall-art-palette-material-director", "wall-art-motif-originality-designer"], "uses": ["studio-brand-memory"]},
+    {"id": "16", "name": "wall-art-palette-material-director", "group": "C", "role": "pipeline", "function": "Mengatur warna, bahan visual, tekstur, dan tingkat kontras untuk koleksi atau karya.", "owns": "Palet dan bahan visual per koleksi", "next": ["wall-art-concept-divergence"], "uses": []},
+    {"id": "17", "name": "wall-art-motif-originality-designer", "group": "C", "role": "pipeline", "function": "Menciptakan motif dan bahasa bentuk baru berdasarkan identitas studio.", "owns": "Pustaka motif studio", "next": ["wall-art-concept-divergence"], "uses": []},
+    {"id": "18", "name": "wall-art-style-consistency-reviewer", "group": "C", "role": "pipeline", "function": "Memeriksa konsistensi gaya sekaligus mencegah pengulangan berlebihan.", "owns": "Penilaian konsistensi gaya", "next": ["wall-art-ratio-resolution-planner"], "uses": ["studio-quality-gate"]},
+
+    {"id": "19", "name": "wall-art-concept-divergence", "group": "D", "role": "pipeline", "function": "Menghasilkan beberapa arah konsep yang benar-benar berbeda.", "owns": "Arah konsep yang ditawarkan", "next": ["wall-art-reference-fusion-director", "wall-art-composition-director"], "uses": []},
+    {"id": "20", "name": "wall-art-reference-fusion-director", "group": "D", "role": "pipeline", "function": "Menetapkan peran tiap referensi dan mengarahkan sintesisnya menjadi karya baru yang utuh.", "owns": "Peran tiap referensi dan resep sintesis", "next": ["wall-art-composition-director"], "uses": ["studio-asset-rights-register"]},
+    {"id": "21", "name": "wall-art-composition-director", "group": "D", "role": "pipeline", "function": "Mengatur titik fokus, skala, ruang kosong, keseimbangan, dan alur pandang.", "owns": "Rancangan komposisi karya", "next": ["wall-art-image-prompt-engineer"], "uses": ["studio-quality-gate"]},
+    {"id": "22", "name": "wall-art-image-prompt-engineer", "group": "D", "role": "pipeline", "function": "Menulis prompt pembuatan atau pengeditan gambar sesuai alat, dan menjalankannya bila alat terhubung dan diizinkan.", "owns": "Prompt dan catatan generasi", "next": ["wall-art-artifact-retouch-reviewer"], "uses": ["studio-asset-rights-register"]},
+    {"id": "23", "name": "wall-art-series-collection-builder", "group": "D", "role": "pipeline", "function": "Merancang koleksi yang serasi tanpa terlihat seperti salinan satu gambar.", "owns": "Rencana koleksi", "next": ["wall-art-palette-material-director", "wall-art-concept-divergence", "wall-art-product-offer-planner"], "uses": []},
+    {"id": "24", "name": "wall-art-personalization-designer", "group": "D", "role": "pipeline", "function": "Merancang produk custom dengan input pelanggan dan batas revisi yang jelas.", "owns": "Spesifikasi produk custom", "next": ["wall-art-product-offer-planner", "etsy-custom-order-workflow"], "uses": []},
+
+    {"id": "25", "name": "wall-art-artifact-retouch-reviewer", "group": "E", "role": "pipeline", "function": "Memeriksa cacat visual, objek aneh, tepi, tekstur, dan detail yang rusak.", "owns": "Daftar cacat dan perintah perbaikan", "next": ["wall-art-style-consistency-reviewer"], "uses": []},
+    {"id": "26", "name": "wall-art-ratio-resolution-planner", "group": "E", "role": "pipeline", "function": "Merencanakan crop ke tiap rasio dan menghitung kecukupan pixel terhadap ukuran cetak dan target PPI.", "owns": "Rencana rasio, crop, dan ukuran cetak", "next": ["wall-art-color-export-manager"], "uses": []},
+    {"id": "27", "name": "wall-art-color-export-manager", "group": "E", "role": "pipeline", "function": "Menentukan ruang warna dan pengaturan ekspor, lalu mengekspor file cetak.", "owns": "Pengaturan warna dan ekspor", "next": ["wall-art-download-package-builder"], "uses": []},
+    {"id": "28", "name": "wall-art-download-package-builder", "group": "E", "role": "pipeline", "function": "Menyusun paket unduhan dengan nama file dan struktur yang mudah dipahami pembeli.", "owns": "Isi dan struktur paket unduhan", "next": ["wall-art-print-instruction-writer"], "uses": ["studio-quality-gate"]},
+    {"id": "29", "name": "wall-art-print-instruction-writer", "group": "E", "role": "pipeline", "function": "Menulis panduan cetak yang jelas dan tidak menjanjikan warna identik.", "owns": "Panduan cetak untuk pembeli", "next": ["wall-art-mockup-art-director", "etsy-listing-copy-builder"], "uses": []},
+
+    {"id": "30", "name": "wall-art-product-offer-planner", "group": "F", "role": "pipeline", "function": "Menentukan isi produk, variasi, bundel, dan batas layanan.", "owns": "Isi produk, variasi, bundel, batas layanan", "next": ["etsy-digital-pricing-modeler", "wall-art-ratio-resolution-planner"], "uses": []},
+    {"id": "31", "name": "etsy-digital-pricing-modeler", "group": "F", "role": "pipeline", "function": "Menghitung skenario harga berdasarkan biaya, waktu, dan margin.", "owns": "Usulan harga dan skenario margin", "next": ["etsy-listing-copy-builder"], "uses": ["etsy-policy-fact-checker"]},
+    {"id": "32", "name": "wall-art-mockup-art-director", "group": "F", "role": "pipeline", "function": "Mengarahkan gambar listing dan mockup yang menarik tanpa menyesatkan ukuran atau isi produk.", "owns": "Daftar dan arahan gambar listing", "next": ["etsy-listing-preflight-reviewer"], "uses": []},
+    {"id": "33", "name": "etsy-listing-copy-builder", "group": "F", "role": "pipeline", "function": "Menulis judul, deskripsi, dan informasi produk secara akurat.", "owns": "Judul dan deskripsi listing", "next": ["etsy-tag-attribute-mapper"], "uses": []},
+    {"id": "34", "name": "etsy-tag-attribute-mapper", "group": "F", "role": "pipeline", "function": "Memetakan keyword ke tag, kategori, dan atribut sesuai aturan terkini.", "owns": "Tag, kategori, dan atribut listing", "next": ["etsy-listing-preflight-reviewer"], "uses": ["etsy-policy-fact-checker"]},
+    {"id": "35", "name": "etsy-listing-preflight-reviewer", "group": "F", "role": "pipeline", "function": "Memeriksa kecocokan gambar, teks, file, harga, dan kebijakan sebelum listing diterbitkan.", "owns": "Siap/tidaknya listing diterbitkan (G5)", "next": ["etsy-catalog-sku-manager"], "uses": ["etsy-policy-fact-checker"]},
+
+    {"id": "36", "name": "etsy-storefront-brand-planner", "group": "G", "role": "pipeline", "function": "Menyusun pembukaan toko, identitas toko, section, banner, about, dan struktur katalog.", "owns": "Identitas dan struktur toko", "next": ["etsy-store-operations-planner"], "uses": ["studio-brand-memory", "etsy-policy-fact-checker"]},
+    {"id": "37", "name": "etsy-catalog-sku-manager", "group": "G", "role": "pipeline", "function": "Mengatur SKU, status produk, versi, file sumber, dan relasi antarlisting.", "owns": "SKU dan status katalog (katalog.csv)", "next": [], "uses": []},
+    {"id": "38", "name": "etsy-customer-message-drafter", "group": "G", "role": "pipeline", "function": "Membuat draf balasan pelanggan berdasarkan informasi pesanan yang tersedia.", "owns": "Kata-kata pesan pelanggan", "next": [], "uses": []},
+    {"id": "39", "name": "etsy-custom-order-workflow", "group": "G", "role": "pipeline", "function": "Mengatur input, proof, revisi, persetujuan, dan penyerahan pesanan custom.", "owns": "Tahap dan status pesanan custom", "next": ["etsy-customer-message-drafter"], "uses": []},
+    {"id": "40", "name": "etsy-issue-resolution-assistant", "group": "G", "role": "pipeline", "function": "Menyusun langkah penanganan masalah berdasarkan fakta dan kebijakan yang berlaku.", "owns": "Jalur penyelesaian masalah pelanggan", "next": ["etsy-customer-message-drafter"], "uses": ["etsy-policy-fact-checker"]},
+    {"id": "41", "name": "etsy-store-operations-planner", "group": "G", "role": "pipeline", "function": "Membuat rutinitas kerja mingguan berdasarkan kapasitas dan prioritas toko.", "owns": "Rutinitas dan rencana mingguan", "next": [], "uses": []},
+
+    {"id": "42", "name": "etsy-performance-data-reader", "group": "H", "role": "pipeline", "function": "Membaca data toko dengan definisi metrik yang benar.", "owns": "Pembacaan data toko", "next": ["studio-experiment-planner", "etsy-portfolio-decision-reviewer", "studio-monthly-strategy-reviewer"], "uses": []},
+    {"id": "43", "name": "etsy-portfolio-decision-reviewer", "group": "H", "role": "pipeline", "function": "Membantu memutuskan produk yang dipertahankan, direvisi, dihentikan, atau dikembangkan menjadi koleksi lanjutan.", "owns": "Usulan pertahankan/revisi/hentikan/kembangkan", "next": ["studio-monthly-strategy-reviewer"], "uses": ["etsy-catalog-sku-manager"]},
+    {"id": "44", "name": "wall-art-pinterest-content-planner", "group": "H", "role": "pipeline", "function": "Membuat rencana konten Pinterest dari aset yang boleh dipakai.", "owns": "Rencana konten Pinterest", "next": ["etsy-store-operations-planner"], "uses": ["studio-asset-rights-register"]},
+    {"id": "45", "name": "studio-monthly-strategy-reviewer", "group": "H", "role": "pipeline", "function": "Menggabungkan hasil kreatif, operasional, dan penjualan menjadi prioritas bulan berikutnya.", "owns": "Prioritas bulan berikutnya", "next": [], "uses": ["studio-brand-memory"]}
+  ],
+  "merged_from_original_48": [
+    {"kept": "studio-experiment-planner", "absorbed": "etsy-listing-experiment-designer", "reason": "Proses dan keluarannya sama (hipotesis, ukuran, faktor pengganggu, catatan hasil); yang berbeda hanya objek ujinya. Dua skill akan berebut keputusan 'cara mengukur'."},
+    {"kept": "wall-art-reference-fusion-director", "absorbed": "wall-art-reference-role-mapper", "reason": "Peran referensi selalu ditetapkan untuk satu karya tertentu dan langsung dipakai sebagai resep sintesis; memisahkannya hanya menambah satu serah terima tanpa keluaran berbeda."},
+    {"kept": "wall-art-ratio-resolution-planner", "absorbed": "wall-art-ratio-crop-planner + wall-art-resolution-print-calculator", "reason": "Masukan sama (ukuran pixel gambar master), keluaran satu tabel yang sama (rasio x ukuran x pixel x PPI x bagian terpotong), dan satu tidak pernah dipakai tanpa yang lain."},
+    {"kept": "etsy-portfolio-decision-reviewer", "absorbed": "wall-art-collection-expansion-planner", "reason": "'Kembangkan' adalah salah satu hasil keputusan portofolio dan memakai bukti yang sama; pembuatan koleksinya sendiri sudah dimiliki wall-art-series-collection-builder."}
+  ],
+  "added": [
+    {"name": "etsy-policy-fact-checker", "reason": "Empat skill (harga, tag, preflight, penanganan masalah) bergantung pada aturan Etsy terkini. Tanpa satu pemilik, masing-masing akan mencari sendiri dan bisa memakai angka berbeda."}
+  ]
+}

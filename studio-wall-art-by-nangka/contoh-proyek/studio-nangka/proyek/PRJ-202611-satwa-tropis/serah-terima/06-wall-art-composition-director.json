@@ -1,0 +1,28 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-composition-director",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "Fokus tengah-bawah (x 0.5, y 0.6); unsur wajib utuh di 80% tengah"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/catatan-kreatif.md",
+      "type": "rancangan komposisi",
+      "verified": true
+    }
+  ],
+  "quality_results": [
+    {
+      "check": "G2 konsep",
+      "result": "warn",
+      "notes": "DNA visual masih sementara; peran referensi tidak berlaku karena tanpa referensi"
+    }
+  ],
+  "next_skill": "wall-art-image-prompt-engineer"
+}

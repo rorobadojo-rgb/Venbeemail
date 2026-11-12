@@ -1,0 +1,27 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "studio-asset-rights-register",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "input_assets": [
+    {
+      "asset_id": "AST-0001",
+      "role": "subjek dan susunan (gambar uji sintetis)"
+    }
+  ],
+  "rights_status": "cleared",
+  "observations": [
+    "AST-0001 digambar skrip Pillow di repositori ini; tidak ada bahan pihak ketiga"
+  ],
+  "output_artifacts": [
+    {
+      "path": "register/asset-rights.csv",
+      "type": "register hak",
+      "verified": true
+    }
+  ],
+  "next_skill": null
+}

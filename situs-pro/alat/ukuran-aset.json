@@ -1,0 +1,68 @@
+{
+  "maskot": {
+    "asal": [
+      223,
+      22
+    ],
+    "ukuran": [
+      576,
+      955
+    ],
+    "potongan": {
+      "potong_y": 262,
+      "tinggi_kotak": 278
+    }
+  },
+  "monyet-merah": {
+    "asal": [
+      140,
+      85
+    ],
+    "ukuran": [
+      742,
+      766
+    ]
+  },
+  "monyet-biru": {
+    "asal": [
+      178,
+      107
+    ],
+    "ukuran": [
+      647,
+      810
+    ]
+  },
+  "monyet-cokelat": {
+    "asal": [
+      169,
+      105
+    ],
+    "ukuran": [
+      718,
+      776
+    ]
+  },
+  "monyet-pirang": {
+    "asal": [
+      147,
+      92
+    ],
+    "ukuran": [
+      765,
+      833
+    ]
+  },
+  "amplop": {
+    "ukuran": [
+      418,
+      301
+    ]
+  },
+  "pesawat": {
+    "ukuran": [
+      350,
+      233
+    ]
+  }
+}

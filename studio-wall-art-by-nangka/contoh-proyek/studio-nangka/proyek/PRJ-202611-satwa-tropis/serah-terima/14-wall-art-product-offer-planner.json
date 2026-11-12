@@ -1,0 +1,28 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-product-offer-planner",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "approved",
+  "artwork_id": "ART-satwa-tropis-01",
+  "decisions": [
+    {
+      "what": "Listing satuan: 5 rasio + panduan cetak, pemakaian pribadi, tanpa ukuran khusus",
+      "by": "pemilik",
+      "date": "2026-11-12"
+    }
+  ],
+  "assumptions": [
+    "Persetujuan pemilik diambil sebagai default contoh"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/lembar-penawaran.md",
+      "type": "lembar penawaran",
+      "verified": true
+    }
+  ],
+  "next_skill": "etsy-digital-pricing-modeler"
+}

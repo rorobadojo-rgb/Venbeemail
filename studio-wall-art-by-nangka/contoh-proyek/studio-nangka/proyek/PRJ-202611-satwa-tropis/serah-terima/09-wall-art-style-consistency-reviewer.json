@@ -1,0 +1,33 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "wall-art-style-consistency-reviewer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "passed",
+  "artwork_id": "ART-satwa-tropis-01",
+  "input_assets": [
+    {
+      "asset_id": "AST-0001",
+      "role": "subjek dan susunan (gambar uji sintetis)"
+    }
+  ],
+  "rights_status": "cleared",
+  "observations": [
+    "Warna berbeda menurut pengukur warna: #EEE6D9, #89996C, #C78C6C, #4B3D32, #D4A243"
+  ],
+  "quality_results": [
+    {
+      "check": "aturan tetap DNA sementara T1-T5",
+      "result": "pass",
+      "notes": "latar polos gading, 5 warna berbeda (batas 5), satu subjek utuh, bentuk membulat"
+    },
+    {
+      "check": "G3 gambar master",
+      "result": "warn",
+      "notes": "lulus dengan catatan: DNA sementara; karya hanya gambar uji"
+    }
+  ],
+  "next_skill": "wall-art-ratio-resolution-planner"
+}

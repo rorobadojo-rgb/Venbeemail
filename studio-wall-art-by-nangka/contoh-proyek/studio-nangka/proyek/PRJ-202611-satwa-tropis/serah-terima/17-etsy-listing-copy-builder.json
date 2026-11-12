@@ -1,0 +1,21 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "etsy-listing-copy-builder",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "ready_for_review",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "Judul 84 karakter; ukuran di deskripsi dibentuk dari rencana cetak"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/listing.json",
+      "type": "paket listing",
+      "verified": true
+    }
+  ],
+  "next_skill": "etsy-tag-attribute-mapper"
+}

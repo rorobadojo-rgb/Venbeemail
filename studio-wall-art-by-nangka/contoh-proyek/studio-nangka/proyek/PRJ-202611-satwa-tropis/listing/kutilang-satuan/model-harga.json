@@ -1,0 +1,42 @@
+{
+  "currency": "USD",
+  "fixed_cost_per_listing": 22.7,
+  "fixed_cost_parts": {
+    "time": 20.0,
+    "tools": 2.5,
+    "listing_fee": 0.2
+  },
+  "per_order_fixed_processing_usd": 0.387,
+  "rows": [
+    {
+      "price": 4.5,
+      "fees_per_order": 1.08,
+      "fees_pct_of_price": 24.1,
+      "net_per_order": 3.42,
+      "breakeven_orders": 6.6,
+      "scenarios": []
+    },
+    {
+      "price": 6.0,
+      "fees_per_order": 1.25,
+      "fees_pct_of_price": 20.8,
+      "net_per_order": 4.75,
+      "breakeven_orders": 4.8,
+      "scenarios": []
+    },
+    {
+      "price": 9.0,
+      "fees_per_order": 1.58,
+      "fees_pct_of_price": 17.5,
+      "net_per_order": 7.42,
+      "breakeven_orders": 3.1,
+      "scenarios": []
+    }
+  ],
+  "warnings": [
+    "biaya 'payment_processing_rate' berkeyakinan rendah; hasil bersifat perkiraan",
+    "biaya 'payment_processing_fixed_local' berkeyakinan rendah; hasil bersifat perkiraan",
+    "pajak atas biaya penjual (vat_on_fees_rate) belum diketahui; dihitung 0, biaya nyata bisa lebih tinggi",
+    "biaya perpanjangan saat terjual dianggap sama dengan biaya listing; cek di catatan fakta"
+  ]
+}

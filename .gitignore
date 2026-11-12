@@ -7,3 +7,8 @@ next-env.d.ts
 .env*.local
 __pycache__/
 out/
+
+# Studio Wall Art by Nangka: data pelanggan tidak pernah masuk git
+studio-nangka/pelanggan/*
+!studio-nangka/pelanggan/README.md
+studio-wall-art-by-nangka/contoh-proyek/**/pelanggan/

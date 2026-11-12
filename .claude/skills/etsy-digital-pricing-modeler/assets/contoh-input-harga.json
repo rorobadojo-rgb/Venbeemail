@@ -1,0 +1,20 @@
+{
+  "_petunjuk": "Contoh masukan kalkulator harga. Ganti bagian fees dengan isi studio-nangka/fakta/fees.json yang terbaru, atau pakai \"fees_file\": \"path/ke/fees.json\". Kurs di contoh ini HANYA untuk menguji skrip, bukan kurs sebenarnya.",
+  "fees": {
+    "verified_on": "2026-11-12",
+    "listing_fee": {"value": 0.20, "confidence": "sedang", "source": "https://www.etsy.com/legal/fees/"},
+    "transaction_fee_rate": {"value": 0.065, "confidence": "sedang", "source": "https://www.etsy.com/legal/fees/"},
+    "payment_processing_rate": {"value": 0.045, "confidence": "rendah", "source": "pihak ketiga; cek tabel resmi"},
+    "payment_processing_fixed_local": {"value": 7000, "currency": "IDR", "confidence": "rendah", "source": "pihak ketiga; cek tabel resmi"},
+    "fx_local_per_usd": {"value": 16000, "confidence": "contoh", "source": "angka uji, bukan kurs sebenarnya"},
+    "offsite_ads_rate": {"value": 0.15, "confidence": "sedang", "source": "https://www.etsy.com/legal/fees/"},
+    "vat_on_fees_rate": {"value": null, "confidence": null, "source": "belum diverifikasi"}
+  },
+  "prices": [4.5, 6.0, 9.0, 12.0],
+  "hours_per_listing": 4,
+  "hourly_value_usd": 5,
+  "monthly_tool_cost_usd": 30,
+  "listings_per_month": 12,
+  "order_scenarios": [1, 5, 15],
+  "offsite_ads_share": 0
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "etsy-tag-attribute-mapper",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-satwa-tropis",
+  "collection_id": "COL-satwa-tropis",
+  "version": "v1",
+  "status": "needs_input",
+  "artwork_id": "ART-satwa-tropis-01",
+  "observations": [
+    "13 tag lulus pemeriksa (batas 13 tag, 20 karakter)"
+  ],
+  "unresolved_questions": [
+    "Kategori dan atribut harus diambil dari formulir listing Etsy (tangkapan layar dari pemilik)"
+  ],
+  "output_artifacts": [
+    {
+      "path": "proyek/PRJ-202611-satwa-tropis/listing/kutilang-satuan/tags.txt",
+      "type": "tag",
+      "verified": true
+    }
+  ],
+  "next_skill": "etsy-listing-preflight-reviewer"
+}

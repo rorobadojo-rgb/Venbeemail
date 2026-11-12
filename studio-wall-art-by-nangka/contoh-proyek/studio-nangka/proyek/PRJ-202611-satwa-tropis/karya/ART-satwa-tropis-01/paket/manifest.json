@@ -1,0 +1,172 @@
+{
+  "schema": "studio-nangka/package-manifest@1",
+  "created": "2026-11-12",
+  "limits": {
+    "max_files": 5,
+    "max_mb": 20
+  },
+  "source_files": [
+    {
+      "file": "satwa-tropis-01_11x14_11x14in.jpg",
+      "bytes": 1031140,
+      "mb": 0.98,
+      "sha256": "68797e63010205061e7120e60c752dce9efa41e209638643db2303091c388a1d",
+      "pixel": [
+        3300,
+        4200
+      ],
+      "mode": "RGB",
+      "dpi": [
+        300,
+        300
+      ],
+      "icc_profile": true
+    },
+    {
+      "file": "satwa-tropis-01_2x3_12x18in.jpg",
+      "bytes": 1215201,
+      "mb": 1.16,
+      "sha256": "feeb5f8b9b51802f150dd606459f326acbe9b0654f9e97a86050c149946a4868",
+      "pixel": [
+        3600,
+        5400
+      ],
+      "mode": "RGB",
+      "dpi": [
+        300,
+        300
+      ],
+      "icc_profile": true
+    },
+    {
+      "file": "satwa-tropis-01_3x4_12x16in.jpg",
+      "bytes": 1090282,
+      "mb": 1.04,
+      "sha256": "2c9dc976107f0a1b93ff4a11abb5b3fe1d4ed38c9d66762e24086bdaeeb77d49",
+      "pixel": [
+        3600,
+        4800
+      ],
+      "mode": "RGB",
+      "dpi": [
+        300,
+        300
+      ],
+      "icc_profile": true
+    },
+    {
+      "file": "satwa-tropis-01_4x5_8x10in.jpg",
+      "bytes": 575135,
+      "mb": 0.55,
+      "sha256": "32206295f5b5ed0fc824d0302e87d940ad88f98949a73c2a991a32e6eff17b4d",
+      "pixel": [
+        2400,
+        3000
+      ],
+      "mode": "RGB",
+      "dpi": [
+        300,
+        300
+      ],
+      "icc_profile": true
+    },
+    {
+      "file": "satwa-tropis-01_iso_a3.jpg",
+      "bytes": 1274094,
+      "mb": 1.22,
+      "sha256": "e33df4f908d555e05210628cd4dd01be6020d85369ebb0e19b18a06b43ebdb3d",
+      "pixel": [
+        3508,
+        4961
+      ],
+      "mode": "RGB",
+      "dpi": [
+        300,
+        300
+      ],
+      "icc_profile": true
+    },
+    {
+      "file": "satwa-tropis-01_print-guide.pdf",
+      "bytes": 4145,
+      "mb": 0.0,
+      "sha256": "6a63c8f90058ec80515db70ce5b96f73fba16a3dd9edf86a1544c16ab47e9718"
+    }
+  ],
+  "deliverables": [
+    {
+      "file": "satwa-tropis-01_print-guide.pdf",
+      "contains": [
+        "satwa-tropis-01_print-guide.pdf"
+      ],
+      "mb": 0.0
+    },
+    {
+      "file": "satwa-tropis-01_bundle-1.zip",
+      "contains": [
+        "satwa-tropis-01_4x5_8x10in.jpg",
+        "satwa-tropis-01_11x14_11x14in.jpg"
+      ],
+      "mb": 1.53
+    },
+    {
+      "file": "satwa-tropis-01_3x4_12x16in.jpg",
+      "contains": [
+        "satwa-tropis-01_3x4_12x16in.jpg"
+      ],
+      "mb": 1.04
+    },
+    {
+      "file": "satwa-tropis-01_2x3_12x18in.jpg",
+      "contains": [
+        "satwa-tropis-01_2x3_12x18in.jpg"
+      ],
+      "mb": 1.16
+    },
+    {
+      "file": "satwa-tropis-01_iso_a3.jpg",
+      "contains": [
+        "satwa-tropis-01_iso_a3.jpg"
+      ],
+      "mb": 1.22
+    }
+  ],
+  "checks": [
+    {
+      "check": "nama file (huruf kecil, angka, - dan _, tanpa spasi; jpg/png/pdf/zip)",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "ukuran tiap file <= 20 MB",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "semua rasio yang dijanjikan ada",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "tiap gambar bisa dibuka ulang",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "gambar bermode RGB",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "gambar punya tag DPI",
+      "result": "pass",
+      "notes": ""
+    },
+    {
+      "check": "jumlah file akhir <= 5",
+      "result": "pass",
+      "notes": "5 file"
+    }
+  ],
+  "verdict": "pass"
+}

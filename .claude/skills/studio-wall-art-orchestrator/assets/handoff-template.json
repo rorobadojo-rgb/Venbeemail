@@ -1,0 +1,18 @@
+{
+  "schema": "studio-nangka/handoff@1",
+  "skill": "studio-brief-interviewer",
+  "date": "2026-11-12",
+  "project_id": "PRJ-202611-contoh",
+  "collection_id": "COL-contoh",
+  "version": "v1",
+  "status": "ready_for_review",
+  "input_assets": [],
+  "rights_status": "unknown",
+  "observations": [],
+  "assumptions": [],
+  "decisions": [],
+  "unresolved_questions": [],
+  "output_artifacts": [],
+  "quality_results": [],
+  "next_skill": "etsy-market-evidence-researcher"
+}
