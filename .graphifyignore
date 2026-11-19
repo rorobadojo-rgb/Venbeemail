@@ -1,0 +1,33 @@
+# .graphifyignore: file yang tidak dimasukkan graphify ke knowledge graph.
+# Sintaksnya sama dengan .gitignore. graphify juga membaca .gitignore, jadi
+# node_modules/, .next/, out/ dan data pelanggan sudah otomatis dilewati.
+# File ini hanya bisa menambah pengecualian, tidak bisa memasukkan kembali.
+
+# 1. Library pihak ketiga yang sudah di-minify (GSAP, ScrollTrigger,
+#    MotionPathPlugin, Lenis di situs-pro/ dan situs-pro-kong/).
+#    Tanpa aturan ini, ±500 dari 1.338 node berisi fungsi satu huruf
+#    seperti Cc() dan fe() yang mengacaukan god node dan komunitas.
+*.min.js
+*.min.css
+
+# 2. Gambar dan video. Di jalur penuh (/graphify .), setiap gambar dibaca
+#    model satu per satu (repo ini punya ±800 gambar, sebagian besar frame
+#    animasi Kong) dan setiap video ditranskripsi. Mahal dan tidak menambah
+#    pemahaman kode. Kode yang memakai gambar itu tetap ikut.
+#    Mau menganalisis gambar referensi desain? Hapus baris ekstensinya, atau
+#    jalankan graphify langsung pada foldernya, misalnya: /graphify docs/pro/referensi
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.mov
+*.webm
+*.mp3
+*.wav
+*.ogg
+
+# 3. Hasil build paket skill (.skill adalah arsip zip).
+studio-wall-art-by-nangka/dist/
