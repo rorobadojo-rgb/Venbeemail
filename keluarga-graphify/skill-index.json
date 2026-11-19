@@ -1,0 +1,66 @@
+{
+  "system": "Keluarga Skill Graphify",
+  "version": "1.0.0",
+  "graphify_version": "0.9.112",
+  "roles": {
+    "router": "Pintu masuk. Mengarahkan ke skill lain; tidak ada skill yang menyerahkan balik kepadanya.",
+    "service": "Layanan. Dipanggil skill lain lalu mengembalikan hasil; tidak pernah memanggil skill jalur.",
+    "pipeline": "Jalur kerja. Menerima hasil skill sebelumnya dan menyerahkan ke skill berikutnya."
+  },
+  "groups": {
+    "A": "Pintu masuk dan fondasi",
+    "B": "Membangun dan merawat graph",
+    "C": "Graph dokumen dan sumber pengetahuan",
+    "D": "Graph perpustakaan skill",
+    "E": "Ekspor, integrasi, dan otomasi",
+    "F": "Perawatan dan pemecahan masalah"
+  },
+  "skills": [
+    {"id": "01", "name": "graphify-dirigen", "group": "A", "role": "router", "function": "Membaca keadaan graphify di repo, memilih skill yang tepat, menjalankannya berurutan, dan merangkum hasilnya.", "owns": "Skill graphify mana yang dijalankan berikutnya", "next": [], "uses": []},
+    {"id": "02", "name": "graphify-pasang-cli", "group": "A", "role": "service", "function": "Memastikan CLI graphify terpasang dengan versi dan extra yang tepat, termasuk di container cloud yang selalu baru.", "owns": "Versi, extra, dan cara pasang CLI graphify", "next": [], "uses": []},
+    {"id": "03", "name": "graphify-diagnosa-lingkungan", "group": "A", "role": "service", "function": "Memeriksa kesiapan lingkungan: CLI, graph, kesegaran graph, hook, pengecualian, extra, dan backend LLM.", "owns": "Status kesiapan lingkungan graphify", "next": [], "uses": []},
+    {"id": "04", "name": "graphify-catatan-graph", "group": "A", "role": "service", "function": "Mencatat setiap graph yang dibangun (lokasi, lingkup, mode, ukuran, commit, biaya) di register.", "owns": "Isi register graph (graph-register.csv)", "next": [], "uses": []},
+    {"id": "05", "name": "graphify-penjaga-biaya", "group": "A", "role": "service", "function": "Memperkirakan token dan waktu sebelum pass semantik, lalu meminta izin sebelum isi dikirim ke model atau layanan luar.", "owns": "Izin memakai token dan mengirim isi ke layanan luar", "next": [], "uses": []},
+    {"id": "06", "name": "graphify-gerbang-mutu", "group": "A", "role": "service", "function": "Menilai lulus atau tidaknya pekerjaan graphify di gerbang G1 rencana, G2 graph sehat, G3 siap commit, dan G4 ekspor.", "owns": "Lulus atau tidaknya gerbang G1-G4", "next": [], "uses": []},
+
+    {"id": "07", "name": "graphify-rencana-korpus", "group": "B", "role": "pipeline", "function": "Menentukan apa yang masuk ke tiap graph, mode build, lokasi keluaran, dan corpus_id.", "owns": "Ruang lingkup, mode, dan lokasi tiap graph", "next": ["graphify-atur-pengecualian"], "uses": ["graphify-penjaga-biaya", "graphify-catatan-graph", "graphify-gerbang-mutu"]},
+    {"id": "08", "name": "graphify-atur-pengecualian", "group": "B", "role": "pipeline", "function": "Menyusun .graphifyignore dan .graphifyrc lalu membuktikan efeknya dengan uji kering.", "owns": "Aturan pengecualian dan bahasa ekstensi", "next": ["graphify-bangun-graph-kode", "graphify-bangun-graph-lengkap", "graphify-graph-dokumen"], "uses": ["graphify-pasang-cli"]},
+    {"id": "09", "name": "graphify-bangun-graph-kode", "group": "B", "role": "pipeline", "function": "Membangun graph kode secara lokal dan gratis lewat AST tree-sitter, tanpa LLM.", "owns": "Build graph kode (AST)", "next": ["graphify-namai-komunitas"], "uses": ["graphify-pasang-cli", "graphify-catatan-graph"]},
+    {"id": "10", "name": "graphify-bangun-graph-lengkap", "group": "B", "role": "pipeline", "function": "Membangun graph lengkap (kode plus dokumen, PDF, dan gambar) lewat skill resmi /graphify atau backend API.", "owns": "Build graph lengkap (kode dan semantik)", "next": ["graphify-namai-komunitas"], "uses": ["graphify-pasang-cli", "graphify-penjaga-biaya", "graphify-catatan-graph"]},
+    {"id": "11", "name": "graphify-namai-komunitas", "group": "B", "role": "pipeline", "function": "Memberi nama komunitas graph dalam bahasa Indonesia dan menyimpannya agar bertahan saat rebuild.", "owns": "Nama komunitas (.graphify_labels.json)", "next": ["graphify-audit-graph"], "uses": []},
+    {"id": "12", "name": "graphify-audit-graph", "group": "B", "role": "pipeline", "function": "Mengukur kesehatan graph: noise, edge tebakan, komunitas tipis, kesegaran, dan path sensitif.", "owns": "Laporan kesehatan graph", "next": [], "uses": ["graphify-gerbang-mutu"]},
+    {"id": "13", "name": "graphify-perbarui-graph", "group": "B", "role": "pipeline", "function": "Memperbarui graph setelah kode atau dokumen berubah, termasuk saat graph memang harus mengecil.", "owns": "Cara dan waktu pembaruan graph", "next": ["graphify-namai-komunitas"], "uses": ["graphify-pasang-cli", "graphify-catatan-graph"]},
+    {"id": "14", "name": "graphify-banding-graph", "group": "B", "role": "pipeline", "function": "Membandingkan dua versi graph: node, relasi, file, dan komunitas yang bertambah, hilang, atau pindah.", "owns": "Perbandingan dua versi graph", "next": [], "uses": []},
+
+    {"id": "15", "name": "graphify-graph-dokumen", "group": "C", "role": "pipeline", "function": "Membangun graph khusus dokumen (Markdown, PDF, Office) seperti PRD, panduan, dan catatan.", "owns": "Build graph dokumen", "next": ["graphify-namai-komunitas"], "uses": ["graphify-pasang-cli", "graphify-penjaga-biaya", "graphify-catatan-graph"]},
+    {"id": "16", "name": "graphify-tanya-dokumen", "group": "C", "role": "pipeline", "function": "Menjawab pertanyaan dari graph dokumen dengan rujukan file dan judul bagian.", "owns": "Jawaban berbasis graph dokumen", "next": [], "uses": ["graphify-memori-jawaban"]},
+    {"id": "17", "name": "graphify-tambah-sumber", "group": "C", "role": "pipeline", "function": "Memasukkan artikel, paper, dan video dari URL ke korpus dengan penanda penulis dan penyumbang.", "owns": "Sumber luar yang masuk korpus", "next": ["graphify-perbarui-graph"], "uses": ["graphify-penjaga-biaya", "graphify-catatan-graph"]},
+    {"id": "18", "name": "graphify-transkrip-media", "group": "C", "role": "pipeline", "function": "Mentranskripsi video dan audio lokal dengan Whisper agar isinya bisa masuk graph.", "owns": "Transkrip media dan model Whisper yang dipakai", "next": ["graphify-graph-dokumen"], "uses": ["graphify-pasang-cli", "graphify-penjaga-biaya"]},
+    {"id": "19", "name": "graphify-ekspor-pengetahuan", "group": "C", "role": "pipeline", "function": "Mengekspor graph menjadi wiki Markdown dan vault Obsidian untuk dibaca manusia dan agen.", "owns": "Wiki dan vault Obsidian dari graph", "next": [], "uses": ["graphify-pasang-cli"]},
+    {"id": "20", "name": "graphify-memori-jawaban", "group": "C", "role": "service", "function": "Menyimpan hasil tanya-jawab yang berguna, buntu, atau dikoreksi, lalu menyarikan pelajarannya.", "owns": "Catatan hasil jawaban dan pelajaran graph", "next": [], "uses": []},
+
+    {"id": "21", "name": "graphify-graph-skill", "group": "D", "role": "pipeline", "function": "Membangun graph perpustakaan skill (skill, file pendukung, rujukan, serah terima) tanpa LLM.", "owns": "Build graph perpustakaan skill", "next": ["graphify-cari-tumpang-tindih-skill", "graphify-cari-celah-skill", "graphify-dampak-ubah-skill", "graphify-peta-keluarga-skill"], "uses": ["graphify-pasang-cli", "graphify-catatan-graph"]},
+    {"id": "22", "name": "graphify-cari-tumpang-tindih-skill", "group": "D", "role": "pipeline", "function": "Menemukan skill yang fungsinya mirip atau pemicunya berebut, lalu mengusulkan gabung, persempit, atau ganti nama.", "owns": "Daftar skill tumpang tindih dan usulannya", "next": [], "uses": []},
+    {"id": "23", "name": "graphify-cari-celah-skill", "group": "D", "role": "pipeline", "function": "Menemukan rujukan rusak, skill yatim, file mati, dan keluarga skill tanpa pintu masuk.", "owns": "Daftar celah dan rujukan rusak perpustakaan skill", "next": [], "uses": []},
+    {"id": "24", "name": "graphify-dampak-ubah-skill", "group": "D", "role": "pipeline", "function": "Menunjukkan apa saja yang terdampak bila sebuah skill diganti nama, diubah, atau dihapus.", "owns": "Daftar dampak perubahan sebuah skill", "next": [], "uses": []},
+    {"id": "25", "name": "graphify-peta-keluarga-skill", "group": "D", "role": "pipeline", "function": "Menggambar diagram dan tabel keluarga skill dari indeks atau dari rujukan antarskill.", "owns": "Diagram dan peta keluarga skill", "next": [], "uses": []},
+
+    {"id": "26", "name": "graphify-ekspor-visual", "group": "E", "role": "pipeline", "function": "Membuat peta visual: HTML interaktif, pohon folder, diagram alur panggilan, SVG, dan GraphML.", "owns": "Berkas visual hasil ekspor", "next": [], "uses": ["graphify-pasang-cli"]},
+    {"id": "27", "name": "graphify-ekspor-database", "group": "E", "role": "pipeline", "function": "Mengekspor graph ke Neo4j atau FalkorDB, sebagai berkas Cypher atau langsung dikirim.", "owns": "Ekspor dan pengiriman ke database graph", "next": [], "uses": ["graphify-pasang-cli", "graphify-penjaga-biaya"]},
+    {"id": "28", "name": "graphify-server-mcp", "group": "E", "role": "pipeline", "function": "Menjalankan graph sebagai server MCP agar agen dan aplikasi lain bisa bertanya langsung.", "owns": "Konfigurasi server MCP graphify", "next": [], "uses": ["graphify-pasang-cli"]},
+    {"id": "29", "name": "graphify-otomasi-git", "group": "E", "role": "pipeline", "function": "Mengatur hook git, merge driver graph.json, mode watch, dan kebijakan commit graph.", "owns": "Otomasi pembaruan graph dan kebijakan commit", "next": [], "uses": ["graphify-pasang-cli"]},
+    {"id": "30", "name": "graphify-gabung-graph", "group": "E", "role": "pipeline", "function": "Menggabungkan beberapa graph (kode, dokumen, skill, antarrepo) dan mengelola graph global.", "owns": "Graph gabungan dan graph global", "next": ["graphify-namai-komunitas"], "uses": ["graphify-pasang-cli", "graphify-catatan-graph"]},
+    {"id": "31", "name": "graphify-mode-always-on", "group": "E", "role": "pipeline", "function": "Mengatur aturan always-on di CLAUDE.md, hook asisten, mode ketat, dan pembungkus aman hook.", "owns": "Integrasi always-on di asisten", "next": [], "uses": ["graphify-pasang-cli"]},
+
+    {"id": "32", "name": "graphify-atasi-masalah", "group": "F", "role": "pipeline", "function": "Mencocokkan gejala error graphify dengan penyebab dan langkah perbaikan yang sudah teruji.", "owns": "Diagnosis gejala error dan perbaikannya", "next": [], "uses": ["graphify-diagnosa-lingkungan"]},
+    {"id": "33", "name": "graphify-kelola-versi", "group": "F", "role": "pipeline", "function": "Menaikkan, menurunkan, atau mencopot graphify tanpa kehilangan graph, nama komunitas, dan pengaman hook.", "owns": "Naik turun versi dan pencopotan graphify", "next": ["graphify-mode-always-on"], "uses": ["graphify-pasang-cli", "graphify-diagnosa-lingkungan"]}
+  ],
+  "design_decisions": [
+    {"decision": "Fokus pada operasional graphify serta graph dokumen dan perpustakaan skill", "reason": "Pilihan pemilik repo pada 2026-11-19. Analisis kode dan navigator per project tidak dibuat; skill resmi graphify tetap menangani tanya-jawab kode."},
+    {"decision": "Wiki dan vault Obsidian digabung menjadi graphify-ekspor-pengetahuan", "reason": "Keduanya mengubah graph menjadi kumpulan Markdown untuk dibaca; masukan, gerbang, dan pemeriksaannya sama."},
+    {"decision": "Konversi PDF dan Office masuk ke graphify-graph-dokumen", "reason": "Konversi selalu dijalankan sebagai bagian build dokumen; memisahkannya hanya menambah satu serah terima."},
+    {"decision": "Audit dan gerbang dipisah", "reason": "Audit mengukur dengan skrip; gerbang memutuskan lulus atau tidak. Sama seperti pemisahan pemeriksa dan gerbang di Studio Wall Art by Nangka."},
+    {"decision": "Graph perpustakaan skill dibangun skrip, bukan pass semantik", "reason": "Skill adalah Markdown, yang di graphify butuh LLM. Skrip peta_skill.py membaca frontmatter dan rujukan secara pasti, gratis, dan hasilnya tetap bisa dibaca CLI graphify."},
+    {"decision": "Pelabelan komunitas tidak memakai backend LLM graphify", "reason": "Di sesi cloud CLI claude tersedia dan graphify memakainya sebagai cadangan pelabelan, yang diam-diam memakai token. Nama ditulis oleh model sesi lewat graphify-namai-komunitas, lalu diterapkan dengan --no-label."}
+  ]
+}

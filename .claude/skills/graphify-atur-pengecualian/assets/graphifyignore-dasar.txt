@@ -1,0 +1,41 @@
+# Pola dasar .graphifyignore (sintaks .gitignore). Salin bagian yang relevan saja.
+# graphify sudah membaca .gitignore dan melewati node_modules/ serta folder build umum.
+
+# --- Pihak ketiga yang sudah di-minify: ratusan fungsi satu huruf, merusak god node ---
+*.min.js
+*.min.css
+*.bundle.js
+*-bundle.js
+
+# --- Media: di jalur lengkap tiap gambar dibaca model (token), tiap video ditranskripsi ---
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.mov
+*.webm
+*.mp3
+*.wav
+*.ogg
+
+# --- Hasil build dan arsip ---
+dist/
+build/
+out/
+*.zip
+*.skill
+
+# --- Data pribadi: selalu keluar dari graph ---
+studio-nangka/pelanggan/
+**/pelanggan/
+.env*
+*.pem
+*.key
+
+# --- Data besar yang bukan pengetahuan ---
+*.lock
+package-lock.json
+*.csv

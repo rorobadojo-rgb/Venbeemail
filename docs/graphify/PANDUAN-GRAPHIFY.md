@@ -18,7 +18,10 @@ Versi yang terpasang: **graphifyy 0.9.112** (dari `graphify-8.zip`, sama dengan 
 | `CLAUDE.md` (bagian `## graphify`) | Mode *always-on*: kalau `graphify-out/graph.json` ada, Claude bertanya ke graph dulu sebelum grep atau membaca file. |
 | `.claude/settings.json` | Hook yang mengingatkan Claude memakai graph sebelum Read/Grep/Glob/Bash. Sudah dibuat **aman**: kalau CLI graphify belum terpasang, hook diam saja (tidak error). |
 | `.graphifyignore` | Daftar yang tidak dimasukkan ke graph: library `*.min.js` dan ±850 gambar/video. |
-| `graphify-out/` | Hasil graph (lihat bagian 3). |
+| `graphify-out/` | Graph utama repo (`KRP-repo`): 1.023 node, 53 komunitas bernama Indonesia. Di-commit, kecuali cache. |
+| `.claude/skills/graphify-*/` | **Keluarga 33 skill graphify** berbahasa Indonesia (lihat bagian 12). |
+| `graphify-kerja/` | Register graph, rencana korpus, laporan audit, dan graph perpustakaan skill (`KRP-skill`). |
+| `keluarga-graphify/` | Dokumen, indeks, alat uji, dan paket `.skill` keluarga skill graphify. |
 
 > **Catatan sesi cloud.** Container Claude Code di web selalu mulai dari nol, jadi CLI `graphify`
 > hilang setiap sesi baru. Tidak masalah: skill `/graphify` memasangnya sendiri bila belum ada
@@ -250,3 +253,31 @@ uv tool uninstall graphifyy    # hapus CLI
 
 Dokumentasi resmi: https://docs.graphify.com (bahasa Inggris). README berbahasa Indonesia ada di
 dalam zip: `graphify-8/docs/translations/README.id-ID.md`.
+
+---
+
+## 12. Keluarga skill graphify (33 skill)
+
+Selain skill resmi `/graphify`, repo ini punya 33 skill berbahasa Indonesia yang mengurus pekerjaan di
+sekitarnya. Anda tidak perlu menghafal namanya: tulis keinginan dengan bahasa biasa dan
+`graphify-dirigen` memilihkan skill yang tepat.
+
+| Kelompok | Untuk apa | Contoh permintaan |
+|---|---|---|
+| A. Pintu masuk dan fondasi | pasang CLI, cek kesiapan, register graph, izin biaya, gerbang mutu | "graph saya masih segar?", "berapa token kalau dokumen ikut?" |
+| B. Membangun dan merawat graph | rencana, pengecualian, build kode/lengkap, nama komunitas, audit, update, banding | "graph-nya penuh fungsi aneh", "beri nama komunitas", "apa bedanya dengan kemarin?" |
+| C. Dokumen dan sumber pengetahuan | graph dokumen, tanya dokumen, URL, transkrip, wiki/Obsidian, memori jawaban | "PRD di docs bisa ditanya?", "buatkan wiki dari graph" |
+| D. Perpustakaan skill | graph skill, skill mirip, celah, dampak ganti nama, diagram keluarga | "petakan semua skill saya", "kalau skill X diganti nama apa yang rusak?" |
+| E. Ekspor dan integrasi | visual, Neo4j/FalkorDB, server MCP, hook git, gabung graph, always-on | "buat diagram arsitektur", "jadikan graph server MCP" |
+| F. Perawatan | atasi error, naik/turun versi | "graphify error ...", "upgrade graphify" |
+
+Dua belas skrip ikut di dalam skill dan bisa dijalankan langsung, misalnya:
+
+```bash
+python3 .claude/skills/graphify-diagnosa-lingkungan/scripts/cek_lingkungan.py      # status lengkap
+python3 .claude/skills/graphify-audit-graph/scripts/audit_graph.py                  # kesehatan graph
+python3 .claude/skills/graphify-graph-skill/scripts/peta_skill.py --cluster         # graph semua skill
+python3 .claude/skills/graphify-cari-celah-skill/scripts/cek_celah_skill.py         # rujukan rusak
+```
+
+Rincian, status uji, dan cara memasang di claude.ai: `keluarga-graphify/README.md`.
