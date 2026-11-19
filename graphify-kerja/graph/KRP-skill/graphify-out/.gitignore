@@ -1,0 +1,20 @@
+# Hanya hasil yang dibagikan yang di-commit (keputusan pemilik repo, 2026-11-19).
+# Yang di-commit: graph.json, GRAPH_REPORT.md, graph.html, manifest.json, nama komunitas
+# (.graphify_labels.json + .sig), memory/, reflections/, wiki/.
+
+# Cache AST: dibuat ulang otomatis, besar, dan berbeda per mesin.
+cache/
+# Cadangan otomatis bertanggal dari cluster-only (contoh: 2026-11-19/).
+20*/
+# Penanda per mesin (path absolut dan waktu ubah berkas).
+.graphify_python
+.graphify_root
+.graphify_build_state.json
+# Nama cadangan dari hub; hanya nama yang ditulis sengaja yang disimpan.
+.graphify_labels.pending.json
+# Berkas antara pipeline /graphify.
+.graphify_detect.json
+.graphify_extract.json
+.graphify_cached.json
+.graphify_chunk_*.json
+*.tmp

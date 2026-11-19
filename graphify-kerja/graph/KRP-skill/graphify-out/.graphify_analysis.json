@@ -1,0 +1,360 @@
+{
+  "communities": {
+    "0": [
+      "file_etsy_listing_preflight_reviewer_references_daftar_preflight_md",
+      "file_etsy_listing_preflight_reviewer_scripts_check_listing_py",
+      "file_etsy_policy_fact_checker_assets_fees_template_json",
+      "file_etsy_policy_fact_checker_references_etsy_facts_snapshot_md",
+      "file_etsy_storefront_brand_planner_assets_rencana_toko_md",
+      "file_etsy_tag_attribute_mapper_scripts_check_tags_py",
+      "file_graphify_cari_celah_skill_scripts_cek_celah_skill_py",
+      "file_graphify_cari_tumpang_tindih_skill_scripts_cek_tumpang_tindih_py",
+      "file_graphify_dampak_ubah_skill_scripts_dampak_skill_py",
+      "file_graphify_graph_skill_scripts_peta_skill_py",
+      "file_graphify_peta_keluarga_skill_scripts_diagram_keluarga_py",
+      "file_studio_brand_memory_assets_brand_memory_template_md",
+      "file_studio_quality_gate_references_rubrik_gerbang_md",
+      "skill_etsy_listing_preflight_reviewer",
+      "skill_etsy_policy_fact_checker",
+      "skill_etsy_storefront_brand_planner",
+      "skill_etsy_tag_attribute_mapper",
+      "skill_graphify_cari_celah_skill",
+      "skill_graphify_cari_tumpang_tindih_skill",
+      "skill_graphify_dampak_ubah_skill",
+      "skill_graphify_graph_skill",
+      "skill_graphify_peta_keluarga_skill",
+      "skill_studio_brand_memory",
+      "skill_studio_quality_gate"
+    ],
+    "1": [
+      "file_etsy_catalog_sku_manager_assets_katalog_template_csv",
+      "file_etsy_catalog_sku_manager_scripts_check_catalog_py",
+      "file_etsy_digital_pricing_modeler_assets_contoh_input_harga_json",
+      "file_etsy_digital_pricing_modeler_scripts_pricing_model_py",
+      "file_etsy_listing_copy_builder_assets_listing_template_json",
+      "file_etsy_listing_copy_builder_references_kerangka_listing_md",
+      "file_etsy_performance_data_reader_references_definisi_metrik_md",
+      "file_etsy_portfolio_decision_reviewer_assets_lembar_portofolio_md",
+      "file_studio_experiment_planner_assets_eksperimen_register_csv",
+      "file_studio_experiment_planner_assets_kartu_eksperimen_md",
+      "file_studio_monthly_strategy_reviewer_assets_tinjauan_bulanan_md",
+      "skill_etsy_catalog_sku_manager",
+      "skill_etsy_digital_pricing_modeler",
+      "skill_etsy_listing_copy_builder",
+      "skill_etsy_performance_data_reader",
+      "skill_etsy_portfolio_decision_reviewer",
+      "skill_studio_experiment_planner",
+      "skill_studio_monthly_strategy_reviewer"
+    ],
+    "2": [
+      "family_studio_wall_art_by_nangka",
+      "file_studio_asset_rights_register_assets_asset_rights_register_csv",
+      "file_wall_art_composition_director_references_zona_aman_crop_md",
+      "file_wall_art_image_prompt_engineer_assets_catatan_generasi_csv",
+      "file_wall_art_image_prompt_engineer_references_panduan_alat_md",
+      "file_wall_art_motif_originality_designer_assets_kartu_motif_md",
+      "skill_studio_asset_rights_register",
+      "skill_wall_art_composition_director",
+      "skill_wall_art_concept_divergence",
+      "skill_wall_art_image_prompt_engineer",
+      "skill_wall_art_motif_originality_designer",
+      "skill_wall_art_reference_fusion_director"
+    ],
+    "3": [
+      "file_graphify_atasi_masalah_references_katalog_gejala_md",
+      "file_graphify_diagnosa_lingkungan_scripts_cek_lingkungan_py",
+      "file_graphify_mode_always_on_references_platform_lain_md",
+      "file_graphify_mode_always_on_scripts_bungkus_hook_py",
+      "file_graphify_otomasi_git_references_kebijakan_commit_md",
+      "file_graphify_pasang_cli_references_extra_dan_platform_md",
+      "skill_graphify_atasi_masalah",
+      "skill_graphify_diagnosa_lingkungan",
+      "skill_graphify_kelola_versi",
+      "skill_graphify_mode_always_on",
+      "skill_graphify_otomasi_git",
+      "skill_graphify_pasang_cli"
+    ],
+    "4": [
+      "file_etsy_keyword_evidence_researcher_assets_keyword_bank_csv",
+      "file_etsy_market_evidence_researcher_assets_bukti_pasar_csv",
+      "file_etsy_market_evidence_researcher_assets_lembar_amati_manual_md",
+      "file_etsy_seasonal_opportunity_planner_references_momen_pasar_as_md",
+      "file_etsy_store_operations_planner_assets_rencana_mingguan_md",
+      "skill_etsy_competitor_pattern_analyst",
+      "skill_etsy_keyword_evidence_researcher",
+      "skill_etsy_market_evidence_researcher",
+      "skill_etsy_micro_niche_mapper",
+      "skill_etsy_seasonal_opportunity_planner",
+      "skill_etsy_store_operations_planner"
+    ],
+    "5": [
+      "file_graphify_catatan_graph_assets_graph_register_csv",
+      "file_graphify_catatan_graph_scripts_catat_graph_py",
+      "file_graphify_graph_dokumen_references_format_dokumen_md",
+      "file_graphify_tanya_dokumen_references_pola_pertanyaan_md",
+      "file_graphify_transkrip_media_references_model_whisper_md",
+      "skill_graphify_catatan_graph",
+      "skill_graphify_graph_dokumen",
+      "skill_graphify_memori_jawaban",
+      "skill_graphify_tambah_sumber",
+      "skill_graphify_tanya_dokumen",
+      "skill_graphify_transkrip_media"
+    ],
+    "6": [
+      "file_studio_brief_interviewer_assets_brief_template_md",
+      "file_studio_wall_art_orchestrator_assets_handoff_template_json",
+      "file_studio_wall_art_orchestrator_references_peta_skill_md",
+      "file_studio_wall_art_orchestrator_scripts_validate_handoff_py",
+      "file_wall_art_reference_reader_assets_lembar_bacaan_referensi_md",
+      "file_wall_art_reference_reader_scripts_extract_palette_py",
+      "file_wall_art_series_collection_builder_assets_rencana_koleksi_md",
+      "skill_studio_brief_interviewer",
+      "skill_studio_wall_art_orchestrator",
+      "skill_wall_art_reference_reader",
+      "skill_wall_art_series_collection_builder"
+    ],
+    "7": [
+      "file_graphify_atur_pengecualian_assets_graphifyignore_dasar_txt",
+      "file_graphify_atur_pengecualian_references_pola_pengecualian_md",
+      "file_graphify_dirigen_references_peta_skill_md",
+      "file_graphify_penjaga_biaya_scripts_perkiraan_biaya_py",
+      "file_graphify_rencana_korpus_assets_rencana_korpus_md",
+      "skill_graphify_atur_pengecualian",
+      "skill_graphify_dirigen",
+      "skill_graphify_penjaga_biaya",
+      "skill_graphify_rencana_korpus"
+    ],
+    "8": [
+      "file_graphify_references_add_watch_md",
+      "file_graphify_references_exports_md",
+      "file_graphify_references_extraction_spec_md",
+      "file_graphify_references_github_and_merge_md",
+      "file_graphify_references_hooks_md",
+      "file_graphify_references_query_md",
+      "file_graphify_references_transcribe_md",
+      "file_graphify_references_update_md",
+      "skill_graphify"
+    ],
+    "9": [
+      "file_etsy_custom_order_workflow_assets_kartu_pesanan_custom_md",
+      "file_etsy_customer_message_drafter_references_pola_balasan_md",
+      "file_etsy_issue_resolution_assistant_references_peta_masalah_md",
+      "file_wall_art_personalization_designer_assets_spesifikasi_custom_md",
+      "skill_etsy_custom_order_workflow",
+      "skill_etsy_customer_message_drafter",
+      "skill_etsy_issue_resolution_assistant",
+      "skill_wall_art_personalization_designer"
+    ],
+    "10": [
+      "file_wall_art_color_export_manager_references_pengaturan_ekspor_md",
+      "file_wall_art_color_export_manager_scripts_export_print_files_py",
+      "file_wall_art_download_package_builder_scripts_build_package_py",
+      "file_wall_art_print_instruction_writer_assets_print_guide_template_txt",
+      "file_wall_art_print_instruction_writer_scripts_make_guide_pdf_py",
+      "skill_wall_art_color_export_manager",
+      "skill_wall_art_download_package_builder",
+      "skill_wall_art_print_instruction_writer"
+    ],
+    "11": [
+      "file_graphify_audit_graph_scripts_audit_graph_py",
+      "file_graphify_banding_graph_scripts_banding_graph_py",
+      "file_graphify_gerbang_mutu_references_rubrik_gerbang_md",
+      "skill_graphify_audit_graph",
+      "skill_graphify_banding_graph",
+      "skill_graphify_gabung_graph",
+      "skill_graphify_gerbang_mutu"
+    ],
+    "12": [
+      "file_graphify_bangun_graph_lengkap_references_backend_llm_md",
+      "file_graphify_namai_komunitas_references_panduan_nama_md",
+      "file_graphify_namai_komunitas_scripts_namai_komunitas_py",
+      "skill_graphify_bangun_graph_kode",
+      "skill_graphify_bangun_graph_lengkap",
+      "skill_graphify_namai_komunitas",
+      "skill_graphify_perbarui_graph"
+    ],
+    "13": [
+      "file_wall_art_artifact_retouch_reviewer_references_daftar_cacat_md",
+      "file_wall_art_palette_material_director_assets_kartu_palet_md",
+      "file_wall_art_visual_dna_builder_assets_visual_dna_template_md",
+      "skill_wall_art_artifact_retouch_reviewer",
+      "skill_wall_art_palette_material_director",
+      "skill_wall_art_style_consistency_reviewer",
+      "skill_wall_art_visual_dna_builder"
+    ],
+    "14": [
+      "file_wall_art_buyer_room_profiler_references_patokan_ruangan_md",
+      "file_wall_art_product_offer_planner_assets_lembar_penawaran_md",
+      "file_wall_art_ratio_resolution_planner_references_ukuran_cetak_md",
+      "file_wall_art_ratio_resolution_planner_scripts_print_math_py",
+      "skill_wall_art_buyer_room_profiler",
+      "skill_wall_art_product_offer_planner",
+      "skill_wall_art_ratio_resolution_planner"
+    ],
+    "15": [
+      "family_keluarga_skill_graphify",
+      "file_graphify_server_mcp_references_konfigurasi_mcp_md",
+      "skill_graphify_ekspor_database",
+      "skill_graphify_ekspor_pengetahuan",
+      "skill_graphify_ekspor_visual",
+      "skill_graphify_server_mcp"
+    ],
+    "16": [
+      "file_wall_art_mockup_art_director_references_urutan_gambar_listing_md",
+      "file_wall_art_mockup_art_director_scripts_make_listing_images_py",
+      "file_wall_art_pinterest_content_planner_assets_kalender_pin_md",
+      "skill_wall_art_mockup_art_director",
+      "skill_wall_art_pinterest_content_planner"
+    ]
+  },
+  "cohesion": {
+    "0": 0.12681159420289856,
+    "1": 0.1503267973856209,
+    "2": 0.2878787878787879,
+    "3": 0.3181818181818182,
+    "4": 0.23636363636363636,
+    "5": 0.2727272727272727,
+    "6": 0.21818181818181817,
+    "7": 0.3333333333333333,
+    "8": 0.2222222222222222,
+    "9": 0.39285714285714285,
+    "10": 0.2857142857142857,
+    "11": 0.38095238095238093,
+    "12": 0.5714285714285714,
+    "13": 0.38095238095238093,
+    "14": 0.2857142857142857,
+    "15": 0.8,
+    "16": 0.4
+  },
+  "gods": [
+    {
+      "id": "skill_graphify_dirigen",
+      "label": "graphify-dirigen",
+      "degree": 35
+    },
+    {
+      "id": "skill_studio_wall_art_orchestrator",
+      "label": "studio-wall-art-orchestrator",
+      "degree": 26
+    },
+    {
+      "id": "skill_graphify_pasang_cli",
+      "label": "graphify-pasang-cli",
+      "degree": 23
+    },
+    {
+      "id": "skill_graphify_graph_dokumen",
+      "label": "graphify-graph-dokumen",
+      "degree": 19
+    },
+    {
+      "id": "skill_graphify_graph_skill",
+      "label": "graphify-graph-skill",
+      "degree": 16
+    },
+    {
+      "id": "skill_etsy_policy_fact_checker",
+      "label": "etsy-policy-fact-checker",
+      "degree": 15
+    },
+    {
+      "id": "skill_graphify_bangun_graph_lengkap",
+      "label": "graphify-bangun-graph-lengkap",
+      "degree": 15
+    },
+    {
+      "id": "skill_graphify_catatan_graph",
+      "label": "graphify-catatan-graph",
+      "degree": 15
+    },
+    {
+      "id": "skill_graphify_rencana_korpus",
+      "label": "graphify-rencana-korpus",
+      "degree": 15
+    },
+    {
+      "id": "skill_graphify_bangun_graph_kode",
+      "label": "graphify-bangun-graph-kode",
+      "degree": 14
+    }
+  ],
+  "surprises": [
+    {
+      "source": "etsy-competitor-pattern-analyst",
+      "target": "wall-art-product-offer-planner",
+      "source_files": [
+        ".claude/skills/etsy-competitor-pattern-analyst/SKILL.md",
+        ".claude/skills/wall-art-product-offer-planner/SKILL.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "hands_off_to",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "etsy-digital-pricing-modeler",
+      "target": "etsy-policy-fact-checker",
+      "source_files": [
+        ".claude/skills/etsy-digital-pricing-modeler/SKILL.md",
+        ".claude/skills/etsy-policy-fact-checker/SKILL.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "uses",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "etsy-issue-resolution-assistant",
+      "target": "etsy-policy-fact-checker",
+      "source_files": [
+        ".claude/skills/etsy-issue-resolution-assistant/SKILL.md",
+        ".claude/skills/etsy-policy-fact-checker/SKILL.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "uses",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "etsy-keyword-evidence-researcher",
+      "target": "etsy-listing-copy-builder",
+      "source_files": [
+        ".claude/skills/etsy-keyword-evidence-researcher/SKILL.md",
+        ".claude/skills/etsy-listing-copy-builder/SKILL.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "hands_off_to",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "etsy-keyword-evidence-researcher",
+      "target": "etsy-tag-attribute-mapper",
+      "source_files": [
+        ".claude/skills/etsy-keyword-evidence-researcher/SKILL.md",
+        ".claude/skills/etsy-tag-attribute-mapper/SKILL.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "hands_off_to",
+      "why": "bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `graphify-graph-skill` connect `Pemeriksa Listing & Analisis Skill` to `Perawatan & Lingkungan Graphify`, `Build & Penamaan Graph`, `Graph Dokumen & Sumber`?",
+      "why": "High betweenness centrality (0.104) - this node is a cross-community bridge."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Pemeriksa Listing & Analisis Skill` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.12681159420289856 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `graphify-rencana-korpus` connect `Perencanaan Korpus Graphify` to `Pemeriksa Listing & Analisis Skill`, `Audit & Gerbang Graph`, `Build & Penamaan Graph`, `Graph Dokumen & Sumber`?",
+      "why": "High betweenness centrality (0.056) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `graphify-graph-dokumen` connect `Graph Dokumen & Sumber` to `Pemeriksa Listing & Analisis Skill`, `Perawatan & Lingkungan Graphify`, `Build & Penamaan Graph`, `Perencanaan Korpus Graphify`?",
+      "why": "High betweenness centrality (0.055) - this node is a cross-community bridge."
+    }
+  ]
+}

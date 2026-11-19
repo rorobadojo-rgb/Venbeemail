@@ -17,7 +17,7 @@ build; keluarga ini mengatur semua hal di sekitarnya.
 | Uji unit 12 skrip | lulus, 34 uji | `python3 keluarga-graphify/tests/test_scripts.py` |
 | Validator resmi skill-creator | lulus, 33 dari 33 | `quick_validate.py` |
 | Uji perjalanan dengan CLI graphify asli | lulus, 18 dari 18 langkah | `python3 keluarga-graphify/tools/uji_perjalanan.py` |
-| Graph utama `KRP-repo` | 1.023 node, 53 komunitas bernama, audit 0 GAGAL 0 PERINGATAN | `graphify-out/`, `graphify-kerja/audit/` |
+| Graph utama `KRP-repo` | 1.027 node, 54 komunitas bernama, audit 0 GAGAL 0 PERINGATAN | `graphify-out/`, `graphify-kerja/audit/` |
 | Graph perpustakaan skill `KRP-skill` | 79 skill, 17 komunitas bernama, audit tanpa temuan | `graphify-kerja/graph/KRP-skill/` |
 | Paket `.skill` untuk claude.ai | 33 berkas + 1 bundel | `keluarga-graphify/dist/` |
 | Terpasang di akun claude.ai | belum | unggah dari `dist/` (lihat bawah) |

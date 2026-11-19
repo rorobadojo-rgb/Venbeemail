@@ -18,7 +18,7 @@ Versi yang terpasang: **graphifyy 0.9.112** (dari `graphify-8.zip`, sama dengan 
 | `CLAUDE.md` (bagian `## graphify`) | Mode *always-on*: kalau `graphify-out/graph.json` ada, Claude bertanya ke graph dulu sebelum grep atau membaca file. |
 | `.claude/settings.json` | Hook yang mengingatkan Claude memakai graph sebelum Read/Grep/Glob/Bash. Sudah dibuat **aman**: kalau CLI graphify belum terpasang, hook diam saja (tidak error). |
 | `.graphifyignore` | Daftar yang tidak dimasukkan ke graph: library `*.min.js` dan ±850 gambar/video. |
-| `graphify-out/` | Graph utama repo (`KRP-repo`): 1.023 node, 53 komunitas bernama Indonesia. Di-commit, kecuali cache. |
+| `graphify-out/` | Graph utama repo (`KRP-repo`): 1.027 node, 54 komunitas bernama Indonesia. Di-commit, kecuali cache. |
 | `.claude/skills/graphify-*/` | **Keluarga 33 skill graphify** berbahasa Indonesia (lihat bagian 12). |
 | `graphify-kerja/` | Register graph, rencana korpus, laporan audit, dan graph perpustakaan skill (`KRP-skill`). |
 | `keluarga-graphify/` | Dokumen, indeks, alat uji, dan paket `.skill` keluarga skill graphify. |

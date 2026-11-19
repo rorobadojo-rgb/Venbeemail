@@ -1,0 +1,3 @@
+corpus_id,lokasi_graph,lingkup,mode,dibangun,commit,node,edge,komunitas,nama_komunitas,biaya_token,status,catatan
+KRP-repo,graphify-out/graph.json,"kode repo lewat AST; tanpa gambar, video, dan library minified",kode,2026-11-19 04:53,00b5b943,1027,2214,54,lengkap,0,aktif,graph utama; dipakai always-on dan hook
+KRP-skill,graphify-kerja/graph/KRP-skill/graphify-out/graph.json,79 skill di .claude/skills plus indeks keluarga graphify dan Studio,skill,2026-11-19 04:53,00b5b943,172,673,17,lengkap,0,aktif,"dibangun peta_skill.py, tanpa LLM"

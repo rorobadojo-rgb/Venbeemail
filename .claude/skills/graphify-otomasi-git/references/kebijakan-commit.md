@@ -15,7 +15,7 @@ komunitasnya.
 | `wiki/` | ya, bila dibuat | navigasi agen |
 | `cache/` | tidak | besar, dibuat ulang otomatis |
 | folder cadangan bertanggal (`2026-11-19/`) | tidak | cadangan lokal cluster-only |
-| `.graphify_python`, `.graphify_root` | tidak | path khusus mesin |
+| `.graphify_python`, `.graphify_root`, `.graphify_build_state.json` | tidak | path khusus mesin dan waktu ubah berkas |
 | `.graphify_labels.pending.json` | tidak | nama cadangan dari hub, belum ditinjau |
 | `.graphify_detect.json`, `.graphify_extract.json`, `.graphify_chunk_*.json` | tidak | berkas antara pipeline |
 

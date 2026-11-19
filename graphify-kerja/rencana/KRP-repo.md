@@ -23,5 +23,5 @@ Pemilik berkas: `graphify-rencana-korpus`.
   Graph turun dari 1.338 ke 835 node; god node menjadi komponen VenbeeMail sendiri.
 - 2026-11-19: dokumen (±165 berkas, ±325 ribu token) tidak dimasukkan ke graph utama. Bila dibutuhkan,
   dibuat sebagai korpus dokumen terpisah lewat `graphify-graph-dokumen`.
-- 2026-11-19: setelah keluarga skill graphify ditambahkan, graph diperbarui menjadi 1.023 node, 53
+- 2026-11-19: setelah keluarga skill graphify ditambahkan, graph dibangun ulang menjadi 1.027 node, 54
   komunitas, semua bernama Indonesia.
