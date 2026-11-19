@@ -7,7 +7,7 @@ Tanggal: 2026-11-19. Lingkungan: container Claude Code cloud, Python 3.13, graph
 | Uji | Hasil | Cara mengulang |
 |---|---|---|
 | Uji struktur | 1.347 pemeriksaan, LULUS | `python3 keluarga-graphify/tools/run_tests.py` |
-| Uji unit skrip | 33 uji, OK (3 di antaranya memakai CLI graphify asli) | `python3 keluarga-graphify/tests/test_scripts.py` |
+| Uji unit skrip | 34 uji, OK (3 di antaranya memakai CLI graphify asli) | `python3 keluarga-graphify/tests/test_scripts.py` |
 | Validator resmi skill-creator | 33 dari 33 sah | `python3 <skill-creator>/scripts/quick_validate.py .claude/skills/graphify-<nama>` |
 | Uji perjalanan | 18 dari 18 langkah LULUS | `python3 keluarga-graphify/tools/uji_perjalanan.py` |
 | Pemeriksa celah atas seluruh 79 skill repo | 0 GAGAL, 1 PERINGATAN (skill resmi graphify 824 baris), 3 INFO | `python3 .claude/skills/graphify-cari-celah-skill/scripts/cek_celah_skill.py` |

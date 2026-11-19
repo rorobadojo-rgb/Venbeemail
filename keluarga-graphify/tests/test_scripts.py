@@ -240,6 +240,16 @@ class NamaiTest(Base):
         saved = json.loads((g.parent / ".graphify_labels.json").read_text(encoding="utf-8"))
         self.assertEqual(saved, {"0": "Nama Lama Nol", "1": "Halaman Komik Baru"})
 
+    def test_nama_bentrok_dengan_nama_tersimpan(self):
+        g = clean_graph(self.tmp / "graphify-out/graph.json")
+        (g.parent / ".graphify_labels.json").write_text(json.dumps({"0": "Generator Alamat Email"}), encoding="utf-8")
+        names = self.tmp / "nama.json"
+        names.write_text(json.dumps({"1": "Generator Alamat Email"}), encoding="utf-8")
+        res = run("namai", "tulis", "--nama", names, "--graph", g)
+        self.assertEqual(res.returncode, 1)
+        self.assertIn("bentrok", res.stdout)
+        self.assertEqual(json.loads((g.parent / ".graphify_labels.json").read_text()), {"0": "Generator Alamat Email"})
+
     @unittest.skipUnless(HAVE_GRAPHIFY, "butuh CLI graphify")
     def test_terapkan_dengan_graphify_asli(self):
         src = self.tmp / "proyek"

@@ -143,6 +143,18 @@ def cmd_tulis(args) -> int:
         except (ValueError, OSError):
             merged = {}
     merged.update(clean)
+    seen_names = {}
+    dups = []
+    for cid, name in sorted(merged.items()):
+        key = name.lower()
+        if key in seen_names:
+            dups.append(f"'{name}' dipakai komunitas {seen_names[key]} dan {cid}")
+        seen_names[key] = cid
+    if dups:
+        print("GAGAL: nama bentrok dengan nama yang sudah tersimpan, tidak ada yang ditulis.")
+        for d in dups:
+            print(" -", d)
+        return 1
     pending_file = graph_path.parent / ".graphify_labels.pending.json"
     if pending_file.exists():
         try:
